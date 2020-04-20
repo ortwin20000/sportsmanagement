@@ -283,7 +283,7 @@ abstract class sportsmanagementHelper
 
 		// Echo '<pre>'.print_r($params,true).'</pre>';
 		// Log::add(Text::_($params->get('cfg_which_database')), Log::ERROR, 'jsmerror');
-		if ($params->get('cfg_which_database'))
+		if ($params->get('cfg_which_database')|| $value)
 		{
 			$options             = array(); // Prevent problems
 			$options['driver']   = $params->get('jsm_dbtype');            // Database driver name
