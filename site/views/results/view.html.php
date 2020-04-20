@@ -131,20 +131,9 @@ class sportsmanagementViewResults extends sportsmanagementView
 
 		if ($team)
 		{
-			if (!File::exists($team->logo_small))
-			{
-				$team->logo_small = sportsmanagementHelper::getDefaultPlaceholder('logo_small');
-			}
-
-			if (!File::exists($team->logo_middle))
-			{
-				$team->logo_middle = sportsmanagementHelper::getDefaultPlaceholder('logo_middle');
-			}
-
-			if (!File::exists($team->logo_big))
-			{
-				$team->logo_big = sportsmanagementHelper::getDefaultPlaceholder('logo_big');
-			}
+			$team->logo_small = empty($team->logo_small) ? sportsmanagementHelper::getDefaultPlaceholder('logo_small') : $team->logo_small;
+			$team->logo_middle = empty($team->logo_middle) ? sportsmanagementHelper::getDefaultPlaceholder('logo_middle') : $team->logo_small;
+			$team->logo_big   = empty($team->logo_big) ? sportsmanagementHelper::getDefaultPlaceholder('logo_big') : $team->logo_big;
 
 			if (!isset($team->name))
 			{
@@ -161,7 +150,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 
 				$image = sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_small,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_small,
 					$title,
 					$attribs['width'],
 					'',
@@ -176,7 +165,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 
 				$image = sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_middle,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_middle,
 					$title,
 					$attribs['width'],
 					'',
@@ -191,7 +180,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 
 				$image = sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_big,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_big,
 					$title,
 					$attribs['width'],
 					'',
@@ -210,7 +199,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				$attribs = array_merge(array('width' => '20', $attribs));
 				$image   = sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_big,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_big,
 					$title,
 					$attribs['width'],
 					'',
@@ -226,7 +215,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				$image   = JSMCountries::getCountryFlag($team->country) . ' ';
 				$image   .= sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_big,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_big,
 					$title,
 					$attribs['width'],
 					'',
@@ -240,7 +229,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				$attribs = array_merge(array('width' => '20', $attribs));
 				$image   = sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_small,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_small,
 					$title,
 					$attribs['width'],
 					'',
@@ -256,7 +245,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				$image   = JSMCountries::getCountryFlag($team->country) . ' ';
 				$image   .= sportsmanagementHelperHtml::getBootstrapModalImage(
 					'resultsteam' . $team->projectteamid,
-					$team->logo_small,
+					COM_SPORTSMANAGEMENT_PICTURE_SERVER . $team->logo_small,
 					$title,
 					$attribs['width'],
 					'',
