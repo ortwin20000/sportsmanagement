@@ -189,20 +189,20 @@ class PHPCalendar
 		$header = $monthName . (($showYear > 0) ? " " . $year : "");
 		$s      .= '<table id="jlctableCalendar-' . $this->modid . '" class="jlcCalendar">' . "\n";
 		$s      .= "   <tr>\n";
-		$s      .= '      <td align="center" class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
+		$s      .= '      <td class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
 			. $language->_('MOD_SPORTSMANAGEMENT_CALENDAR_PREVYEAR') . '" id="jlcprevYear-' . $this->modid
 			. '" href="javascript:void(0)" onclick="jlcnewDate(' . $month . "," . ($year - 1) . "," . $this->modid
 			. ');">&lt;&lt;</a>' . "</td>\n";
-		$s      .= '      <td align="center" class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
+		$s      .= '      <td class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
 			. $language->_('MOD_SPORTSMANAGEMENT_CALENDAR_PREVMONTH') . '" id="jlcprevMonth-' . $this->modid
 			. '" href="javascript:void(0)" onclick="jlcnewDate(' . $prev[0] . "," . $prev[1] . "," . $this->modid
 			. ');">&lt;</a>' . "</td>\n";
-		$s      .= '<td align="center" class="jlcCalendarHeader jlcheaderDate" colspan="3">' . $header . "</td>\n";
-		$s      .= '<td align="center" class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
+		$s      .= '<td class="jlcCalendarHeader jlcheaderDate" colspan="3">' . $header . "</td>\n";
+		$s      .= '<td class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
 			. $language->_('MOD_SPORTSMANAGEMENT_CALENDAR_NEXTMONTH') . '" id="jlcnextMonth-' . $this->modid
 			. '" href="' . 'javascript:void(0)' . '" onclick="' . "jlcnewDate(" . $next[0] . "," . $next[1] . "," . $this->modid
 			. ');" >&gt;</a>' . "</td>\n";
-		$s      .= '<td align="center" class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
+		$s      .= '<td class="jlcCalendarHeader jlcheaderArrow">' . '<a class="jlcheaderArrow" title="'
 			. $language->_('MOD_SPORTSMANAGEMENT_CALENDAR_NEXTYEAR') . '" id="jlcnextYear-' . $this->modid
 			. '" href="' . 'javascript:void(0)' . '" onclick="' . "jlcnewDate(" . $month . "," . ($year + 1) . "," . $this->modid
 			. ');" >&gt;&gt;</a>' . "</td>\n";
