@@ -114,14 +114,14 @@ if (!defined('JLC_MODULESCRIPTLOADED'))
 		$doc->addScript('/media/system/js/mootools-core' . $moouncompressed . '.js', array('version' => $document->getMediaVersion()));
 		$doc->addScript('/media/system/js/mootools-more' . $moouncompressed . '.js', array('version' => $document->getMediaVersion()));
 		$doc->addScript('/media/system/js/modal' . $moouncompressed . '.js', array('version' => $document->getMediaVersion()));
-		$doc->addScript(Uri::base() . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/js' . DIRECTORY_SEPARATOR . $module->module . '.js');
+		$doc->addScript(Uri::base(true) . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/js' . DIRECTORY_SEPARATOR . $module->module . '.js');
 	}
 	else
 	{
-		$doc->addScript(Uri::base() . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/js' . DIRECTORY_SEPARATOR . $module->module . '_2.js');
+		$doc->addScript(Uri::base(true) . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/js' . DIRECTORY_SEPARATOR . $module->module . '_2.js');
 	}
 
-	$doc->addStyleSheet(Uri::base() . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/css' . DIRECTORY_SEPARATOR . $module->module . '.css');
+	$doc->addStyleSheet(Uri::base(true) . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'assets/css' . DIRECTORY_SEPARATOR . $module->module . '.css');
 	define('JLC_MODULESCRIPTLOADED', 1);
 }
 

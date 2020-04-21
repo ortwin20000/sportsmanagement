@@ -99,7 +99,7 @@ if (ComponentHelper::getParams('com_sportsmanagement')->get('cfg_which_database'
 }
 else
 {
-	$module->picture_server = Uri::root();
+	$module->picture_server = Uri::base(true);
 }
 
 $data = new modJSMClubiconsHelper($params, $module);
@@ -154,7 +154,7 @@ $doc->addStyleDeclaration($style);
 if ($cnt)
 {
 	$script = 'script';
-	$doc->addScript(Uri::base() . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'js/' . $script . '.js');
+	$doc->addScript(Uri::base(true) . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'js/' . $script . '.js');
 	?>
     <div id="<?php echo $module->module; ?>-<?php echo $module->id; ?>">
 		<?PHP
