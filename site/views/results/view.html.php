@@ -307,11 +307,11 @@ class sportsmanagementViewResults extends sportsmanagementView
 		{
 			if ($project->teams_as_referees)
 			{
-				$referees = sportsmanagementModelResults::getMatchRefereeTeams($game->id);
+				$referees = sportsmanagementModelResults::getMatchRefereeTeams($game->id, Factory::getApplication()->input->getInt('cfg_which_database', 0));
 			}
 			else
 			{
-				$referees = sportsmanagementModelResults::getMatchReferees($game->id);
+				$referees = sportsmanagementModelResults::getMatchReferees($game->id, Factory::getApplication()->input->getInt('cfg_which_database', 0));
 			}
 
 			if (!empty($referees))
