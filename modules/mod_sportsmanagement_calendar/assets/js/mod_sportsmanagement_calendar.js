@@ -16,15 +16,14 @@ function jlCalmod_setTitle(targetid, sourceids, thistitle, modid) {
 	var titleid = sourceids.replace('jlcal_', 'jlcaltitte_');
 	if (document.getElementById(titleid)) 
   {
-		document.getElementById('jlCalListDayTitle-' + modid).innerHTML = document.getElementById(titleid).innerHTML;
+		//document.getElementById('jlCalListDayTitle-' + modid).innerHTML = document.getElementById(titleid).innerHTML;
 	}
 }
 
 function jlCalmod_setContent(targetid, tempcontentid, sourcecontent, thistitle, modid) 
 {
 	document.getElementById(targetid).innerHTML = sourcecontent;
-	document.getElementById(tempcontentid).innerHTML = '<div class="componentheading">'
-			+ thistitle.replace('<br />', ' - ') + '</div>' + sourcecontent;
+	document.getElementById(tempcontentid).innerHTML = '</div>' + sourcecontent;
 	jQuery('#' + tempcontentid + ' acronym').each(function(handle) {
 		var header = new Element('span').injectAfter(handle);
 		header.innerHTML = handle.title;
