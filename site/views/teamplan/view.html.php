@@ -106,10 +106,10 @@ class sportsmanagementViewTeamPlan extends sportsmanagementView
 		if ($this->config['use_tabs_events'])
 		{
 			$iPanel   = 1;
-			$selector = 'teamplan';
-			echo HTMLHelper::_('bootstrap.startTabSet', $selector, array('active' => 'panel' . $iPanel));
+			$selector = 'teamplan'.$matchInfo->id;
+			$output .= HTMLHelper::_('bootstrap.startTabSet', $selector, array('active' => 'panel-'.$matchInfo->id.'-' . $iPanel));
 
-			// Size of the event icons in the tabs (when used)
+			/** Size of the event icons in the tabs (when used) */
 			$width  = 20;
 			$height = 20;
 			$type   = 4;
@@ -149,7 +149,7 @@ class sportsmanagementViewTeamPlan extends sportsmanagementView
 					$tab_content = Text::_($event->name);
 				}
 
-				$output .= HTMLHelper::_('bootstrap.addTab', $selector, 'panel' . $iPanel++, $tab_content);
+				$output .= HTMLHelper::_('bootstrap.addTab', $selector, 'panel-'.$matchInfo->id.'-' . $iPanel++, $tab_content);
 				$output .= '<table class="matchreport" border="0">';
 				$output .= '<tr>';
 
@@ -202,7 +202,7 @@ class sportsmanagementViewTeamPlan extends sportsmanagementView
 				$imgOut   = HTMLHelper::image($pic_out, Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTION_WENT_OUT'), array(' title' => Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTION_WENT_OUT')));
 				$imgIn    = HTMLHelper::image($pic_in, Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTION_CAME_IN'), array(' title' => Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTION_CAME_IN')));
 
-				$output .= HTMLHelper::_('bootstrap.addTab', $selector, 'panel' . $iPanel++, $tab_content);
+				$output .= HTMLHelper::_('bootstrap.addTab', $selector, 'panel-'.$matchInfo->id.'-' . $iPanel++, $tab_content);
 				$output .= '<table class="matchreport" border="0">';
 				$output .= '<tr>';
 				$output .= '<td class="list">';
@@ -230,7 +230,7 @@ class sportsmanagementViewTeamPlan extends sportsmanagementView
 				$output .= HTMLHelper::_('bootstrap.endTab');
 			}
 
-			echo HTMLHelper::_('bootstrap.endTabSet');
+			$output .= HTMLHelper::_('bootstrap.endTabSet');
 		}
 		else
 		{
