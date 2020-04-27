@@ -154,7 +154,7 @@ $doc->addStyleDeclaration($style);
 if ($cnt)
 {
 	$script = 'script';
-	$doc->addScript(Uri::base(true) . 'modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'js/' . $script . '.js');
+	$doc->addScript(JURI::base(true) . '/modules' . DIRECTORY_SEPARATOR . $module->module . DIRECTORY_SEPARATOR . 'js/' . $script . '.js');
 	?>
     <div id="<?php echo $module->module; ?>-<?php echo $module->id; ?>">
 		<?PHP
