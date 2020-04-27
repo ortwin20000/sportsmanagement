@@ -17,6 +17,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Factory;
 
 /**
  * sportsmanagementViewNextMatch
@@ -50,6 +51,7 @@ class sportsmanagementViewNextMatch extends sportsmanagementView
 		$this->config        = $config;
 		$this->tableconfig   = $tableconfig;
 		$this->overallconfig = sportsmanagementModelProject::getOverallConfig($model::$cfg_which_database);
+        $this->overallevents = sportsmanagementModelProject::getProjectEvents(0, Factory::getApplication()->input->getInt('cfg_which_database', 0));
 
 		if (!isset($this->overallconfig['seperator']))
 		{
