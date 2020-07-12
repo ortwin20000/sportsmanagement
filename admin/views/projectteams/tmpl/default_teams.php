@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage projectteams
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
@@ -102,9 +98,8 @@ $optteams = ' allowClear: true,
 					<?php
 					$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/mail.png';
 					$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_SEND_MAIL_TEAMS');
-					$imageParams = 'title= "' . $imageTitle . '"';
-					$image       = HTMLHelper::image($imageFile, $imageTitle, $imageParams);
-					$linkParams  = '';
+                    $image_attributes['title'] = $imageTitle;
+					$image       = HTMLHelper::_('image',$imageFile,$imageTitle,$image_attributes);
 					echo $image;
 					?>
                 </a>
@@ -150,9 +145,8 @@ $optteams = ' allowClear: true,
 					<?php
 					$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/mail.png';
 					$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_SEND_MAIL_ADMINS');
-					$imageParams = 'title= "' . $imageTitle . '"';
-					$image       = HTMLHelper::image($imageFile, $imageTitle, $imageParams);
-					$linkParams  = '';
+                    $image_attributes['title'] = $imageTitle;
+					$image       = HTMLHelper::_('image',$imageFile,$imageTitle,$image_attributes);
 					echo $image;
 					?></a>
             </th>
@@ -196,6 +190,7 @@ $optteams = ' allowClear: true,
             <th><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_DG'); ?></th>
             <th><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_IS_IN_SCORE'); ?></th>
             <th><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_USE_FINALLY'); ?></th>
+	<th><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAM_FINALTABLERANK'); ?></th>
 
             <th>
 				<?php echo HTMLHelper::_('grid.sort', 'STID', 'st.id', $this->sortDirection, $this->sortColumn); ?>
@@ -255,12 +250,9 @@ $optteams = ' allowClear: true,
 						<?php
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/edit.png';
 						$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_EDIT_DETAILS');
-						$imageParams = 'title= "' . $imageTitle . '"';
-						$image       = HTMLHelper::image($imageFile, $imageTitle, $imageParams);
-						$linkParams  = '';
+                        $image_attributes['title'] = $imageTitle;
+						$image       = HTMLHelper::_('image',$imageFile,$imageTitle,$image_attributes);
 						echo HTMLHelper::link($link1, $image);
-
-
 						?>
 					<?php else : ?>
 						<?php //echo $this->escape($row->name); ?>
@@ -275,19 +267,15 @@ $optteams = ' allowClear: true,
 				?>
                 <td>
 					<?php
-					/**
-					 * die möglichkeit bieten, das vereinslogo zu aktualisieren
-					 */
+					/** die möglichkeit bieten, das vereinslogo zu aktualisieren */
 					$link  = 'index.php?option=com_sportsmanagement&view=club&layout=edit&tmpl=component&id=' . $row->club_id;
 					$image = 'icon-16-Teams.png';
 
 					if ($row->club_logo == '')
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_NO_IMAGE');
-						echo HTMLHelper::_(
-							'image', 'administrator/components/com_sportsmanagement/assets/images/information.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_NO_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/information.png',$imageTitle,$image_attributes);
 						echo sportsmanagementHelper::getBootstrapModalImage(
 							'projectteam' . $row->club_id,
 							Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/' . $image,
@@ -305,11 +293,9 @@ $optteams = ' allowClear: true,
 					}
                     elseif ($row->club_logo == sportsmanagementHelper::getDefaultPlaceholder("clublogobig"))
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_DEFAULT_IMAGE');
-						echo HTMLHelper::_(
-							'image', 'administrator/components/com_sportsmanagement/assets/images/information.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_DEFAULT_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/information.png',$imageTitle,$image_attributes);
 						?>
                         <a href="<?php echo Uri::root() . $row->club_logo; ?>" title="<?php echo $imageTitle; ?>"
                            class="modal">
@@ -339,11 +325,9 @@ $optteams = ' allowClear: true,
 
 						if (File::exists(JPATH_SITE . DIRECTORY_SEPARATOR . $row->club_logo))
 						{
-							$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_CUSTOM_IMAGE');
-							echo HTMLHelper::_(
-								'image', 'administrator/components/com_sportsmanagement/assets/images/ok.png',
-								$imageTitle, 'title= "' . $imageTitle . '"'
-							);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_CUSTOM_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/ok.png',$imageTitle,$image_attributes);
 							?>
                             <a href="<?php echo Uri::root() . $row->club_logo; ?>" title="<?php echo $imageTitle; ?>"
                                class="modal">
@@ -444,9 +428,8 @@ $optteams = ' allowClear: true,
 					}
 					$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/' . $image;
 					$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_MANAGE_PLAYERS');
-					$imageParams = 'title= "' . $imageTitle . '"';
-					$image       = HTMLHelper::image($imageFile, $imageTitle, $imageParams) . ' <sub>' . $row->playercount . '</sub>';
-					$linkParams  = '';
+                    $image_attributes['title'] = $imageTitle;
+					$image       = HTMLHelper::_('image',$imageFile, $imageTitle, $image_attributes) . ' <sub>' . $row->playercount . '</sub>';
 					echo HTMLHelper::link($link2, $image);
 					?>
                 </td>
@@ -461,9 +444,8 @@ $optteams = ' allowClear: true,
 					}
 					$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/' . $image;
 					$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_MANAGE_STAFF');
-					$imageParams = 'title= "' . $imageTitle . '"';
-					$image       = HTMLHelper::image($imageFile, $imageTitle, $imageParams) . ' <sub>' . $row->staffcount . '</sub>';
-					$linkParams  = '';
+                    $image_attributes['title'] = $imageTitle;
+					$image       = HTMLHelper::_('image',$imageFile, $imageTitle, $image_attributes) . ' <sub>' . $row->staffcount . '</sub>';
 					echo HTMLHelper::link($link3, $image);
 					?>
                 </td>
@@ -496,19 +478,15 @@ $optteams = ' allowClear: true,
 					<?php
 					if (empty($row->picture) || !File::exists(JPATH_SITE . DIRECTORY_SEPARATOR . $row->picture))
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_NO_IMAGE') . $row->picture;
-						echo HTMLHelper::image(
-							'administrator/components/com_sportsmanagement/assets/images/delete.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_NO_IMAGE') . $row->picture;
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/delete.png',$imageTitle,$image_attributes);
 					}
                     elseif ($row->picture == sportsmanagementHelper::getDefaultPlaceholder("team"))
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_DEFAULT_IMAGE');
-						echo HTMLHelper::image(
-							'administrator/components/com_sportsmanagement/assets/images/information.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_DEFAULT_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/information.png',$imageTitle,$image_attributes);
 
 						?>
                         <a href="<?php echo Uri::root() . $row->picture; ?>" title="<?php echo $imageTitle; ?>"
@@ -523,11 +501,9 @@ $optteams = ' allowClear: true,
 					{
 						if (File::exists(JPATH_SITE . DIRECTORY_SEPARATOR . $row->picture))
 						{
-							$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMS_CUSTOM_IMAGE');
-							echo HTMLHelper::_(
-								'image', 'administrator/components/com_sportsmanagement/assets/images/ok.png',
-								$imageTitle, 'title= "' . $imageTitle . '"'
-							);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMS_CUSTOM_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/ok.png',$imageTitle,$image_attributes);
 							?>
                             <a href="<?php echo Uri::root() . $row->picture; ?>" title="<?php echo $imageTitle; ?>"
                                class="modal">
@@ -538,11 +514,9 @@ $optteams = ' allowClear: true,
 						}
 						else
 						{
-							$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMS_NO_IMAGE');
-							echo HTMLHelper::_(
-								'image', 'administrator/components/com_sportsmanagement/assets/images/delete.png',
-								$imageTitle, 'title= "' . $imageTitle . '"'
-							);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMS_NO_IMAGE');
+$image_attributes['title'] = $imageTitle;
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/delete.png',$imageTitle,$image_attributes);
 						}
 
 					}
@@ -655,6 +629,19 @@ $optteams = ' allowClear: true,
 					);
 					?>
                 </td>
+		<td class="center">
+		<?php
+					$append = ' style="background-color:#bbffff"';
+					echo HTMLHelper::_(
+						'select.genericlist',
+						$this->lists['finaltablerank'],
+						'finaltablerank' . $row->id,
+						$inputappend . 'class="form-control form-control-inline" size="1" onchange="document.getElementById(\'cb' .
+						$i . '\').checked=true"' . $append,
+						'value', 'text', $row->finaltablerank
+					);
+					?>	
+		</td>
 
                 <td class="center"><?php echo $row->season_team_id; ?>
                     <br>

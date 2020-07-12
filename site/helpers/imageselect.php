@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage helpers
@@ -12,9 +10,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  * https://css-tricks.com/examples/DragAndDropFileUploading/
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
@@ -93,6 +89,9 @@ abstract class ImageSelectSM
 		$js = "
 		function selectImage_" . $type . "(image, imagename, field, fieldid)
 		{
+		console.log('selectImage image : ' + image);
+		console.log('selectImage imagename : ' + imagename);
+		
 			console.log('selectImage fieldid : ' + fieldid);
 			console.log('selectImage field : ' + field);
 			document.getElementById('copy_' + fieldid).value = 'images/com_sportsmanagement/database/" . self::getfolder($typefolder) . "/'+image;
@@ -218,9 +217,12 @@ $img.attr("src", "' . Uri::root() . '" + select);
 
 		//        $link2 = 'index.php?option=com_sportsmanagement&amp;view=imagehandler&amp;type=' .
 		//		$type . '&amp;field=' . $fieldname . '&amp;fieldid=' . $fieldid .'&amp;tmpl=component';
-
+/*
 		$link2 = 'index.php?option=com_media&amp;view=images' .
 			'&amp;asset=com_sportsmanagement&amp;folder=com_sportsmanagement/database/' . self::getfolder($typefolder) . '&author=&amp;fieldid=' . $fieldid . '&amp;tmpl=component';
+*/
+$link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .
+			'&imagelist=1&asset=com_sportsmanagement&folder=' . self::getfolder($typefolder) . '&author=&fieldid=' . $fieldid . '&tmpl=component&type='.$type.'&fieldname=' . $fieldname;
 
 		$document->addScriptDeclaration($js);
 
@@ -257,15 +259,27 @@ $img.attr("src", "' . Uri::root() . '" + select);
 	 */
 	static function getfolder($type)
 	{
+		
+?>
+<script>
+console.log('getfolder: ' + '<?php echo $type;  ?>' );  
+</script>  
+<?php		
 		switch ($type)
 		{
 			case "clubs_small":
+			case "clubssmall":
+			case "clubs/small":
 				return "clubs/small";
 				break;
 			case "clubs_medium":
+			case "clubsmedium":
+			case "clubs/medium":
 				return "clubs/medium";
 				break;
 			case "clubs_large":
+			case "clubslarge":
+			case "clubs/large":
 				return "clubs/large";
 				break;
 			case "clubs_trikot_home":
@@ -342,6 +356,11 @@ $img.attr("src", "' . Uri::root() . '" + select);
 				break;
 			case "agegroups":
 				return "agegroups";
+				break;
+            case "projectimages":
+                //$data = Factory::getApplication()->input->getArray();
+				//return "projectimages/".$data['pid'];
+                return "projectimages";
 				break;
 			default:
 				return "events/" . $type;

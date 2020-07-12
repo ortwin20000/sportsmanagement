@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage rounds
@@ -11,22 +9,16 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 
-
 $templatesToLoad = array('footer', 'listheader');
 sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 ?>
 <div class="table-responsive">
-
-    <!--	<div id="editcell"> -->
-    <!--    <fieldset class="adminform"> -->
     <legend><?php echo Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_LEGEND', '<i>' . $this->project->name . '</i>'); ?></legend>
     <table class="<?php echo $this->table_data_class; ?>">
         <thead>
@@ -93,8 +85,8 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					if ($canEdit && !$row->checked_out) :
 						$imageTitle  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_EDIT_DETAILS');
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/edit.png';
-						$imageParams = "title='$imageTitle'";
-						echo HTMLHelper::link($link1, HTMLHelper::image($imageFile, $imageTitle, $imageParams));
+						$imageParams['title'] = $imageTitle;
+						echo HTMLHelper::link($link1, HTMLHelper::_('image',$imageFile, $imageTitle, $imageParams));
 					endif;
 					?>
                 </td>
@@ -179,8 +171,8 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					{
 						$imageTitle  = Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_ALL_PUBLISHED', $row->countMatches);
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/ok.png';
-						$imageParams = "title='$imageTitle'";
-						echo HTMLHelper::image($imageFile, $imageTitle, $imageParams);
+						$imageParams['title'] = $imageTitle;
+						echo HTMLHelper::_('image',$imageFile, $imageTitle, $imageParams);
 					}
 					else
 					{
@@ -193,8 +185,8 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 							$imageTitle = Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_PUBLISHED_NR', $row->countUnPublished);
 						}
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/error.png';
-						$imageParams = "title='$imageTitle'";
-						echo HTMLHelper::image($imageFile, $imageTitle, $imageParams);
+						$imageParams['title'] = $imageTitle;
+						echo HTMLHelper::_('image',$imageFile, $imageTitle, $imageParams);
 					}
 					?>
                 </td>
@@ -204,8 +196,8 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					{
 						$imageTitle  = Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_ALL_RESULTS', $row->countMatches);
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/ok.png';
-						$imageParams = "title='$imageTitle'";
-						echo HTMLHelper::image($imageFile, $imageTitle, $imageParams);
+						$imageParams['title'] = $imageTitle;
+						echo HTMLHelper::_('image',$imageFile, $imageTitle, $imageParams);
 					}
 					else
 					{
@@ -218,8 +210,8 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 							$imageTitle = Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_ROUNDS_RESULTS_MISSING', $row->countNoResults);
 						}
 						$imageFile   = 'administrator/components/com_sportsmanagement/assets/images/error.png';
-						$imageParams = "title='$imageTitle'";
-						echo HTMLHelper::image($imageFile, $imageTitle, $imageParams);
+						$imageParams['title'] = $imageTitle;
+						echo HTMLHelper::_('image',$imageFile, $imageTitle, $imageParams);
 					}
 					?>
                 </td>
@@ -262,6 +254,5 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 		?>
         </tbody>
     </table>
-    <!--    </fieldset> -->
 </div>
   

@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage helpers
@@ -35,6 +33,8 @@ class JSMRanking
 	 * @var integer
 	 */
 	var $_projectid = 0;
+	
+	static $_use_finaltablerank = 0;
 
 	/**
 	 * project model cache
@@ -129,24 +129,18 @@ class JSMRanking
 	{
 		if ($project)
 		{
-			// $this->_roundcodes = null;
-
 			$extensions = sportsmanagementHelper::getExtensions($project->id);
-
 			foreach ($extensions as $type)
 			{
 				$classname = 'JSMRanking' . ucfirst($type);
-
 				if (!class_exists($classname))
 				{
 					$file = JPATH_COMPONENT_SITE . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'ranking.php';
-
 					if (file_exists($file))
 					{
 						include_once $file;
 						$obj = new $classname;
 						$obj->setProjectId($project->id, $cfg_which_database);
-
 						return $obj;
 					}
 				}
@@ -154,19 +148,16 @@ class JSMRanking
 				{
 					$obj = new $classname;
 					$obj->setProjectId($project->id, $cfg_which_database);
-
 					return $obj;
 				}
 			}
 
 			$obj = new JSMRanking;
 			$obj->setProjectId($project->id, $cfg_which_database);
-
 			return $obj;
 		}
 
 		$obj = new JSMRanking;
-
 		return $obj;
 	}
 
@@ -181,22 +172,9 @@ class JSMRanking
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
-
 		$this->_projectid = (int) $id;
-
-		//		$this->_project = new sportsmanagementModelProject();
-		//		$this->_project->setProjectID($id);
-		//		$this->_params = $this->_project->getTemplateConfig('ranking');
 		sportsmanagementModelProject::setProjectID($id, $cfg_which_database);
 		$this->_params = sportsmanagementModelProject::getTemplateConfig('ranking', $cfg_which_database, __METHOD__);
-
-		if (COM_SPORTSMANAGEMENT_SHOW_DEBUG_INFO)
-		{
-			$my_text = 'projectid -> ' . $this->_projectid . '<br>';
-			sportsmanagementHelper::setDebugInfoText(__METHOD__, __FUNCTION__, __CLASS__, __LINE__, $my_text);
-		}
-
-		// Wipe data
 		$this->_data = null;
 	}
 
@@ -741,6 +719,21 @@ class JSMRanking
 		$data->_teams   = self::_initTeams($pid, $division, $cfg_which_database);
 		$data->_matches = self::_getMatches($pid, $division, $cfg_which_database);
 
+ //echo '<pre>'.print_r($data->_teams,true).'</pre>';
+ //echo '<pre>'.print_r($data->_matches,true).'</pre>';
+		if ( sizeof($data->_matches) == 0 )
+		{
+		self::$_use_finaltablerank = 1;	
+		}
+        
+        foreach( $data->_teams as $key => $value )
+        {
+            if ($value->_points_finally)
+            {
+                self::$_use_finaltablerank = 0;
+            }
+        }
+		
 		return $data;
 	}
 
@@ -753,8 +746,6 @@ class JSMRanking
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
-
-		// Create a new query object.
 		$db        = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query     = $db->getQuery(true);
 		$starttime = microtime();
@@ -762,7 +753,7 @@ class JSMRanking
 		$query->select('pt.id AS ptid, pt.is_in_score, pt.start_points, pt.division_id');
 		$query->select('t.name, t.id as teamid, pt.neg_points_finally');
 		$query->select('pt.use_finally, pt.points_finally,pt.matches_finally,pt.won_finally,pt.draws_finally,pt.lost_finally');
-		$query->select('pt.homegoals_finally, pt.guestgoals_finally,pt.diffgoals_finally,pt.penalty_points');
+		$query->select('pt.homegoals_finally, pt.guestgoals_finally,pt.diffgoals_finally,pt.penalty_points,pt.finaltablerank');
 		$query->select('CONCAT_WS(\':\',pt.id,t.alias) AS ptid_slug');
 		$query->from('#__sportsmanagement_project_team AS pt ');
 		$query->join('INNER', '#__sportsmanagement_season_team_id AS st1 ON st1.id = pt.team_id');
@@ -829,6 +820,7 @@ class JSMRanking
 
 			// New for is_in_score
 			$t->setIs_In_Score($r->is_in_score);
+			$t->setuse_finaltablerank($r->finaltablerank);
 
 			// New for use_finally
 			$t->setuse_finally($r->use_finally);
@@ -1107,6 +1099,15 @@ class JSMRanking
 	 */
 	function _getRankingCriteria()
 	{
+		$crit   = array();
+		//_cmpFinaltablerank
+		if ( self::$_use_finaltablerank )
+		{
+			$crit[] = '_cmpFinaltablerank';
+			$this->_criteria = $crit;
+		}
+		else
+		{
 		if (empty($this->_criteria))
 		{
 			/**
@@ -1114,7 +1115,7 @@ class JSMRanking
 			 * get the values from ranking template setting
 			 */
 			$values = explode(',', $this->_params['ranking_order']);
-			$crit   = array();
+			//$crit   = array();
 
 			foreach ($values as $v)
 			{
@@ -1141,6 +1142,7 @@ class JSMRanking
 
 			$this->_criteria = $crit;
 		}
+	}
 
 		return $this->_criteria;
 	}
@@ -1274,6 +1276,13 @@ class JSMRanking
 	function _cmpAlpha($a, $b)
 	{
 		$res = strcasecmp($a->getName(), $b->getName());
+
+		return $res;
+	}
+	
+	function _cmpFinaltablerank($a, $b)
+	{
+		$res = $a->_finaltablerank < $b->_finaltablerank;
 
 		return $res;
 	}
@@ -1712,117 +1721,62 @@ class JSMRanking
 class JSMRankingTeamClass
 {
 	var $_use_finally = 0;
-
+	var $_finaltablerank = 0;
 	var $_points_finally = 0;
-
 	var $_neg_points_finally = 0;
-
 	var $_matches_finally = 0;
-
 	var $_won_finally = 0;
-
 	var $_draws_finally = 0;
-
 	var $_lost_finally = 0;
-
 	var $_homegoals_finally = 0;
-
 	var $_guestgoals_finally = 0;
-
 	var $_diffgoals_finally = 0;
-
 	var $_is_in_score = 0;
-
 	var $_ptid = 0;
-
 	var $_teamid = 0;
-
 	var $_divisionid = 0;
-
 	var $_startpoints = 0;
-
 	var $_name = null;
-
 	var $cnt_matches = 0;
-
 	var $cnt_won = 0;
-
 	var $cnt_draw = 0;
-
 	var $cnt_lost = 0;
-
 	var $cnt_won_home = 0;
-
 	var $cnt_draw_home = 0;
-
 	var $cnt_lost_home = 0;
-
 	var $cnt_won_away = 0;
-
 	var $cnt_draw_away = 0;
-
 	var $cnt_lost_away = 0;
-
 	var $cnt_wot = 0;
-
 	var $cnt_wso = 0;
-
 	var $cnt_lot = 0;
-
 	var $cnt_lso = 0;
-
 	var $cnt_wot_home = 0;
-
 	var $cnt_wso_home = 0;
-
 	var $cnt_lot_home = 0;
-
 	var $cnt_lso_home = 0;
-
 	var $cnt_wot_away = 0;
-
 	var $cnt_wso_away = 0;
-
 	var $cnt_lot_away = 0;
-
 	var $cnt_lso_away = 0;
-
 	var $sum_points = 0;
-
 	var $neg_points = 0;
-
 	var $bonus_points = 0;
-
 	var $sum_team1_result = 0;
-
 	var $sum_team2_result = 0;
-
 	var $sum_away_for = 0;
-
 	var $sum_team1_legs = 0;
-
 	var $sum_team2_legs = 0;
-
 	var $sum_team1_matchpoint = 0;
-
 	var $sum_team2_matchpoint = 0;
-
 	var $sum_team1_sets = 0;
-
 	var $sum_team2_sets = 0;
-
 	var $sum_team1_games = 0;
-
 	var $sum_team2_games = 0;
-
 	var $diff_team_results = 0;
-
 	var $diff_team_legs = 0;
-
 	var $round = 0;
-
 	var $rank = 0;
-
 
 	/**
 	 * JSMRankingTeamClass::JSMRankingTeam()
@@ -1858,6 +1812,11 @@ class JSMRankingTeamClass
 	function setuse_finally($val)
 	{
 		$this->_use_finally = (int) $val;
+	}
+	
+	function setuse_finaltablerank($val)
+	{
+		$this->_finaltablerank = (int) $val;
 	}
 
 	/**

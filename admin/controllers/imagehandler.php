@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage imagehandler
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -57,13 +53,19 @@ class sportsmanagementControllerImagehandler extends JSMControllerAdmin
 	{
 		// Reference global application object
 		$app = Factory::getApplication();
-
+$datainput = Factory::getApplication()->input->getArray();
 		// JInput object
 		// $jinput = $app->input;
 		// $option = $this->jsmjinput->getCmd('option');
 
 		$type = '';
 		$msg  = '';
+        $updatemodal  = true;
+
+		if ( $datainput['imagelist'] )
+		{
+			$updatemodal  = false;
+		}
 
 		// Check for request forgeries
 		Session::checkToken() or jexit(\Text::_('JINVALID_TOKEN'));
@@ -77,6 +79,26 @@ class sportsmanagementControllerImagehandler extends JSMControllerAdmin
 		$field       = $this->jsmjinput->getVar('field');
 		$fieldid     = $this->jsmjinput->getVar('fieldid');
 		$linkaddress = $this->jsmjinput->getVar('linkaddress');
+        $pid       = $this->jsmjinput->getVar('pid');
+        $mid       = $this->jsmjinput->getVar('mid');
+        
+        
+        switch ($type)
+		{
+		case "projectimages":
+				//return "projectimages/".$data['pid'];
+                $folder .= "/".$pid;
+                $updatemodal  = false;
+				break;  
+          case "matchreport":
+				//return "projectimages/".$data['pid'];
+                $folder .= "/".$mid;
+                $updatemodal  = false;
+				break; 
+		//default:
+		//$updatemodal  = false;
+		//break; 
+          }
 
 		// Set FTP credentials, if given
 		ClientHelper::setCredentialsFromRequest('ftp');
@@ -84,6 +106,12 @@ class sportsmanagementControllerImagehandler extends JSMControllerAdmin
     jQuery('upload" . $fieldid . "').modal('hide');
 }; </script>\n";
 		$base_Dir = JPATH_SITE . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $this->jsmoption . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
+
+echo "<script>console.log('Debug Objects type: " . $type . "' );</script>";
+echo "<script>console.log('Debug Objects folder: " . $folder . "' );</script>";
+echo "<script>console.log('Debug Objects pid: " . $pid . "' );</script>";
+echo "<script>console.log('Debug Objects mid: " . $mid . "' );</script>";
+echo "<script>console.log('Debug Objects base_dir: " . $base_Dir . "' );</script>";
 
 		// Do we have an imagelink?
 		if (!empty($linkaddress))
@@ -152,8 +180,15 @@ class sportsmanagementControllerImagehandler extends JSMControllerAdmin
 
 			//			echo "<script> alert('" . Text::_( 'COM_SPORTSMANAGEMENT_ADMIN_IMAGEHANDLER_CTRL_UPLOAD_COMPLETE'.'-'.$folder.'-'.$type.'-'.$filename.'-'.$field ) . "'); window.history.go(-1); window.parent.selectImage_".$type."('$filename', '$filename','$field'); </script>\n";
 			//			echo "<script> alert('" . Text::_( 'COM_SPORTSMANAGEMENT_ADMIN_IMAGEHANDLER_CTRL_UPLOAD_COMPLETE' ) . "'); window.history.go(-1); window.parent.selectImage_".$type."('$filename', '$filename','$field'); </script>\n";
-			echo "<script>  window.parent.selectImage_" . $type . "('$filename', '$filename','$field','$fieldid');window.closeModal();window.parent.jQuery('.modal.in').modal('hide'); </script>\n";
-			$msg  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_IMAGEHANDLER_CTRL_UPLOAD_COMPLETE');
+			if ( $updatemodal )
+            {
+            echo "<script>window.parent.selectImage_" . $type . "('$filename', '$filename','$field','$fieldid');window.closeModal();window.parent.jQuery('.modal.in').modal('hide'); </script>\n";
+			}
+            else
+            {
+            echo "<script>window.closeModal();window.parent.jQuery('.modal.in').modal('hide');parent.location.reload(); </script>\n";    
+            }
+            $msg  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_IMAGEHANDLER_CTRL_UPLOAD_COMPLETE');
 			$type = 'notice';
 
 			// $app->close();

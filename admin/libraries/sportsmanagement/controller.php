@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage libraries
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Language\Text;
@@ -22,6 +18,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Log\Log;
 
 /**
  * JSMControllerAdmin
@@ -52,6 +49,26 @@ class JSMControllerAdmin extends AdminController
 		$this->jsmjinput = $this->jsmapp->input;
 		$this->jsmoption = $this->jsmjinput->getCmd('option');
 
+	}
+    
+    /**
+	 * Method to save the submitted ordering values for records.
+	 *
+	 * Overrides JControllerAdmin::saveorder to check the core.admin permission.
+	 *
+	 * @return  boolean  True on success
+	 *
+	 * @since   1.6
+	 */
+	public function saveorder()
+	{
+		if (!JFactory::getUser()->authorise('core.admin', $this->option))
+		{
+			JError::raiseError(500, JText::_('JERROR_ALERTNOAUTHOR'));
+			jexit();
+		}
+
+		return parent::saveorder();
 	}
 
 	/**
@@ -181,6 +198,9 @@ class JSMControllerForm extends FormController
 		$this->person_id = $this->jsmapp->getUserState("$this->jsmoption.person_id", '0');
 		$this->team_id   = $this->jsmapp->getUserState("$this->jsmoption.team_id", '0');
 
+//Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . 'post<pre>'.print_r($post,true).'</pre>'), Log::NOTICE, 'jsmerror');
+//Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . 'data<pre>'.print_r($data,true).'</pre>'), Log::NOTICE, 'jsmerror');
+		
 		$id = $this->jsmdb->insertid();
 
 		if (empty($id))
@@ -215,6 +235,13 @@ class JSMControllerForm extends FormController
 					break;
 				case 'rounds':
 					$setRedirect = '&pid=' . $post['pid'];
+					break;
+				case 'projects':
+					$setRedirect = '&pid=' . $id;
+					break;
+				case 'project':
+					$id = $this->jsmjinput->getInt('insert_project_id');
+					$setRedirect = '&pid=' . $id;
 					break;
 				case 'projectteam':
 					$setRedirect = '&pid=' . $data['project_id'];

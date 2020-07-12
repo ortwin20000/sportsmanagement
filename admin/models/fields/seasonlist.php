@@ -102,6 +102,17 @@ class JFormFieldseasonlist extends FormField
 		{
 			$attribs .= ' size="' . $v . '"';
 		}
+        
+        switch ( Factory::getApplication()->input->getCmd('view', '') )
+	  {
+			  case 'clubs':
+              case 'projects':
+			  $attribs .= 'onchange="this.form.submit();"';
+			  break;
+		  default:
+			  $attribs .= '';
+			  break;
+	  }
 
 		$cfg_which_database = $this->form->getValue('cfg_which_database', $div);
 
@@ -117,7 +128,7 @@ class JFormFieldseasonlist extends FormField
 		//// Merge any additional options in the XML definition.
 		//		$options = array_merge(parent::getOptions(), $options);
 		//		return $options;
-		$options = array(HTMLHelper::_('select.option', '', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'), 'value', 'text'));
+		$options = array(HTMLHelper::_('select.option', '', Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_SEASON_FILTER'), 'value', 'text'));
 		if ($result)
 		{
 			$options = array_merge($options, $result);

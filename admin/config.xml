@@ -92,7 +92,7 @@
 		
   <field name="cfg_help_server" 
   type="text" 
-  default="http://jsm-wiki.diddipoeler.de/index.php/" 
+  default="https://jsm-wiki.diddipoeler.de/index.php/" 
 		size="100"
     label="COM_SPORTSMANAGEMENT_SETTINGS_HELPSERVER"
 		description="COM_SPORTSMANAGEMENT_SETTINGS_HELPSERVER_DESC">
@@ -133,6 +133,7 @@
 		<field name="cfg_which_media_tool" 
     type="extensionradiobutton"
 			default="imageselect" 
+			class="radio btn-group btn-group-yesno"
       label="COM_SPORTSMANAGEMENT_SETTINGS_MEDIA_TOOL_TITLE"
 			description="COM_SPORTSMANAGEMENT_SETTINGS_MEDIA_TOOL_DESC">
 			<option value="media">COM_SPORTSMANAGEMENT_JOOMLA_MEDIA_KOMPONENT</option>
@@ -723,7 +724,6 @@ class="radio btn-group btn-group-yesno"
 <!-- backend -->	
 	<fieldset name="COM_SPORTSMANAGEMENT_SETTINGS_GROUP_BACKEND"
 	label="COM_SPORTSMANAGEMENT_SETTINGS_GROUP_BACKEND"
-		
   	addrulepath="/administrator/components/com_sportsmanagement/models/rules"
 	addfieldpath="/administrator/components/com_sportsmanagement/models/fields">
 
@@ -741,7 +741,7 @@ class="radio btn-group btn-group-yesno"
 			description="COM_SPORTSMANAGEMENT_FIELD_GH_TOKEN_DESC"
 			label="COM_SPORTSMANAGEMENT_FIELD_GH_TOKEN_LABEL"
 		/>
-			
+<field type="extensionsubtitle" title="Joomleague Import" color="#2672a6" />			
 		<field
 			name="jl_dbtype"
 			type="databaseconnection"
@@ -1012,7 +1012,17 @@ multiple="true"
 			<option value="1">JYES</option>
 		</field>		
 
-
+<field name="auto_completion_club_name" 
+    type="extensionradiobutton" 
+    default="0"
+    class="radio btn-group btn-group-yesno"
+			label="COM_SPORTSMANAGEMENT_SETTINGS_AUTO_COMPLETION_CLUB_NAME" 
+      description="COM_SPORTSMANAGEMENT_SETTINGS_AUTO_COMPLETION_CLUB_NAME_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+<!--
 <field name="show_option_projectteams_quickadd" 
     type="extensionradiobutton" 
     default="0"
@@ -1022,7 +1032,7 @@ multiple="true"
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-	
+	-->
 <field name="show_option_projectteam_change" 
     type="extensionradiobutton" 
     default="0"

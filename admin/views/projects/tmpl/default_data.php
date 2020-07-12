@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage projects
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Filesystem\File;
@@ -171,18 +167,24 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $this->user->get('id'), $row->checked_out_time, 'projects.', $canCheckin); ?>
 					<?php else: ?>
                         <a href="<?php echo $link; ?>">
-							<?php
-							$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_EDIT_DETAILS');
-							echo HTMLHelper::_(
-								'image', 'administrator/components/com_sportsmanagement/assets/images/edit.png',
-								$imageTitle, 'title= "' . $imageTitle . '"'
-							);
+<?php
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_EDIT_DETAILS');
+$image_attributes['title'] = $imageTitle;			
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/edit.png',$imageTitle,$image_attributes);
 							?>
                         </a>
                         </br>
 					<?php
 					endif;
-					$pcture_link = 'index.php?option=com_media&view=images&tmpl=component&asset=com_sportsmanagement&author=&folder=com_sportsmanagement/database/projectimages/' . $row->id;
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{			
+$pcture_link = 'index.php?option=com_media&tmpl=component&asset=com_sportsmanagement&author=&path=local-0:/com_sportsmanagement/database/projectimages/' . $row->id;
+}	
+elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
+{
+//$pcture_link = 'index.php?option=com_sportsmanagement&view=imagelist&tmpl=component&asset=com_sportsmanagement&author=&folder=images/com_sportsmanagement/database/projectimages/' . $row->id.'&pid='. $row->id;	
+$pcture_link = 'index.php?option=com_sportsmanagement&view=imagelist&tmpl=component&asset=com_sportsmanagement&author=&folder=projectimages' .'&pid='. $row->id;
+}	
 					echo sportsmanagementHelper::getBootstrapModalImage('projectimages' . $row->id, Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/link.png', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_EDIT_MATCHPICTURE'), '20', Uri::base() . $pcture_link, $this->modalwidth, $this->modalheight);
 					?>
                 </td>
@@ -220,9 +222,10 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
                 <td class="center"><?php echo JSMCountries::getCountryFlag($row->country); ?></td>
                 <td class="center"><?php echo $row->season; ?>
                     <br>
-					<?php
-					$picture = $this->model->existcurrentseason($this->season_ids, $row->league_id) ? 'ok.png' : 'error.png';
-					echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/' . $picture, '', 'title= "' . '' . '"');
+<?php
+$picture = $this->model->existcurrentseason($this->season_ids, $row->league_id) ? 'ok.png' : 'error.png';
+$image_attributes['title'] = 'title= "' . '' . '"';			
+echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/' . $picture, '', $image_attributes);
 					?>
                 </td>
                 <td class="center">
@@ -275,19 +278,15 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					<?php
 					if (empty($row->picture) || !File::exists(JPATH_SITE . DIRECTORY_SEPARATOR . $row->picture))
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_NO_IMAGE') . $row->picture;
-						echo HTMLHelper::_(
-							'image', 'administrator/components/com_sportsmanagement/assets/images/delete.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_NO_IMAGE') . $row->picture;
+$image_attributes['title'] = $imageTitle;						
+echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets/images/delete.png',$imageTitle,$image_attributes);
 					}
                     elseif ($row->picture == sportsmanagementHelper::getDefaultPlaceholder("player"))
 					{
-						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_DEFAULT_IMAGE');
-						echo HTMLHelper::_(
-							'image', 'administrator/components/com_sportsmanagement/assets/images/information.png',
-							$imageTitle, 'title= "' . $imageTitle . '"'
-						);
+$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_DEFAULT_IMAGE');
+$image_attributes['title'] = $imageTitle;			    
+echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/information.png',$imageTitle, $image_attributes);
 					}
 					else
 					{
@@ -305,7 +304,7 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					<?php if ($row->current_round) : ?>
 						<?php echo HTMLHelper::link(
 							'index.php?option=com_sportsmanagement&view=matches&pid=' . $row->id . '&rid=' . $row->current_round,
-							HTMLHelper::image(Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/icon-16-Matchdays.png', Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_GAMES_DETAILS'))
+							HTMLHelper::_('image',Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/icon-16-Matchdays.png', Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_GAMES_DETAILS'))
 						); ?>
 					<?php endif; ?>
                 </td>
@@ -330,7 +329,7 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 					{
 						echo HTMLHelper::link(
 								'index.php?option=com_sportsmanagement&view=' . $teile[$a] . '&pid=' . $row->id,
-								HTMLHelper::image(Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/information.png', Text::_($teile[$a]))
+								HTMLHelper::_('image',Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/information.png', Text::_($teile[$a]))
 							) . '<br>';
 					}
 					if ($this->state->get('filter.userfields'))

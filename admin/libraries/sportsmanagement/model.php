@@ -1,8 +1,6 @@
 <?PHP
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage libraries
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
@@ -275,6 +271,14 @@ class JSMModelAdmin extends AdminModel
 
 				$data['sports_type_id'] = $data['request']['sports_type_id'];
 				$data['agegroup_id']    = $data['request']['agegroup_id'];
+				if ($data['founded'] != '0000-00-00' && $data['founded'] != '')
+				{
+					$data['founded'] = sportsmanagementHelper::convertDate($data['founded'], 0);
+				}
+				if ($data['dissolved'] != '0000-00-00' && $data['dissolved'] != '')
+				{
+					$data['dissolved'] = sportsmanagementHelper::convertDate($data['dissolved'], 0);
+				}
 				break;
 			/**
 			 * person
@@ -697,8 +701,10 @@ class JSMModelAdmin extends AdminModel
 			$data['id'] = $id;
 			$this->jsmapp->setUserState("$this->jsmoption.club_id", $id);
 			$this->jsmapp->setUserState("$this->jsmoption.person_id", $id);
+			$this->jsmapp->setUserState("$this->jsmoption.insert_project_id", $id);
 			$this->jsmjinput->set('insert_id', $id);
 			$this->jsmjinput->set('person_id', $id);
+			$this->jsmjinput->set('insert_project_id', $id);
 
 			if ($isNew)
 			{
@@ -1631,7 +1637,8 @@ class JSMModelList extends ListModel
 	 */
 	public function __construct($config = array())
 	{
-
+		$this->jsmapp = Factory::getApplication();
+		$this->jsmjinput      = $this->jsmapp->input;
 		parent::__construct($config);
 		$getDBConnection = sportsmanagementHelper::getDBConnection();
 		parent::setDbo($getDBConnection);
@@ -1642,11 +1649,9 @@ class JSMModelList extends ListModel
 		$this->jsmsubquery2 = $this->jsmdb->getQuery(true);
 		$this->jsmsubquery3 = $this->jsmdb->getQuery(true);
 
-		// Reference global application object
-		$this->jsmapp = Factory::getApplication();
-
-		// JInput object
-		$this->jsmjinput      = $this->jsmapp->input;
+//		$this->jsmapp = Factory::getApplication();
+//		$this->jsmjinput      = $this->jsmapp->input;
+        
 		$this->jsmoption      = $this->jsmjinput->getCmd('option');
 		$this->jsmdocument    = Factory::getDocument();
 		$this->jsmuser        = Factory::getUser();
