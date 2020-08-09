@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage helpers
@@ -14,9 +12,7 @@
  * toolbar
  * https://issues.joomla.org/tracker/joomla-cms/19670
  */
-
 defined('_JEXEC') or die;
-
 use Joomla\CMS\Router\Route;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -32,6 +28,11 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Component\Actionlogs\Administrator\Model\ActionlogModel;
+//BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_actionlogs/models', 'ActionlogsModel');
+
+HTMLHelper::_('behavior.keepalive');
 
 if (version_compare(JVERSION, '3.0.0', 'ge'))
 {
@@ -77,7 +78,94 @@ abstract class sportsmanagementHelper
 	static $_jsm_db = '';
 	static $_success_text = array();
 
-	
+	/**
+	 * Record transaction details in log record
+	 * @param   object  $user    Saves getting the current user again.
+	 * @param   int     $tran_id  The transaction id just created or updated
+	 * @param   int     $id  Passed id reference from the form to identify if new record
+	 * @return  boolean	True
+	 */
+    public static function recordActionLog($user = null, $tran = null, $id = 0)
+	{
+	// get the component details such as the id
+	//$extension =  MycomponentHelper::getExtensionDetails('com_sportsmanagement');
+	$extension = 'com_sportsmanagement';
+	// get the transaction details for use in the log for easy reference
+        //$tran = MycomponentHelper::getTransaction($tran_id);
+        $con_type = Factory::getApplication()->input->getCmd('view', 'cpanel');
+        if ($id === 0) { $type = Text::_('JTOOLBAR_NEW'); } else { $type = Text::_('JLIB_INSTALLER_UPDATE'); }
+
+		$message = array();
+		$message['action'] = $con_type;
+	    switch ( $con_type )
+	    {
+		    case 'player':
+		$message['type'] = $type .' '. $tran['firstname'].' '. $tran['lastname'];	    
+			    break;
+		    default:
+		$message['type'] = $type .' '. $tran['name'];	    
+			    break;
+	    }
+		$message['id'] = $tran['id'];
+		$message['title'] = $extension;
+		$message['extension_name'] = $extension;
+		$message['itemlink'] = "index.php?option=com_sportsmanagement&task=".$con_type.".edit&id=".$tran['id'];
+		$message['userid'] = $user->id;
+		$message['username'] = $user->username;
+		$message['accountlink'] = "index.php?option=com_users&task=user.edit&id=".$user->id;
+		
+		$messages = array($message);
+		
+		$messageLanguageKey = Text::_('COM_SPORTSMANAGEMENT_TRANSACTION_LINK');
+		$context = $extension.'.'.$con_type;
+		
+/** welche joomla version ? */
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+/** @var ActionlogModel $model */
+		$fmodel = new ActionlogModel;	
+}
+	    elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
+{
+	        /** @var ActionlogsModelActionlog $model **/
+		    BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_actionlogs/models', 'ActionlogsModel');
+		$fmodel = BaseDatabaseModel::getInstance('Actionlog', 'ActionlogsModel');
+	    }
+		//$model->addLog($messages, strtoupper($messageLanguageKey), $context, $userId);
+	    try{
+		$fmodel->addLog($messages, $messageLanguageKey, $context, $user->id);
+	    }
+		    catch (Exception $e)
+			{
+		    }
+
+		return true;
+	}
+
+	/**
+	 * Get the Model from another component for use
+	 * @param   string  $name    The model name. Optional. Default to my own for safety.
+	 * @param   string  $prefix  The class prefix. Optional
+	 * @param   array   $config  Configuration array for model. Optional
+	 * @return object	The model
+	 */
+	public function getForeignModel($name = 'Transaction', $prefix = 'MycomponentModel', $config = array('ignore_request' => true))
+	{
+		\Joomla\CMS\MVC\Model\ItemModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_actionlogs/models', 'ActionlogsModelActionlog');
+		$fmodel = \Joomla\CMS\MVC\Model\ItemModel::getInstance($name, $prefix, $config);
+
+		return $fmodel;
+	}
+    
+    
+	/**
+	 * sportsmanagementHelper::formatselect2output()
+	 * 
+	 * @param mixed $daten
+	 * @param string $placeholder
+	 * @param string $class
+	 * @return
+	 */
 	function formatselect2output($daten=array(),$placeholder='',$class='' )
 	{
 ?>
@@ -147,7 +235,9 @@ var <?php echo $placeholder; ?> = new Array;
 
 		if ($picture)
 		{
-			$modaltext .= '<img src="' . $picture . '" alt="' . $text . '" width="' . $picturewidth . '" />';
+			//$modaltext .= '<img src="' . $picture . '" alt="' . $text . '" width="' . $picturewidth . '" class"sportsmanagement-img-preview" />';
+			//$modaltext .= '<img src="' . $picture . '" alt="' . $text . '" class"sportsmanagement-img-preview" />';
+			$modaltext .= '<img src="' . $picture . '" alt="' . $text . '" style="width: auto;height: ' . $picturewidth . 'px" />';
 		}
 		else
 		{
@@ -2458,7 +2548,7 @@ try
 
 		if ($config['show_print_button'] == 1)
 		{
-			HTMLHelper::_('behavior.tooltip');
+			//HTMLHelper::_('behavior.tooltip');
 			$status = 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=800,height=600,directories=no,location=no';
 
 			// Checks template image directory for image, if non found default are loaded

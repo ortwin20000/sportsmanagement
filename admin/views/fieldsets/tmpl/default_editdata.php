@@ -218,9 +218,7 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
 			<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'details')); ?>
 
 			<?PHP
-			foreach ($fieldsets
-
-			as $fieldset)
+			foreach ($fieldsets	as $fieldset)
 			{
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', $fieldset->name, Text::_($fieldset->label, true));
 
@@ -235,27 +233,24 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
 				case 'club':
 				case 'playground':
 				case 'player':
+                $class_span1 = 'span6';
+                $class_span2 = 'span6';
+				break;
+				default:
+                $class_span1 = 'span12';
+				break;
+				}
 				?>
-                <div class="span6">
-					<?php
-					break;
-					default:
-					?>
-                    <div class="span12">
-						<?php
-						break;
-						}
-						?>
-
+                <div class="<?php echo $class_span1; ?>">
 						<?PHP
 						foreach ($this->form->getFieldset($fieldset->name) as $field)
 						{
 							?>
                             <div class="control-group">
-                                <div class="control-label">
+                                <div class="control-label span3">
 									<?php echo $field->label; ?>
                                 </div>
-                                <div class="controls">
+                                <div class="controls span9">
 									<?php echo $field->input; ?>
 
 									<?PHP
@@ -267,7 +262,12 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
 										case 'id':
 											break;
 										default:
-											?>
+											switch ($field->type)
+                                            {
+                                            case 'extensionsubtitle':
+                                            break;
+                                            default:
+                                            ?>
                                             <a rel="{handler: 'iframe',size: {x: <?php echo COM_SPORTSMANAGEMENT_MODAL_POPUP_WIDTH; ?>,y: <?php echo COM_SPORTSMANAGEMENT_MODAL_POPUP_HEIGHT; ?>}}"
                                                href="<?php echo COM_SPORTSMANAGEMENT_HELP_SERVER . 'SM-Backend-Felder:' . $this->jinput->getVar("view") . '-' . $this->form->getName() . '-' . $var_onlinehelp; ?>"
                                                class="modal">
@@ -281,6 +281,9 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
                                             </a>
 
 											<?PHP
+                                            break;
+                                            }
+                                            
 											if ($field->name == 'jform[country]')
 											{
 												echo JSMCountries::getCountryFlag($field->value);
@@ -326,23 +329,22 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
                                 </div>
                             </div>
 							<?php
-
 						}
 						?>
                     </div>
 					<?php
 					switch ($view)
 					{
-						case 'club':
-						case 'playground':
-						case 'player':
-							if (!$this->item->latitude)
-							{
-								$this->item->latitude  = '0.00000000';
-								$this->item->longitude = '0.00000000';
-							}
-							?>
-                            <div class="span6">
+					case 'club':
+    				case 'playground':
+					case 'player':
+					if (!$this->item->latitude)
+					{
+					$this->item->latitude  = '0.00000000';
+					$this->item->longitude = '0.00000000';
+					}
+					?>
+                    <div class="<?php echo $class_span2; ?>">
                                 <div class="control-group">
                                     <style type="text/css">.map_canvas {
                                             width: 100%;

@@ -16,8 +16,6 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
 
-$templatesToLoad = array('footer', 'listheader');
-sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 if ($this->assign)
 {
 	$this->readonly = ' readonly ';
@@ -33,9 +31,9 @@ else
         <thead>
         <tr>
             <th width="1%" class="center"><?php echo Text::_('COM_SPORTSMANAGEMENT_GLOBAL_NUM'); ?></th>
-            <th width="1%" class="center">
-                <input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);"/>
-            </th>
+            <th style="width:1%" class="text-center">
+									<?php echo HTMLHelper::_('grid.checkall'); ?>
+								</th>
 
             <th width="10%" class="left nowrap">
 				<?php

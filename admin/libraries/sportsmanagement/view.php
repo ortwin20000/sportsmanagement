@@ -22,6 +22,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 /** welche joomla version ? */
 if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
@@ -127,6 +128,11 @@ class sportsmanagementView extends BaseHtmlView
 // for details http://ivaynberg.github.io/select2/		
 $this->document->addStyleDeclaration(
 			'
+img.sportsmanagement-img-preview {
+  width: auto;
+  height: 50px;
+}			
+			
 img.item {
     padding-right: 10px;
     vertical-align: middle;
@@ -148,8 +154,15 @@ img.car {
 	$this->jsmmessage     = '';
 	$this->jsmmessagetype = 'notice';
 	$this->state          = $this->get('State');
-        $this->dragable_group = '';
-
+    $this->dragable_group = '';
+        
+        
+        $this->sortColumn = $this->escape($this->state->get('list.ordering'));
+        $this->sortDirection  = $this->escape($this->state->get('list.direction'));
+        $this->ordering = true;
+        //$this->saveOrder = $this->sortColumn == 'a.ordering';
+        
+/*
 		if (isset($this->state))
 		{
 			$this->sortDirection = $this->state->get('list.direction');
@@ -159,7 +172,7 @@ img.car {
             //$ordering   = ($this->sortColumn == 'ordering');
             $this->ordering = true;
 		}
-
+*/
 		if (ComponentHelper::getParams($this->option)->get('cfg_which_database'))
 		{
 			$this->jsmmessage = 'Sie haben Zugriff auf die externe Datenbank';
@@ -185,9 +198,7 @@ img.car {
 				break;
 		}
 
-		/**
-		 * bei der einzelverarbeitung
-		 */
+		/** bei der einzelverarbeitung */
 		if ($this->layout == 'edit'
 			|| $this->layout == 'edit_3'
 			|| $this->layout == 'edit_4'
@@ -203,7 +214,7 @@ img.car {
 				default:
 					$this->addTemplatePath(JPATH_ROOT . DIRECTORY_SEPARATOR . 'administrator' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . $this->option . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'fieldsets' . DIRECTORY_SEPARATOR . 'tmpl');
 
-					// Get the Data
+					/** Get the Data */
 					$this->form   = $this->get('Form');
 					$this->item   = $this->get('Item');
 					$this->script = $this->get('Script');
@@ -227,10 +238,21 @@ img.car {
 			{
 				case 'club';
 				case 'playground';
-                //$this->app->set('itemname', $this->item->name);
+                case 'league';
+                case 'person';
+                case 'position';
+                case 'agegroup';
                 $this->app->setUserState('com_sportsmanagement.itemname', $this->item->name);
-					//$this->itemname = $this->item->name;
-					break;
+				break;
+                case 'teamperson';
+        case 'projectreferee';
+                $mdlPerson      = BaseDatabaseModel::getInstance("player", "sportsmanagementModel");
+		        $project_person = $mdlPerson->getPerson($this->item->person_id);
+                $this->app->setUserState('com_sportsmanagement.itemname', $project_person->lastname . ' - ' . $project_person->firstname);
+                break;
+                case 'player';
+                $this->app->setUserState('com_sportsmanagement.itemname', $this->item->lastname.' '.$this->item->firstname);
+                break;
             }
             
             
@@ -238,16 +260,12 @@ img.car {
             
 		}
 
-		/**
-		 * in der listansicht
-		 */
+		/** in der listansicht */
 		else
 		{
 			if ($this->format != 'json')
 			{
-				/**
-				 * dadurch werden die spaltenbreiten optimiert
-				 */
+				/** dadurch werden die spaltenbreiten optimiert */
 				$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/form_control.css', 'text/css');
 			}
 
@@ -260,12 +278,12 @@ img.car {
 				case 'jlextdfbkeyimport';
 				case 'transifex';
                 case 'imagelist';
-					break;
+				break;
 				default:
-					$this->items      = $this->get('Items');
-					$this->total      = $this->get('Total');
-					$this->pagination = $this->get('Pagination');
-					break;
+				$this->items      = $this->get('Items');
+				$this->total      = $this->get('Total');
+				$this->pagination = $this->get('Pagination');
+				break;
 			}
 
 			$this->user        = Factory::getUser();
@@ -341,7 +359,7 @@ img.car {
 				$this->sidebar = JHtmlSidebar::render();
 			}
 		}
-		
+	/*	
 switch ($this->view)
 {
 case 'clubs';
@@ -350,7 +368,7 @@ case 'playgrounds':
 //$this->activeFilters = $this->get('ActiveFilters');	
 break;
 }
-		
+*/		
 
 		parent::display($tpl);
 	}
@@ -381,16 +399,16 @@ break;
 
 			switch ($this->view)
 			{
-				case 'projects':
+				//case 'projects':
 				//case 'players':
 				case 'predictiongames':
 				case 'jlextfederations':
 				case 'jlextassociations':
-				case 'jlextcountries':
-				case 'agegroups':
-				case 'eventtypes':
+				//case 'jlextcountries':
+				//case 'agegroups':
+				//case 'eventtypes':
 				//case 'leagues':
-				case 'seasons':
+				//case 'seasons':
 				case 'sportstypes':
 				//case 'positions':
 				case 'clubnames':

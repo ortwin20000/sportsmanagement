@@ -111,8 +111,13 @@ class JSMModelAdmin extends AdminModel
 		$address_parts = array();
 		$person_double = array();
 		$parentsave    = true;
+        
+        $config = Factory::getConfig();
 
-		// $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' task '.$this->jsmjinput->get('task')), '');
+if ( $config->get('debug') )
+{
+		$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' task '.$this->jsmjinput->get('task')), '');
+}
 
 		$input_options = InputFilter::getInstance(
 			array(
@@ -268,6 +273,15 @@ class JSMModelAdmin extends AdminModel
 				{
 					$data['picture'] = $post['copy_jform']['picture'];
 				}
+                
+                if ( !$data['founded'] )
+                {
+                    $data['founded'] = '0000-00-00';
+                }
+                if ( !$data['dissolved'] )
+                {
+                    $data['dissolved'] = '0000-00-00';
+                }
 
 				$data['sports_type_id'] = $data['request']['sports_type_id'];
 				$data['agegroup_id']    = $data['request']['agegroup_id'];
@@ -463,6 +477,7 @@ class JSMModelAdmin extends AdminModel
 					{
 						$team_id   = $post['team_id'][$key];
 						$team_name = $post['team_value_id'][$key];
+						$club_id = $post['club_value_id'][$key];
 
 						// Create an object for the record we are going to update.
 						$object = new stdClass;
@@ -470,6 +485,7 @@ class JSMModelAdmin extends AdminModel
 						// Must be a valid primary key value.
 						$object->id    = $team_id;
 						$object->name  = $team_name;
+						$object->club_id    = $club_id;
 						$object->alias = OutputFilter::stringURLSafe($team_name);
 
 						// Update their details in the table using id as the primary key.
@@ -546,6 +562,12 @@ class JSMModelAdmin extends AdminModel
 				{
 					$data['dissolved_year'] = $data['dissolved_year'];
 				}
+				
+				if ( !$data['founded_year'] )
+            {
+            $data['founded_year'] = 'kein';
+            }
+				
 				break;
 			/**
 			 * mannschaft
@@ -589,6 +611,10 @@ class JSMModelAdmin extends AdminModel
 				if (array_key_exists('copy_jform', $post))
 				{
 					$data['picture'] = $post['copy_jform']['picture'];
+				}
+				if ( $data['category_id'] == '' )
+				{
+				$data['category_id']  = 0;	
 				}
 
 				$data['start_date']         = sportsmanagementHelper::convertDate($data['start_date'], 0);
@@ -691,9 +717,15 @@ class JSMModelAdmin extends AdminModel
 			$parentsave = false;
 		}
 
-		//    $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' parentsave '.$parentsave), '');
-		//    $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' getState id '.$this->getState($this->getName().'.id') ), '');
-		//    $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$this->jsmjinput->getInt('id') ), '');
+if ( $config->get('debug') )
+{
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' data <pre>'.print_r($data,true).'</pre>'), '');    
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' post <pre>'.print_r($post,true).'</pre>'), '');
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' parentsave '.$parentsave), '');
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' getState id '.$this->getState($this->getName().'.id') ), '');
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$this->jsmjinput->getInt('id') ), '');
+}
+        
 		if ($parentsave)
 		{
 			$id         = (int) $this->getState($this->getName() . '.id');
@@ -706,6 +738,15 @@ class JSMModelAdmin extends AdminModel
 			$this->jsmjinput->set('person_id', $id);
 			$this->jsmjinput->set('insert_project_id', $id);
 
+			if ($isNew)
+			{
+			sportsmanagementHelper::recordActionLog($this->jsmuser, $data, 0);	
+			}
+			else
+			{
+			sportsmanagementHelper::recordActionLog($this->jsmuser, $data, $data['id'] );	
+			}
+			
 			if ($isNew)
 			{
 				/**
@@ -1287,7 +1328,7 @@ class JSMModelAdmin extends AdminModel
 				{
 					$form->setFieldAttribute('merge_teams', 'type', 'hidden');
 				}
-
+				
 				//        $form->setFieldAttribute('logo_small', 'default', ComponentHelper::getParams($this->jsmoption)->get('ph_logo_small',''));
 				//        $form->setFieldAttribute('logo_small', 'directory', $joomladirectory.'com_sportsmanagement/database/clubs/small');
 				$form->setFieldAttribute('logo_small', 'type', $cfg_which_media_tool);
@@ -1519,6 +1560,7 @@ class JSMModelAdmin extends AdminModel
 		for ($i = 0; $i < count($pks); $i++)
 		{
 			$row->load((int) $pks[$i]);
+			$row->ordering = $pks[$i];
 
 			if ($row->ordering != $order[$i])
 			{
@@ -1528,7 +1570,10 @@ class JSMModelAdmin extends AdminModel
 						$row->ordering = substr($row->name, 0, 4);
 						break;
 					default:
+						if ( $order[$i] )
+						{
 						$row->ordering = $order[$i];
+						}
 						break;
 				}
 

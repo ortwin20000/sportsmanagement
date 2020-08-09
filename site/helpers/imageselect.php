@@ -31,7 +31,6 @@ use Joomla\CMS\Log\Log;
 abstract class ImageSelectSM
 {
 	static $_foldertype = '';
-
 	static $_view = '';
 
 	/**
@@ -235,7 +234,7 @@ $link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .
 		$imageselect .= "</div></div>\n";
 
 		$imageselect .= "<div class=\"button2-left\"><div class=\"blank\">";
-		$imageselect .= sportsmanagementHelper::getBootstrapModalImage('select' . $funcname, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'), '20', Uri::base() . $link2, $modalwidth, $modalheight);
+		$imageselect .= sportsmanagementHelper::getBootstrapModalImage('select' . $funcname, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' '.Factory::getApplication()->getUserState("com_sportsmanagement.itemname", ''), '20', Uri::base() . $link2, $modalwidth, $modalheight);
 		$imageselect .= "</div></div>\n";
 
 		$imageselect .= "<div class=\"button2-left\"><div class=\"blank\"><a class=\"btn btn-primary\" title=\"" .
@@ -310,7 +309,8 @@ console.log('getfolder: ' + '<?php echo $type;  ?>' );
 				return "persons";
 				break;
 			case "projectreferee":
-				return "persons";
+				//return "persons";
+                return "projectreferees";
 				break;
 			case "playgrounds":
 				return "playgrounds";
@@ -361,6 +361,11 @@ console.log('getfolder: ' + '<?php echo $type;  ?>' );
                 //$data = Factory::getApplication()->input->getArray();
 				//return "projectimages/".$data['pid'];
                 return "projectimages";
+				break;
+				case "matchreport":
+                //$data = Factory::getApplication()->input->getArray();
+				//return "projectimages/".$data['pid'];
+                return "matchreport";
 				break;
 			default:
 				return "events/" . $type;

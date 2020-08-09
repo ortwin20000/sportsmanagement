@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage teamplan
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
@@ -34,7 +30,7 @@ if (!empty($this->matches))
 	$nbcols = 0;
 	?>
     <div class="<?php echo $this->divclassrow; ?> table-responsive" id="teamplan">
-        <table class="<?php echo $this->config['table_class']; ?>">
+        <table class="<?php echo $this->config['table_class']; ?>" id="teamplanoutput">
             <thead>
             <tr>
 				<?php
@@ -975,7 +971,8 @@ if (!empty($this->matches))
 										if ($match->referees[$i]->referee_lastname != '' && $match->referees[$i]->referee_firstname)
 										{
 											$output      .= '<span class="hasTip" title="' . Text::_('COM_SPORTSMANAGEMENT_TEAMPLAN_REF_FUNCTION') . '::' . Text::_($match->referees[$i]->referee_position_name) . '">';
-											$ref         = $match->referees[$i]->referee_lastname . ',' . $match->referees[$i]->referee_firstname;
+											//$ref         = $match->referees[$i]->referee_lastname . ',' . $match->referees[$i]->referee_firstname;
+                                            $ref = sportsmanagementHelper::formatName(null, $match->referees[$i]->referee_firstname, $match->referees[$i]->referee_nickname, $match->referees[$i]->referee_lastname, $this->config["referee_name_format"]);
 											$toolTipText .= $ref . ' (' . Text::_($match->referees[$i]->referee_position_name) . ')' . '&lt;br /&gt;';
 											if ($this->config['show_referee_link'])
 											{
@@ -1111,6 +1108,7 @@ if (!empty($this->matches))
                                     <tr>
                                         <td>
 											<?php
+
 											echo sportsmanagementHelperHtml::showEventsContainerInResults(
 												$match,
 												$this->projectevents,
@@ -1119,6 +1117,7 @@ if (!empty($this->matches))
 												$this->config,
                                                 $this->project
 											);
+
 											?>
                                         </td>
                                     </tr>

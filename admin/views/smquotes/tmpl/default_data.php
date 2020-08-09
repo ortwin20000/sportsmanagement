@@ -13,15 +13,31 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+    
+if ($this->saveOrder && !empty($this->items))
+{
+$saveOrderingUrl = 'index.php?option=com_sportsmanagement&task=agegroups.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';    
+HTMLHelper::_('draggablelist.draggable');
+}    
+}
+else
+{
+$saveOrderingUrl = 'index.php?option=com_sportsmanagement&task=agegroups.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';    
+JHtml::_('sortablelist.sortable', 'smquoteslist', 'adminForm', strtolower($this->sortDirection), $saveOrderingUrl);
+} 
 
 ?>
 <div id="editcell">
-    <table class="<?php echo $this->table_data_class; ?>">
+    <table class="<?php echo $this->table_data_class; ?>" id="smquoteslist">
         <thead>
         <tr>
             <th width="5"><?php echo Text::_('COM_SPORTSMANAGEMENT_GLOBAL_NUM'); ?></th>
             <th width="20">
-                <input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);"/>
+                <?php echo HTMLHelper::_('grid.checkall'); ?>
             </th>
             <th width="20">&nbsp;</th>
             <th>
@@ -33,7 +49,7 @@ use Joomla\CMS\Router\Route;
             </th>
             <th>
 				<?php
-				echo HTMLHelper::_('grid.sort', 'JGLOBAL_ARTICLES', 'obj.author', $this->sortDirection, $this->sortColumn);
+				echo HTMLHelper::_('grid.sort', 'JGLOBAL_ARTICLES', 'obj.quote', $this->sortDirection, $this->sortColumn);
 				?>
             </th>
             <th>
@@ -49,7 +65,7 @@ use Joomla\CMS\Router\Route;
             </th>
             <th>
 				<?php
-				echo HTMLHelper::_('grid.sort', 'JSTATUS', 'pl.published', $this->sortDirection, $this->sortColumn);
+				echo HTMLHelper::_('grid.sort', 'JSTATUS', 'obj.published', $this->sortDirection, $this->sortColumn);
 				?>
             </th>
             <th width="20">
@@ -64,11 +80,15 @@ use Joomla\CMS\Router\Route;
             <td colspan="3"><?php echo $this->pagination->getResultsCounter(); ?></td>
         </tr>
         </tfoot>
-        <tbody>
+        <tbody <?php if ( $this->saveOrder && version_compare(substr(JVERSION, 0, 3), '4.0', 'ge') ) :?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($this->sortDirection); ?>" data-nested="false"<?php endif; ?>>
 		<?php
 		$k = 0;
 		for ($i = 0, $n = count($this->items); $i < $n; $i++)
 		{
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+$this->dragable_group = 'data-dragable-group="none"';
+} 			
 			$row        =& $this->items[$i];
 			$link       = Route::_('index.php?option=com_sportsmanagement&task=smquote.edit&id=' . $row->id);
 			$canEdit    = $this->user->authorise('core.edit', 'com_sportsmanagement');
@@ -76,7 +96,7 @@ use Joomla\CMS\Router\Route;
 			$checked    = HTMLHelper::_('jgrid.checkedout', $i, $this->user->get('id'), $row->checked_out_time, 'smquotes.', $canCheckin);
 			$canChange  = $this->user->authorise('core.edit.state', 'com_sportsmanagement.smquote.' . $row->id) && $canCheckin;
 			?>
-            <tr class="<?php echo "row$k"; ?>">
+            <tr class="<?php echo "row$k"; ?>" <?php echo $this->dragable_group; ?>>
                 <td class="center"><?php echo $this->pagination->getRowOffset($i); ?></td>
                 <td class="center"><?php echo HTMLHelper::_('grid.id', $i, $row->id); ?></td>
 				<?php
