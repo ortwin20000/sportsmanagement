@@ -155,11 +155,25 @@ img.car {
 	$this->jsmmessagetype = 'notice';
 	$this->state          = $this->get('State');
     $this->dragable_group = '';
-        
-        
+        $this->ordering = true;
+        if ( $this->state )
+        {
+        try{
         $this->sortColumn = $this->escape($this->state->get('list.ordering'));
         $this->sortDirection  = $this->escape($this->state->get('list.direction'));
-        $this->ordering = true;
+		 }
+catch (Exception $e)
+{
+//Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getCode()), Log::ERROR, 'jsmerror');
+//Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERROR, 'jsmerror');
+}
+}
+
+if (preg_match("/ordering/i", $this->sortColumn)) {
+   $this->saveOrderButton = false;
+} else {
+   $this->saveOrderButton = true;
+}
         //$this->saveOrder = $this->sortColumn == 'a.ordering';
         
 /*
@@ -800,6 +814,7 @@ document.getElementById("filter_season").classList.add("filter_season");
 				case 'treetomatchs';
 				case 'smextxmleditors';
 				case 'smextxmleditor';
+					case 'jsmopenligadb';
                 case 'smimageimports';
 				break;
 				default:

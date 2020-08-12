@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Log\Log;
 
 /**
  * sportsmanagementModelProjectReferees
@@ -215,9 +216,34 @@ class sportsmanagementModelProjectReferees extends JSMModelList
 		$this->setState('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'list_limit', $this->jsmapp->get('list_limit'), 'int'));
 		$this->setState('list.start', $this->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0, 'int'));
 
-		parent::populateState('p.lastname', 'asc');
+		$orderCol = $this->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', '', 'string');
+		if (!in_array($orderCol, $this->filter_fields))
+		{
+			$orderCol = 'p.lastname';
+		}
+		$this->setState('list.ordering', $orderCol);
+		$listOrder = $this->getUserStateFromRequest($this->context . '.filter_order_Dir', 'filter_order_Dir', '', 'cmd');
+		if (!in_array(strtoupper($listOrder), array('ASC', 'DESC', '')))
+		{
+			$listOrder = 'ASC';
+		}
+		$this->setState('list.direction', $listOrder);
 	}
 
+	public function getItems2() {
+		$this->jsmquery->clear();
+$this->jsmquery = $this->getListQuery();
+		$this->jsmdb->setQuery($this->jsmquery);
+		try{
+        return $this->jsmdb->loadObjectList();
+}
+catch (Exception $e)
+{
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getCode()), Log::ERROR, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERROR, 'jsmerror');
+	return false;
+}
+	}
 	/**
 	 * sportsmanagementModelProjectReferees::getListQuery()
 	 *
@@ -230,6 +256,8 @@ class sportsmanagementModelProjectReferees extends JSMModelList
 		$this->_team_id         = Factory::getApplication()->input->getVar('team_id');
 		$this->_project_team_id = Factory::getApplication()->input->getVar('project_team_id');
 
+		//echo '_season_id<pre>'.print_r($this->_season_id,true).'</pre>';
+		
 		if (!$this->_team_id)
 		{
 			$this->_team_id = $this->jsmapp->getUserState("$this->jsmoption.team_id", '0');
@@ -241,14 +269,18 @@ class sportsmanagementModelProjectReferees extends JSMModelList
 		}
 
 		$this->jsmquery->clear();
-		$this->jsmquery->select(implode(",", $this->filter_fields) . ',tp.person_id as person_id');
+		$this->jsmquery->select(implode(",", $this->filter_fields) . ',tp.person_id as person_id,tp.persontype,tp.season_id');
+		$this->jsmquery->select('tp.id as season_person_id');
 		$this->jsmquery->from('#__sportsmanagement_person AS p');
 		$this->jsmquery->join('INNER', '#__sportsmanagement_season_person_id AS tp on tp.person_id = p.id');
 		$this->jsmquery->join('INNER', '#__sportsmanagement_project_referee AS pref on pref.person_id = tp.id');
 		$this->jsmquery->join('LEFT', '#__users AS u ON u.id = pref.checked_out');
 		$this->jsmquery->where('tp.persontype = 3');
 		$this->jsmquery->where('p.published = 1');
+		if ( $this->_season_id )
+		{
 		$this->jsmquery->where('tp.season_id = ' . $this->_season_id);
+		}
 		$this->jsmquery->where('pref.project_id = ' . $this->_project_id);
 
 		if ($this->getState('filter.project_position_id'))
