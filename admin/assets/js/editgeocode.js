@@ -1,5 +1,3 @@
-// http://bl.ocks.org/andyreagan/c81461c8a8ce52d103fc92decf9650b6
-
 var dpjQuery = jQuery.noConflict();
 var cities;
 var country;			
@@ -14,81 +12,20 @@ var zip;
 var province;
 
 var yourQuery;	
-
-
-function getbackendlatlon()
-{
-dpjQuery("#jform_geocomplete").val(getAddresString());
-dpjQuery("#jform_geocomplete").trigger("geocode");
-if ( opencagekey != '' )
-{
-geocode(dpjQuery("#jform_geocomplete").val());	
-}
-else
-{
-getlatlonopenstreet(1);
-}
-
-
-}
-
-
-function geocode(query){
-      dpjQuery.ajax({
-        url: 'https://api.opencagedata.com/geocode/v1/json',
-        method: 'GET',
-        data: {
-          'key': opencagekey ,
-          'q': query,
-          'no_annotations': 1
-          // see other optional params:
-          // https://opencagedata.com/api#forward-opt
-        },
-        dataType: 'json',
-        statusCode: {
-          200: function(response){  // success
-	console.log('opencagedata');
-            console.log(response);
-            console.log(response.results[0].formatted);
-console.log(response.results[0].geometry.lat);
-            console.log(response.results[0].geometry.lng);
-            
-            console.log(response.results[0].components.county);
-            console.log(response.results[0].components.state);
-            console.log(response.results[0].components.state_district);	
-//state = val.address.state;
-dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_1_LONG_NAME").val(response.results[0].components.state);
-dpjQuery("#jform_state").val(response.results[0].components.state);	
-dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_2_LONG_NAME").val(response.results[0].components.county);	
-dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_3_LONG_NAME").val(response.results[0].components.state_district);	
-dpjQuery("#jform_latitude").val(response.results[0].geometry.lat);
-dpjQuery("#jform_longitude").val(response.results[0].geometry.lng);
-addLayer(response.results[0].geometry.lat,response.results[0].geometry.lng);
-
-          },
-          402: function(){
-            console.log('hit free-trial daily limit');
-            console.log('become a customer: https://opencagedata.com/pricing');
-          }
-          // other possible response codes:
-          // https://opencagedata.com/api#codes
-        }
-      });
-    }     
-
-
+	
 dpjQuery(document).ready(function(){
 dpjQuery("#jform_geocomplete").val(getAddresString());
-addLayer('0.00000000','0.00000000');
-if ( opencagekey != '' )
+
+if ( dpjQuery("#jform_latitude").val() )
 {
-geocode(dpjQuery("#jform_geocomplete").val());	
+addLayer(dpjQuery("#jform_latitude").val(),dpjQuery("#jform_longitude").val());
 }
 else
-{	
+{
 getlatlonopenstreet(0);
-}
+}	
 
+//geocoder = new L.Control.Geocoder.Nominatim();
 countryleaflet = dpjQuery("#jform_country").val();
 console.log('ready countryleaflet ' + countryleaflet);
 var url = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getCcountryAlpha2&country=' + countryleaflet;
@@ -110,39 +47,34 @@ console.log('ready countryleafletsearch ' + countryleafletsearch );
 
 street = dpjQuery("#jform_address").val();
 zip = dpjQuery("#jform_zipcode").val();
+	
+if (dpjQuery('#jform_city').length == 0) {
+console.log('Das Element mit der ID jform_city ist nicht vorhanden.');
 city = dpjQuery("#jform_location").val();
+}
+else	
+{	
+city = dpjQuery("#jform_city").val();
+}	
 yourQuery = ( street + ',' + zip + ' ' + city + ',' + countryleafletsearch );
 
 console.log('ready yourQuery ' + yourQuery );
-/*
-dpjQuery('#jform_address,  #jform_zipcode, #jform_location,  #jform_state, #jform_country').bind('change', function(e) {
-dpjQuery("#jform_geocomplete").val(getAddresString());
-dpjQuery("#jform_geocomplete").trigger("geocode");
-if ( opencagekey != '' )
-{
-geocode(dpjQuery("#jform_geocomplete").val());	
-}
-else
-{
-getlatlonopenstreet(1);
-}
-	});
-    */
+
+  
 });
 
 
 function getlatlonopenstreet(result)
 {
-//var inp = dpjQuery("#jform_geocomplete").val();
-var inp = encodeURI(dpjQuery("#jform_geocomplete").val());	
+dpjQuery("#jform_geocomplete").val(getAddresString());
+dpjQuery("#jform_geocomplete").trigger("geocode");	
+	
+	
+var inp = dpjQuery("#jform_geocomplete").val();
 console.log('jform_geocomplete ' + inp );
 //var xmlhttp = new XMLHttpRequest();
 var url = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=" + inp ;
-	
-var opencageurl = opencage  + dpjQuery("#jform_geocomplete").val();
-	
 console.log('openstreetmap url ' + url );
-console.log('opencage url ' + opencageurl );	
 dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_1_LONG_NAME").val('');
 dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_1_SHORT_NAME").val('');
 dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_2_LONG_NAME").val('');
@@ -204,6 +136,7 @@ addLayer(val.lat,val.lon);
 
 function getAddresString()
 {
+
 	street = '';
 	city = '';
 	country = '';
@@ -212,6 +145,8 @@ function getAddresString()
 		street += ', ';
 	}
 	
+if (dpjQuery('#jform_city').length == 0) {
+console.log('Das Element mit der ID jform_city ist nicht vorhanden.');
 	if(dpjQuery("#jform_location").val()){
 		city = dpjQuery("#jform_location").val();
 		if(dpjQuery("#jform_zipcode").val()){
@@ -219,10 +154,22 @@ function getAddresString()
 		}
 		city += ', ';
 	}
+}
+	else
+	{
+	if(dpjQuery("#jform_city").val()){
+		city = dpjQuery("#jform_city").val();
+		if(dpjQuery("#jform_zipcode").val()){
+			city += ' ' + dpjQuery("#jform_zipcode").val();
+		}
+		city += ', ';
+	}
+	}
+	
 	if (dpjQuery("#jform_state").val()) {
 		province = dpjQuery("#jform_state").val() + ', ';
 	}
-
+	
 countryleaflet = dpjQuery("#jform_country").val();
 console.log('getAddresString countryleaflet ' + countryleaflet);
 
@@ -267,6 +214,7 @@ country = val.text;
 	
 console.log('getAddresString country alpha2 leaflet ' + countryleafletsearch );
 console.log('getAddresString country  ' + country );	
+console.log('getAddresString city  ' + city );	
 console.log('getAddresString street ' + street);
   
 	return street + city + country;
@@ -287,7 +235,7 @@ var route = '';
 				route = result.address_components[i].long_name;
 			break;
 			case 'locality':
-				dpjQuery("#jform_location").val(result.address_components[i].long_name);
+				dpjQuery("#jform_city").val(result.address_components[i].long_name);
 			break;
 			case 'street_number':
 			street_number = result.address_components[i].long_name;
@@ -302,6 +250,7 @@ var route = '';
       dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_2_LONG_NAME").val(result.address_components[i].long_name);
       dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_2_SHORT_NAME").val(result.address_components[i].short_name);
 			break;
+      
 			case 'postal_code':
 				dpjQuery("#jform_zipcode").val(result.address_components[i].long_name);
 			break;
@@ -335,13 +284,19 @@ function addLayer(lat,lng) {
 	
 var markerLocation = new L.LatLng(lat,lng);
 var marker = new L.Marker(markerLocation);
+//console.log(marker);
 console.log("Adding layer");
-console.log(lat);
-console.log(lng);
+
+
     
+//L.marker([lat, lng]).addTo(layerGroup);
+//console.log(layerGroup);
+//map.removeLayer(layerGroup);
 //Add a marker to show where you clicked.
 theMarker = L.marker([lat,lng]).addTo(map);  
 map.setView(new L.LatLng(lat, lng), 15);	
+//L.marker([lat, lng]).addTo(layerGroup);
+//layerGroup.addLayer(marker);
 
 }
 			
