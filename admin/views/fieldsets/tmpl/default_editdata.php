@@ -167,6 +167,19 @@ if (version_compare(JSM_JVERSION, '4', 'eq'))
 									}
 									?>
                                 </div>
+				    <?php
+					switch ($view)
+					{
+					case 'club':
+    				case 'playground':
+					case 'player':
+					if (!$this->item->latitude)
+					{
+					$this->item->latitude  = '0.00000000';
+					$this->item->longitude = '0.00000000';
+					}
+					
+					?>
                                 <div class="col-lg-6">
                                     <div class="control-group">
                                         <style type="text/css">.map_canvas {
@@ -179,7 +192,7 @@ if (version_compare(JSM_JVERSION, '4', 'eq'))
                                         <!-- google map ende -->
 
                                         <!-- leaflet map anfang -->
-                                        <div id="map" style="width: 100%;height: 400px; margin-top: 50px; position: relative;">
+                                        <div id="map" style="width: 100%;height: 400px; margin-top: 50px; position: absolute;">
                                         </div>
                                         <!-- leaflet map ende -->
 					    <script>
@@ -223,6 +236,10 @@ if (version_compare(JSM_JVERSION, '4', 'eq'))
 
                                     </div>
                                 </div>
+				    <?php
+							break;
+					}		
+							?>
                             </div>
 							<?PHP
 							break;
@@ -400,7 +417,7 @@ elseif (version_compare(JSM_JVERSION, '3', 'eq'))
                                     </div>
                                     <!-- google map ende -->
                                     <!-- leaflet map anfang -->
-                                    <div id="map" style="height: 400px; margin-top: 50px; position: relative;">
+                                    <div id="map" style="height: 400px; margin-top: 50px; position: absolute;">
                                     </div>
                                     <!-- leaflet map ende -->
 

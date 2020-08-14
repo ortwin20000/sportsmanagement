@@ -602,6 +602,10 @@ if ( $config->get('debug') )
 				{
 					$data['picture'] = $post['copy_jform']['picture'];
 				}
+				if ($data['max_visitors'] == '')
+				{
+					$data['max_visitors'] = 0;
+				}
 				break;
 
 			/**
@@ -1457,8 +1461,8 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					switch ($field->DATA_TYPE)
 					{
 						case 'varchar':
-							$form->setFieldAttribute($field->COLUMN_NAME, 'size', $field->CHARACTER_MAXIMUM_LENGTH);
-							break;
+					//	$form->setFieldAttribute($field->COLUMN_NAME, 'size', $field->CHARACTER_MAXIMUM_LENGTH);
+						break;
 					}
 				}
 				break;
@@ -1523,8 +1527,8 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					switch ($field->DATA_TYPE)
 					{
 						case 'varchar':
-							$form->setFieldAttribute($field->COLUMN_NAME, 'size', $field->CHARACTER_MAXIMUM_LENGTH);
-							break;
+					//	$form->setFieldAttribute($field->COLUMN_NAME, 'size', $field->CHARACTER_MAXIMUM_LENGTH);
+						break;
 					}
 				}
 
