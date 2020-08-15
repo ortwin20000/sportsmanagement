@@ -67,7 +67,7 @@ use Joomla\CMS\Uri\Uri;
 					<?php echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_MATCHES_DATE', 'mc.match_date', $this->sortDirection, $this->sortColumn); ?>
                 </th>
                 <th class="title"><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_TIME'); ?></th>
-                <th class="title"><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_F_MD_ATT'); ?></th>
+                <th class="title"><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_F_MD_VENUE'); ?></th>
 				<?php
 				if ($this->projectws->project_type == 'DIVISIONS_LEAGUE')
 				{
@@ -281,10 +281,16 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 								</span>
                     </td>
                     <td id="crowd" class="center">
-                        <input onchange="document.getElementById('cb<?php echo $i; ?>').checked=true" type="text"
+						<?php 
+						$append = '';
+						$append .= ' onchange="document.getElementById(\'cb' . $i . '\').checked=true" ';
+						echo HTMLHelper::_('select.genericlist', $this->playgrounds, 'playground_id' . $row->id,
+							'class="form-control form-control-inline" size="1"' . $append, 'value', 'text', $row->playground_id 
+						); ?>
+                        <!--<input onchange="document.getElementById('cb<?php echo $i; ?>').checked=true" type="text"
                                name="crowd<?php echo $row->id; ?>"
                                value="<?php echo $row->crowd; ?>" size="4" maxlength="5" tabindex="4"
-                               class="form-control form-control-inline"/>
+                               class="form-control form-control-inline"/>-->
                     </td>
 					<?php
 					if ($this->projectws->project_type == 'DIVISIONS_LEAGUE')
