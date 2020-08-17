@@ -232,6 +232,7 @@ else
 		unset($nation);
 		$nation[]       = HTMLHelper::_('select.option', '0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_ASSOCIATION'));
 		$mdlassociation = BaseDatabaseModel::getInstance('jlextassociations', 'sportsmanagementModel');
+		$res = array();
 
 		if ($res = $mdlassociation->getAssociations())
 		{
@@ -240,8 +241,8 @@ else
 		}
 
 		$lists['association'] = array();
-
-		foreach ($res as $row) if ($res)
+if ($res){
+		foreach ($res as $row) 
 		{
 			if (array_key_exists($row->country, $lists['association']))
 			{
@@ -253,7 +254,9 @@ else
 				$lists['association'][$row->country][] = $row;
 			}
 		}
-
+}
+		
+		
 		$lists['association2'] = JHtmlSelect::genericlist(
 			$nation,
 			'filter_search_association',
