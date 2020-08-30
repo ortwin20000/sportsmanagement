@@ -62,7 +62,12 @@ $this->folder = $data['folder'];
 $this->type = $data['type'];		
 $this->fieldid = $data['fieldid'];		
 $this->fieldname = $data['fieldname'];		
-$this->imagelist = $data['imagelist'];	
+$this->imagelist = $data['imagelist'];
+
+$this->club_id = $data['club_id'];
+$this->teamplayer_id = $data['teamplayer_id'];
+$this->player_id = $data['player_id'];
+	
 if (array_key_exists('filter_search', $data))
 {
 $this->filter_search = $data['filter_search'];    

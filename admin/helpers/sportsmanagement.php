@@ -2240,7 +2240,7 @@ try
 			echo '<td align="center" style=""><b>' . $division->name . '</b>&nbsp;</td>';
 			$jRegistry = new Registry;
 
-			if (version_compare(JVERSION, '3.0.0', 'ge'))
+			if ( version_compare(JVERSION, '3.0.0', 'ge') )
 			{
 				$jRegistry->loadString($division->rankingparams);
 			}
@@ -2638,7 +2638,8 @@ try
 			case 'assignpersons':
 				$zusatz .= '&team_id=' . $jinput->get('team_id');
 				$zusatz .= '&persontype=' . $jinput->get('persontype');
-				$zusatz .= '&season_id=' . $app->getUserState("$option.season_id", '0');;
+				$zusatz .= '&season_id=' . $app->getUserState("$option.season_id", '0');
+                $zusatz .= '&whichview=teamplayers';
 				break;
 		}
 

@@ -261,7 +261,10 @@ if (!empty($this->rows))
 		}
 	}
 	?>
-    <div class="<?php echo $this->divclassrow; ?> table-responsive" id="defaultplayers">
+    <div class="<?php echo $this->divclassrow; ?> table-responsive" id="defaultplayers" itemscope itemtype="http://schema.org/SportsTeam">
+      <span itemprop="name" content="<?php echo Text::_($this->team->name);?>"></span> 
+      <span itemprop="sport" content="<?php echo Text::_($this->project->sport_type_name);?>"></span> 
+	    <span itemprop="description" content="<?php echo Text::_($this->project->name);?>"></span>
         <?php
         foreach ( $this->projectpositions as $positions => $position ) if( $position->persontype == 1 )
 {
@@ -468,13 +471,15 @@ if (!empty($this->rows))
                 </thead>
                 <!-- end position header -->
                 <!-- Players row-->
+<div itemprop="member" itemscope itemtype="http://schema.org/OrganizationRole"> 
+                      <span itemprop="roleName" content="<?php echo Text::_($row->position);?>"></span>
 				<?php
 				$total_market_value = 0;
 
 				foreach ($players as $row)
 				{
 					?>
-                    <tr class="" width="" onMouseOver="this.bgColor='#CCCCFF'" onMouseOut="this.bgColor='#ffffff'">
+                    <tr class="" width="" onMouseOver="this.bgColor='#CCCCFF'" onMouseOut="this.bgColor='#ffffff'" itemprop="member" itemscope="" itemtype="http://schema.org/Person">
 						<?php
 						$pnr = ($row->position_number != '') ? $row->position_number : '&nbsp;';
 
@@ -498,7 +503,10 @@ if (!empty($this->rows))
 							$row->lastname,
 							$this->config["name_format"]
 						);
-
+?>
+ 
+  <?php
+                  
 						if ($this->config['show_player_icon'])
 						{
 							$picture = $row->picture;
@@ -510,6 +518,11 @@ if (!empty($this->rows))
 
 							?>
                             <td class="" width="" nowrap="nowrap">
+                              <span itemprop="name" content="<?php echo $playerName;?>"></span> 
+                              <span itemprop="birthDate" content="<?php echo $row->birthday;?>"></span>
+				   <span itemprop="deathDate" content="<?php echo $row->deathday;?>"></span>
+				    <span itemprop="nationality" content="<?php echo JSMCountries::getCountryName($row->country);?>"></span>
+                              
 								<?PHP
 								echo sportsmanagementHelperHtml::getBootstrapModalImage(
 									'player' . $row->playerid,
@@ -519,7 +532,9 @@ if (!empty($this->rows))
 									'',
 									$this->modalwidth,
 									$this->modalheight,
-									$this->overallconfig['use_jquery_modal']
+									$this->overallconfig['use_jquery_modal'],
+                                  'itemprop',
+                                  'image'
 								);
 								?>
 
@@ -905,6 +920,7 @@ if (!empty($this->rows))
 					$k = (1 - $k);
 				}
 				?>
+                  </div>
                 <!-- end players rows -->
                 <!-- position totals anfang -->
 				<?php

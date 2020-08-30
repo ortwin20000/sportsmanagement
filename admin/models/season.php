@@ -53,6 +53,8 @@ class sportsmanagementModelseason extends JSMModelAdmin
 		$season_id  = $this->jsmjinput->getVar('season_id', 0, 'post', 'array');
 		$project_id = $this->jsmjinput->getVar('project_id', 0, 'post', 'array');
 		$persontype = $this->jsmjinput->getVar('persontype', 0, 'post', 'array');
+        $whichview = $this->jsmjinput->getVar('whichview', 0, 'post', 'array');
+		$post   = Factory::getApplication()->input->post->getArray(array());
 
 		foreach ($pks as $key => $value)
 		{
@@ -75,6 +77,30 @@ class sportsmanagementModelseason extends JSMModelAdmin
 				$row->load($season_id);
 				$this->jsmapp->enqueueMessage('Saisonzuordnung : ' . $row->name . ' schon vorhanden.', 'notice');
 			}
+/** hier machen wir schon mal einen insert*/
+switch ($whichview )
+{
+case 'teamplayers':
+$personposition	= $post['position' . $value];
+$this->jsmquery->clear();
+$this->jsmquery->select('id');
+$this->jsmquery->from('#__sportsmanagement_project_position');
+$this->jsmquery->where('project_id = ' . $project_id);
+$this->jsmquery->where('position_id = ' . $personposition);
+$this->jsmdb->setQuery($this->jsmquery);
+$project_position_id = $this->jsmdb->loadResult();		
+		
+$profile = new stdClass;
+$profile->project_id = $project_id;
+$profile->person_id = $value;
+$profile->published = 1;
+$profile->project_position_id = $project_position_id;
+$profile->persontype = $persontype;
+$profile->modified = $this->jsmdate->toSql();
+$profile->modified_by = $this->jsmuser->get('id');
+$result = $this->jsmdb->insertObject('#__sportsmanagement_person_project_position', $profile);		
+break;
+}
             
             if ($persontype == 3)
 				{

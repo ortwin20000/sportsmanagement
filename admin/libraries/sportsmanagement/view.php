@@ -153,7 +153,17 @@ img.car {
 	$this->project_id     = $this->jinput->get('pid');
 	$this->jsmmessage     = '';
 	$this->jsmmessagetype = 'notice';
-	$this->state          = $this->get('State');
+		
+		
+		switch ($this->view)
+		{
+			case 'smquotetxt':
+				break;
+			default:
+				$this->state          = $this->get('State');
+				break;
+		}
+	
     $this->dragable_group = '';
         $this->ordering = true;
         if ( $this->state )
@@ -169,6 +179,15 @@ catch (Exception $e)
 }
 }
 
+/** soll der link zur bewertung der komponente angezeigt werden ? */		
+if (ComponentHelper::getParams($this->option)->get('show_jed_link'))
+{
+Log::add(Text::_('COM_SPORTSMANAGEMENT_SETTINGS_SHOW_JED_LINK_TEXT'), Log::NOTICE, 'jsmerror');
+$this->app->enqueueMessage(Text::_('COM_SPORTSMANAGEMENT_SETTINGS_SHOW_JED_LINK_TEXT'), 'Notice');	
+}		
+		
+		
+		
 if (preg_match("/ordering/i", $this->sortColumn)) {
    $this->saveOrderButton = false;
 } else {
@@ -248,26 +267,31 @@ if (preg_match("/ordering/i", $this->sortColumn)) {
 
 					break;
 			}
-            switch ($this->view)
-			{
-				case 'club';
-				case 'playground';
-                case 'league';
-                case 'person';
-                case 'position';
-                case 'agegroup';
-                $this->app->setUserState('com_sportsmanagement.itemname', $this->item->name);
-				break;
-                case 'teamperson';
-        case 'projectreferee';
-                $mdlPerson      = BaseDatabaseModel::getInstance("player", "sportsmanagementModel");
-		        $project_person = $mdlPerson->getPerson($this->item->person_id);
-                $this->app->setUserState('com_sportsmanagement.itemname', $project_person->lastname . ' - ' . $project_person->firstname);
-                break;
-                case 'player';
-                $this->app->setUserState('com_sportsmanagement.itemname', $this->item->lastname.' '.$this->item->firstname);
-                break;
-            }
+			
+/** hier wird der name für den button des bilderuploads gesetzt */			
+switch ($this->view)
+{
+case 'club';
+case 'playground';
+case 'league';
+case 'person';
+case 'position';
+case 'agegroup';
+$this->app->setUserState('com_sportsmanagement.itemname', $this->item->name);
+break;
+case 'teamplayer';
+case 'projectreferee';
+$mdlPerson      = BaseDatabaseModel::getInstance("player", "sportsmanagementModel");
+$project_person = $mdlPerson->getPerson($this->item->person_id);
+$this->app->setUserState('com_sportsmanagement.itemname', $project_person->lastname . ' - ' . $project_person->firstname);
+break;
+case 'player';
+$this->app->setUserState('com_sportsmanagement.itemname', $this->item->lastname.' '.$this->item->firstname);
+break;
+case 'smquote';
+$this->app->setUserState('com_sportsmanagement.itemname', $this->item->author);		
+break;		
+}
             
             
             
@@ -341,7 +365,7 @@ if (preg_match("/ordering/i", $this->sortColumn)) {
 				case 'projects';
 				case 'projectteams';
 				case 'rounds';
-				case 'teampersons';
+				case 'teamplayers';
 				case 'templates';
 				case 'projectreferees';
 				case 'projectpositions';
@@ -432,7 +456,7 @@ break;
 				//case 'rounds':
 				case 'divisions':
 				case 'extrafields':
-				case 'teampersons':
+				case 'teamplayers':
 					JHtmlSidebar::addFilter(
 						Text::_('JOPTION_SELECT_PUBLISHED'),
 						'filter_state',
@@ -475,16 +499,20 @@ break;
 
 					break;
 				case 'smquotes':
+					/*
 					JHtmlSidebar::addFilter(
 						Text::_('JOPTION_SELECT_PUBLISHED'),
 						'filter_state',
 						HTMLHelper::_('select.options', HTMLHelper::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.state'), true)
 					);
+					*/
+					/*
 					JHtmlSidebar::addFilter(
 						Text::_('JOPTION_SELECT_CATEGORY'),
 						'filter_category_id',
 						HTMLHelper::_('select.options', HTMLHelper::_('category.options', 'com_sportsmanagement'), 'value', 'text', $this->state->get('filter.category_id'))
 					);
+					*/
 					break;
 			}
 /*
@@ -816,6 +844,7 @@ document.getElementById("filter_season").classList.add("filter_season");
 				case 'smextxmleditor';
 					case 'jsmopenligadb';
                 case 'smimageimports';
+					case 'smquotestxt';
 				break;
 				default:
 					/**

@@ -104,6 +104,12 @@ use Joomla\CMS\Factory;
 			$routeparameter['cfg_which_database'] = Factory::getApplication()->input->getInt('cfg_which_database', 0);
 			$routeparameter['s']                  = Factory::getApplication()->input->getInt('s', 0);
 			$routeparameter['p']                  = $game->project_slug;
+			$routeparameter['mid']                = $game->match_slug;
+			$matchreport_link                       = sportsmanagementHelperRoute::getSportsmanagementRoute('matchreport', $routeparameter);
+			$routeparameter                       = array();
+			$routeparameter['cfg_which_database'] = Factory::getApplication()->input->getInt('cfg_which_database', 0);
+			$routeparameter['s']                  = Factory::getApplication()->input->getInt('s', 0);
+			$routeparameter['p']                  = $game->project_slug;
 			$routeparameter['tid']                = $game->team1_slug;
 			$routeparameter['ptid']               = $game->projectteam1_slug;
 			$teaminfo1_link                       = sportsmanagementHelperRoute::getSportsmanagementRoute('teaminfo', $routeparameter);
@@ -353,16 +359,26 @@ use Joomla\CMS\Factory;
 
 				if ($game->cancel == 0)
 				{
-					$score .= '<td align="center">';
+					if ($this->config['show_matchreport_link'])
+				{
+					$score .= '<td colspan="3" align="center" id="ergebnismatchreport">';	
+				$score .= HTMLHelper::link($matchreport_link, $e1.'-'.$e2 );		
+						$score .= '</td>';
+					}
+					else
+					{
+					$score .= '<td align="center" id="ergebnisheim">';
 					$score .= $e1;
-					$score .= '</td><td align="center">-</td><td align="center">';
+					$score .= '</td><td align="center">-</td><td align="center" id="ergebnisgast">';
 					$score .= $e2;
+					}
 				}
 				else
 				{
-					$score .= '<td align="center" valign="top" colspan="3">' . $game->cancel_reason . '</td>';
+					$score .= '<td align="center" valign="top" colspan="3" id="ergebnisgrund">' . $game->cancel_reason . '</td>';
 				}
 				echo $score;
+			
 				if ($this->config['show_thumbs_picture'])
 				{
 					switch ($this->config['type_matches'])
