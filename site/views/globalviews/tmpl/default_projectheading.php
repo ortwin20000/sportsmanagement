@@ -55,7 +55,7 @@ if (!empty($this->overallconfig))
 	if ($this->overallconfig['show_project_heading'] == 1 && $this->project)
 	{
 		?>
-        <div class="<?php echo $this->divclassrow; ?>" id="projectheading" itemscope="itemscope" itemtype="http://schema.org/SportsAssociation/Soccer">
+        <div class="<?php echo $this->divclassrow; ?>" id="projectheading" itemscope="itemscope" itemtype="http://schema.org/SportsAssociation/Fistball">
             <table class="table">
 
 				<?php
