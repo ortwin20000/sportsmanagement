@@ -76,8 +76,6 @@ $logo_width            = ComponentHelper::getParams($option)->get('logo_picture_
     <br/>
 	<?php echo Text::_("COM_SPORTSMANAGEMENT_DESC"); ?>
     <br/>
-    <img src="<?php echo Uri::root(true); ?>/components/com_sportsmanagement/assets/images/fussballineuropa.png"
-         width="<?PHP echo $logo_width; ?>" height="auto"></a>
 	<?php echo Text::_("COM_SPORTSMANAGEMENT_COPYRIGHT"); ?> : &copy;
     <a href="http://www.fussballineuropa.de" target="_blank">Fussball in Europa</a>
     <br/>
