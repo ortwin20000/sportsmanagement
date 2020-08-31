@@ -280,6 +280,13 @@ if ($this->config['show_comments_count'])
 				}
 				?>
 <div itemscope itemtype="http://schema.org/SportsEvent">
+<div itemprop="location"itemscope itemtype="http://schema.org/Place">
+<span itemprop="name" content="<?php echo $game->playground_name;?>"></span>
+<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+<span itemprop="streetAddress" content="<?php echo $game->playground_address;?>"</span>
+<span itemprop="postalCode" content="<?php echo $game->playground_zipcode;?>"</span>
+</div>
+</div>
 <?php
 $starttime = sportsmanagementHelperHtml::showMatchTime($game, $this->config, $this->overallconfig, $this->project);                  
 ?>
@@ -401,9 +408,7 @@ $ergebnis = date('H:i:s', strtotime('+'.$this->project->game_regular_time + $thi
 						?>
                         <!-- show playground -->
                         <td>
-				<span itemprop="location" content="<?php echo $team1->playground_name;?>"></span>
 							<?php echo sportsmanagementHelperHtml::showMatchPlayground($game, $this->config); ?>
-				
                         </td>
 						<?php
 					}
