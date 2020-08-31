@@ -13,7 +13,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 
 ?>
-<div class="<?php echo $this->divclassrow; ?>" id="default_teams" itemscope itemtype="http://schema.org/SportsTeam/Soccer">
+<div class="<?php echo $this->divclassrow; ?>" id="default_teams" itemscope itemtype="http://schema.org/SportsTeam/Fistball">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h4>
 			<?php echo Text::_('COM_SPORTSMANAGEMENT_CLUBINFO_TEAMS'); ?>
