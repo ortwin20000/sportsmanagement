@@ -274,9 +274,9 @@ echo sportsmanagementHelper::getBootstrapModalImage('season_picture' . $this->it
 ?>
 <br />
  <?php
-$link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .'&teamplayer_id='.$this->item->id.
+$link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .'&teamplayer_id='.$this->item->tpid.
 '&imagelist=1&asset=com_sportsmanagement&folder=teamplayers' . '&author=&fieldid=' . '&tmpl=component&type=teamplayers'.'&fieldname=picture';
-echo sportsmanagementHelper::getBootstrapModalImage('select' . $funcname, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' ', '20', Uri::base() . $link2, $this->modalwidth, $this->modalheight);        
+echo sportsmanagementHelper::getBootstrapModalImage('select'.$this->item->id, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' ', '20', Uri::base() . $link2, $this->modalwidth, $this->modalheight);        
         ?>
                 </td>
 				<?PHP
