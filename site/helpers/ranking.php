@@ -318,6 +318,11 @@ class JSMRanking
 				$leg2       = 0;
 			}
 
+			$res = explode(';',$match->ls1);
+			$leg1 = array_sum($res);
+			$res = explode(';',$match->ls2);
+			$leg2 = array_sum($res);
+			
 			$home->cnt_matches++;
 			$away->cnt_matches++;
 
@@ -880,6 +885,8 @@ class JSMRanking
 		$query->select('m.team2_bonus AS away_bonus');
 		$query->select('m.team1_legs AS l1');
 		$query->select('m.team2_legs AS l2');
+		$query->select('m.team1_result_split AS ls1');
+		$query->select('m.team2_result_split AS ls2');
 
 		$query->select('m.team1_single_matchpoint AS mp1');
 		$query->select('m.team2_single_matchpoint AS mp2');
