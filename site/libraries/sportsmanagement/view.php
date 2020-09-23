@@ -121,16 +121,21 @@ else
 class sportsmanagementView extends HtmlView
 {
 	protected $icon = '';
-
 	protected $title = '';
-
 	protected $layout = '';
-
 	protected $tmpl = '';
-
 	protected $table_data_class = '';
-
 	protected $table_data_div = '';
+	
+	public $bootstrap_fileinput_version = '5.1.2';
+	public $bootstrap_fileinput_bootstrapversion = '4.3.1';
+	public $bootstrap_fileinput_popperversion = '1.14.7';
+	public $leaflet_version = '1.7.1';
+	public $leaflet_css_integrity = 'sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==';
+	public $leaflet_js_integrity = 'sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==';
+	
+	public $leaflet_locatecontrol = '0.72.0';
+	public $leaflet_routing_machine = '3.2.12';
 
 	/**
 	 * sportsmanagementView::display()

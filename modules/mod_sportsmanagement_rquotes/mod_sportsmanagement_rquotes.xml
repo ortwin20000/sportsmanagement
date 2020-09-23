@@ -13,7 +13,7 @@
 	<license>GPL2</license>
 	<authorEmail>diddipoeler@arcor.de</authorEmail>
 	<authorUrl>www.fussballineuropa.de</authorUrl>
-	<version>1.0.00</version>
+	<version>3.8.0</version>
 	<description>MOD_SPORTSMANAGEMENT_RQUOTES_XML_DESCRIPTION</description>
 
 	<!-- The updateservers element is required to enable the automatic update. -->
@@ -30,6 +30,7 @@
 		<filename module="mod_sportsmanagement_rquotes">mod_sportsmanagement_rquotes.php</filename>
 		<filename>index.html</filename>
 		<filename>helper.php</filename>
+		<filename>update-server.xml</filename>
 		<folder>assets</folder>
 		<folder>elements</folder>
 		
@@ -268,4 +269,9 @@ default="itemid">
 
 </fields>
 </config>
+
+<updateservers>
+<server type="extension" priority="1" name="SportsManagement Update Site">https://raw.githubusercontent.com/diddipoeler/sportsmanagement/master/modules/mod_sportsmanagement_rquotes/update-server.xml</server>
+</updateservers>
+
 </extension>

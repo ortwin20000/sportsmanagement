@@ -57,6 +57,26 @@ class sportsmanagementModelteamplayers extends JSMModelList
 		$getDBConnection = sportsmanagementHelper::getDBConnection();
 		parent::setDbo($getDBConnection);
 	}
+	
+	function getprojectpublished($items = NULL)
+	{
+		//echo '<pre>'.print_r($items,true).'</pre>';
+      
+      foreach ($items as $count_i => $item)
+	{
+        $this->jsmquery->clear();
+        $this->jsmquery->select('ppp.published');
+		$this->jsmquery->from('#__sportsmanagement_person_project_position AS ppp');
+		$this->jsmquery->where('ppp.person_id = '. $item->person_id);
+		$this->jsmquery->where('ppp.project_id = ' . $this->_project_id);
+		$this->jsmquery->where('ppp.persontype = ' . $this->getState('filter.persontype'));
+        $this->jsmdb->setQuery($this->jsmquery);
+		$item->project_published = $this->jsmdb->loadResult();
+        
+      }
+		
+	return $items;	
+	}
 
 	/**
 	 * sportsmanagementModelteamplayers::getListQuery()
@@ -101,7 +121,7 @@ class sportsmanagementModelteamplayers extends JSMModelList
 		$this->jsmsubquery2->where('ppp.person_id = ppl.id');
 		$this->jsmsubquery2->where('ppp.project_id = ' . $this->_project_id);
 		$this->jsmsubquery2->where('ppp.persontype = ' . $this->getState('filter.persontype'));
-		$this->jsmquery->select('(' . $this->jsmsubquery2 . ') AS project_published');
+		//$this->jsmquery->select('(' . $this->jsmsubquery2 . ') AS project_published');
 
 		if (is_numeric($this->getState('filter.state')))
 		{

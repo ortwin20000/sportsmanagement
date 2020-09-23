@@ -7,13 +7,14 @@
 	<license>GPL2</license>
 	<authorEmail>diddipoeler@arcor.de</authorEmail>
 	<authorUrl>www.fussballineuropa.de</authorUrl>
-	<version>1.0.06</version>
+	<version>3.8.0</version>
 	<description>MOD_SPORTSMANAGEMENT_PLAYGROUND_TICKER_DESC</description>
 
 	<files>
 		<filename module="mod_sportsmanagement_playground_ticker">mod_sportsmanagement_playground_ticker.php</filename>
 		<filename>index.html</filename>
 		<filename>helper.php</filename>
+		<filename>update-server.xml</filename>
 		<folder>tmpl</folder>
 		<folder>css</folder>
 	</files>
@@ -186,4 +187,9 @@
     				
 		</fields>
 	</config>		
+	
+	<updateservers>
+<server type="extension" priority="1" name="SportsManagement Update Site">https://raw.githubusercontent.com/diddipoeler/sportsmanagement/master/modules/mod_sportsmanagement_playground_ticker/update-server.xml</server>
+</updateservers>
+
 </extension>

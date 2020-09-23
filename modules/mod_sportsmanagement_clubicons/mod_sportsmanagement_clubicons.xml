@@ -3,7 +3,7 @@
 	<name>MOD_SPORTSMANAGEMENT_CLUBICONS</name>
 	<author>Carsten Kühn</author>
 	<authorUrl>http://www.yourlife.de</authorUrl> 
-	<version>1.5b.2</version>
+	<version>3.8.0</version>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<description>MOD_SPORTSMANAGEMENT_CLUBICONS_MODUL_NAME_DESC</description>
 	<files>
@@ -11,6 +11,7 @@
 		<filename module="mod_sportsmanagement_clubicons">mod_sportsmanagement_clubicons.php</filename>
 		<filename>index.html</filename>
 		<filename>helper.php</filename>
+		<filename>update-server.xml</filename>
 		<folder>tmpl</folder>
     <folder>css</folder>
     <folder>js</folder>
@@ -151,4 +152,9 @@
 			</fieldset>
  </fields>
  </config>
+ 
+ <updateservers>
+<server type="extension" priority="1" name="SportsManagement Update Site">https://raw.githubusercontent.com/diddipoeler/sportsmanagement/master/modules/mod_sportsmanagement_clubicons/update-server.xml</server>
+</updateservers>
+
  </extension>

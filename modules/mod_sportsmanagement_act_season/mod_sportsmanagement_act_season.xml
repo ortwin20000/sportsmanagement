@@ -13,18 +13,19 @@
 	<license>GNU/GPL</license>
 	<authorEmail>diddipoeler@arcor.de</authorEmail>
 	<authorUrl>http://www.fussballineuropa.de</authorUrl>
-	<version>1.0</version>
+	<version>3.8.0</version>
 	<description>MOD_SPORTSMANAGEMENT_ACT_SEASON_DESC</description>
-	<files>
-		<filename module="mod_sportsmanagement_act_season">mod_sportsmanagement_act_season.php</filename>
-		<filename>index.html</filename>
-    <filename>helper.php</filename>
-    <folder>tmpl</folder>
-    <folder>img</folder>
-    <folder>js</folder>
-		<folder>css</folder>
-    <folder>img</folder>
-	</files>
+<files>
+<filename module="mod_sportsmanagement_act_season">mod_sportsmanagement_act_season.php</filename>
+<filename>index.html</filename>
+<filename>helper.php</filename>
+<filename>mod_sportsmanagement_act_season.xml</filename>	
+<filename>update-server.xml</filename>	
+<folder>tmpl</folder>
+<folder>img</folder>
+<folder>js</folder>
+<folder>css</folder>
+</files>
 	
 	<languages>
 		
@@ -117,5 +118,8 @@
 
 		</fields>
 	</config>	 
-  
+<updateservers>
+<server type="extension" priority="1" name="SportsManagement Update Site">https://raw.githubusercontent.com/diddipoeler/sportsmanagement/master/modules/mod_sportsmanagement_act_season/update-server.xml</server>
+</updateservers>
+	
 </extension>

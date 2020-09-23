@@ -273,7 +273,7 @@ switch ($mode)
 				
 				<div class="slide">
 				
-					<div style="width: 150px;
+					<div style="width: <?php echo $params->get('slider_width') - 10;?>px;
 								height:210px;
 								padding: 10px 10px 20px 10px;
 								border: 1px solid #BFBFBF;
@@ -316,7 +316,7 @@ switch ($mode)
 								{
 						?>					
 									<div style="position: absolute; bottom: 25px; left: 10px; font-size: 15px;">	
-									<?	echo $sortedData[$i]['posicion'] .'<br>'; ?>
+									<?	echo Text::_($sortedData[$i]['posicion']) .'<br>'; ?>
 									</div>
 						<?
 								}
@@ -344,13 +344,20 @@ switch ($mode)
 			// Calc horizontal width
 			if ($params->get('slider_mode') == 'H')
 				{	
-				  $slider_width = $params->get('max_slides') * 65;
+				  //$slider_width = $params->get('max_slides') * 65;
+				$slider_width = $params->get('slider_width');
 				  $slider_mode = 'horizontal';
+				}
+		elseif ($params->get('slider_mode') == 'F')
+				{	
+				  //$slider_width = $params->get('max_slides') * 65;
+				$slider_width = $params->get('slider_width');
+				  $slider_mode = 'fade';
 				}
 			else
 				{
 				  $slider_mode = 'vertical';
-				  $slider_width = 180;
+				  $slider_width = $params->get('slider_width');
 				}			
 					
 			// responsive

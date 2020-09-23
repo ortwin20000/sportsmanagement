@@ -10,7 +10,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die();
-//use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Language\Text;
@@ -68,6 +68,13 @@ class sportsmanagementView extends BaseHtmlView
 	protected $table_data_class = '';
 	protected $table_data_div = '';
     public $itemname;
+	
+	public $bootstrap_fileinput_version = '5.1.2';
+	public $bootstrap_fileinput_bootstrapversion = '4.3.1';
+	public $bootstrap_fileinput_popperversion = '1.14.7';
+	public $leaflet_version = '1.7.1';
+	public $leaflet_css_integrity = 'sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==';
+	public $leaflet_js_integrity = 'sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==';
 
 	/**
 	 * sportsmanagementView::display()
@@ -277,11 +284,12 @@ case 'league';
 case 'person';
 case 'position';
 case 'agegroup';
-$this->app->setUserState('com_sportsmanagement.itemname', $this->item->name);
+case 'sportstype';		
+$this->app->setUserState('com_sportsmanagement.itemname', Text::_($this->item->name) );
 break;
 case 'teamplayer';
 case 'projectreferee';
-$mdlPerson      = BaseDatabaseModel::getInstance("player", "sportsmanagementModel");
+$mdlPerson = BaseDatabaseModel::getInstance("player", "sportsmanagementModel");
 $project_person = $mdlPerson->getPerson($this->item->person_id);
 $this->app->setUserState('com_sportsmanagement.itemname', $project_person->lastname . ' - ' . $project_person->firstname);
 break;
@@ -290,6 +298,16 @@ $this->app->setUserState('com_sportsmanagement.itemname', $this->item->lastname.
 break;
 case 'smquote';
 $this->app->setUserState('com_sportsmanagement.itemname', $this->item->author);		
+break;
+
+case 'projectteam';
+$team_id = $this->item->team_id;
+$season_team = Table::getInstance('seasonteam', 'sportsmanagementTable');
+$season_team->load($team_id);
+$mdlTeam = BaseDatabaseModel::getInstance('Team', 'sportsmanagementModel');
+$this->project_team = $mdlTeam->getTeam($season_team->team_id, 0);
+$this->app->setUserState('com_sportsmanagement.itemname', $this->project_team->name);
+
 break;		
 }
             
