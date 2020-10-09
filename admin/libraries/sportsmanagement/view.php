@@ -172,6 +172,8 @@ img.car {
 		}
 	
     $this->dragable_group = '';
+		$this->sortColumn = '';
+		$this->sortDirection = '';
         $this->ordering = true;
         if ( $this->state )
         {
@@ -285,6 +287,7 @@ case 'person';
 case 'position';
 case 'agegroup';
 case 'sportstype';		
+case 'eventtype';
 $this->app->setUserState('com_sportsmanagement.itemname', Text::_($this->item->name) );
 break;
 case 'teamplayer';
@@ -474,7 +477,7 @@ break;
 				//case 'rounds':
 				case 'divisions':
 				case 'extrafields':
-				case 'teamplayers':
+				//case 'teamplayers':
 					JHtmlSidebar::addFilter(
 						Text::_('JOPTION_SELECT_PUBLISHED'),
 						'filter_state',

@@ -98,7 +98,7 @@ class com_sportsmanagementInstallerScript
 	 * The release value would ideally be extracted from <version> in the manifest file,
 	 * but at preflight, the manifest file exists only in the uploaded temp folder.
 	 */
-	private $release = '3.8.00';
+	private $release = '3.8.20';
 
 	// $language_update = '';
 
@@ -836,6 +836,7 @@ Like this extension?
 				{
 					case 'persons':
 					case 'projectreferees':
+                    case 'teamplayers':
 						File::copy(JPATH_ROOT . '/images/com_sportsmanagement/database/placeholders/men_small.png', JPATH_ROOT . '/images/com_sportsmanagement/database/' . $folder . '/men_small.png');
 						File::copy(JPATH_ROOT . '/images/com_sportsmanagement/database/placeholders/men_large.png', JPATH_ROOT . '/images/com_sportsmanagement/database/' . $folder . '/men_large.png');
 						File::copy(JPATH_ROOT . '/images/com_sportsmanagement/database/placeholders/woman_small.png', JPATH_ROOT . '/images/com_sportsmanagement/database/' . $folder . '/woman_small.png');

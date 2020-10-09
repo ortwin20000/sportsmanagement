@@ -50,27 +50,17 @@ class sportsmanagementViewprojectreferees extends sportsmanagementView
 	 */
 	public function init()
 	{
-		//$this->state         = $this->get('State');
-		//$this->sortDirection = $this->state->get('list.direction');
-		//$this->sortColumn    = $this->state->get('list.ordering');
-
-		//$items      = $this->get('Items');
-		//$total      = $this->get('Total');
-		//$pagination = $this->get('Pagination');
-
 		$table       = Table::getInstance('projectreferee', 'sportsmanagementTable');
 		$this->table = $table;
 
 		$this->_persontype = $this->jinput->get('persontype');
+		$mdlProject = BaseDatabaseModel::getInstance('Project', 'sportsmanagementModel');
+		$this->project    = $mdlProject->getProject($this->project_id);
 
 		if (empty($this->_persontype))
 		{
 			$this->_persontype = $this->app->getUserState("$this->option.persontype", '0');
 		}
-
-		//$this->project_id = $this->app->getUserState("$this->option.pid", '0');
-		//$mdlProject       = BaseDatabaseModel::getInstance('Project', 'sportsmanagementModel');
-		//$this->project          = $mdlProject->getProject($this->project_id);
 
 		/** build the html options for position */
 		$position_id[]         = HTMLHelper::_('select.option', '0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_REFEREE_FUNCTION'));
@@ -86,12 +76,8 @@ class sportsmanagementViewprojectreferees extends sportsmanagementView
 		$lists['project_position_id'] = $position_id;
 		unset($position_id);
 
-		//$this->user       = Factory::getUser();
-		//$this->config     = Factory::getConfig();
 		$this->lists      = $lists;
-		//$this->items      = $items;
-		//$this->pagination = $pagination;
-        
+       
 		//echo 'items<pre>'.print_r($this->items,true).'</pre>';
 		
 		if ( !$this->items )
@@ -104,7 +90,6 @@ $this->season_id = $this->app->getUserState("$this->option.season_id", '0');
 $this->app->setUserState("$this->option.season_id", 0);
 $this->items = $this->get('Items2');				
 $this->app->setUserState("$this->option.season_id", $this->season_id);				
-//echo 'items<pre>'.print_r($this->items,true).'</pre>';				
 			}
 		}
 try

@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage match
@@ -12,9 +10,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  * https://hotexamples.com/de/examples/-/Google_Service_Calendar_EventDateTime/-/php-google_service_calendar_eventdatetime-class-examples.html
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Factory;
@@ -2841,13 +2837,12 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 		if ($match_number != $teile[0])
 		{
 			$app->enqueueMessage(Text::_('Spielnummer der Datei passt nicht zur Spielnummer im Projekt.'), 'Error');
-
+			$app->enqueueMessage(Text::_($teile[0]), 'Error');
 			return false;
 		}
 		else
 		{
 			$app->enqueueMessage(Text::_('Spielnummern sind identisch. Datei wird verarbeitet'), 'Notice');
-
 			return true;
 		}
 
@@ -2868,6 +2863,7 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 		$query  = $db->getQuery(true);
 
 		$csv_player_count = 40;
+		$find_csv = '';
 		$project_id       = $app->getUserState("$option.pid", '0');
 		$match_id         = Factory::getApplication()->input->getVar('match_id');
 		$tblmatch         = Table::getInstance("match", "sportsmanagementTable");
@@ -3199,6 +3195,8 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 
 			foreach ($mannschaftsverantwortlichePositionen as $mannschaftsverantwortlichePosition)
 			{
+				if ( array_key_exists( $find_csv.'-'.$mannschaftsverantwortlichePosition, $csv_file->data[0] ) );
+				{
 				if (!isset($this->csv_staff[$i]))
 				{
 					$this->csv_staff[$i] = new stdClass;
@@ -3216,11 +3214,10 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 				$this->csv_staff[$i]->project_position_id = 0;
 				$this->csv_staff[$i]->position_id         = 0;
 
-				// Falls es den Staff gibt, ein paar Felder selektieren
+				/** Falls es den Staff gibt, ein paar Felder selektieren */
 				if ($lastname)
 				{
 					$person_id = $this->getPersonId($firstname, $lastname);
-
 					if ($person_id)
 					{
 						$this->csv_staff[$i]->person_id           = $person_id;
@@ -3230,8 +3227,8 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 						$this->csv_staff[$i]->position_id         = $projectpersonid->position_id;
 					}
 				}
-
 				$i++;
+			}
 			}
 		}
 

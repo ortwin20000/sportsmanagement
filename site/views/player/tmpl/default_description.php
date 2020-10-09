@@ -15,7 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 ?>
 <!-- Team Player Description START -->
-<div class="<?php echo $this->divclassrow; ?> table-responsive" id="player">
+<div class="<?php echo $this->divclassrow; ?> table-responsive" id="defaultplayerdescription">
 	<?php
 	$description = "";
 
@@ -23,13 +23,18 @@ use Joomla\CMS\HTML\HTMLHelper;
 	{
 		$description = $this->teamPlayer->notes;
 	}
-	else
+    if (isset($this->person) && !empty($this->person->notes))
 	{
-		if (!empty($this->person->notes))
-		{
-			$description = $this->person->notes;
-		}
+		$description .= '<br />'.$this->person->notes;
 	}
+    
+//	else
+//	{
+//		if (!empty($this->person->notes))
+//		{
+//			$description = $this->person->notes;
+//		}
+//	}
 
 	if (!empty($description))
 	{
