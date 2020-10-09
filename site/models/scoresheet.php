@@ -139,7 +139,7 @@ class sportsmanagementModelScoresheet extends BaseDatabaseModel
 		$query->order('b.lastname');
 
 		// Where
-		$query->where('team_id = ' . $teamid . ' AND season_id = ' . $season_id);
+		$query->where('team_id = ' . $teamid . ' AND season_id = ' . $seasonid);
 
 		try
 		{
