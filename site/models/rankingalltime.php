@@ -245,11 +245,16 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 			$query->join('LEFT', '#__sportsmanagement_project AS p ON p.id = tl.project_id');
 
 			$query->where('tl.project_id IN (' . $project_ids . ')');
-
-			// $query->group('st.team_id' );
-
+try
+{
 			$db->setQuery($query);
 			$this->_teams = $db->loadObjectList();
+            }
+catch (Exception $e)
+{
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), Log::INFO, 'jsmerror');
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), Log::INFO, 'jsmerror');
+}
 
 			if (!$this->_teams)
 			{
@@ -743,6 +748,11 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 	}
 
 
+	/**
+	 * sportsmanagementModelRankingAllTime::getAllProjectNames()
+	 * 
+	 * @return
+	 */
 	function getAllProjectNames()
 	{
 		$app    = Factory::getApplication();
@@ -762,7 +772,15 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 			$query->where('id = ' . $projekt);
 			$query->order('name ');
 			$db->setQuery($query);
+            try
+            {
 			$league = $db->loadResult();
+            }
+catch (Exception $e)
+{
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), Log::INFO, 'jsmerror');
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), Log::INFO, 'jsmerror');
+}
 		}
 
 		$query->clear();
@@ -773,7 +791,15 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		$query->where('p.league_id = ' . $league);
 		$query->order('s.name DESC ');
 		$db->setQuery($query);
+        try
+        {
 		$result = $db->loadObjectList();
+        }
+catch (Exception $e)
+{
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), Log::INFO, 'jsmerror');
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), Log::INFO, 'jsmerror');
+}
 
 		$db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
 
@@ -793,7 +819,6 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		$jinput = $app->input;
 		$league = $jinput->request->get('l', 0, 'INT');
 
-		// Create a new query object.
 		$db    = Factory::getDBO();
 		$query = Factory::getDbo()->getQuery(true);
 
@@ -801,10 +826,7 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		{
 			$projekt = $jinput->request->get('p', 0, 'INT');
 			$query->clear();
-
 			$query->select('league_id');
-
-			// From the rounds table
 			$query->from('#__sportsmanagement_project');
 			$query->where('id = ' . $projekt);
 			$query->order('name ');
@@ -813,35 +835,29 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		}
 
 		$query->clear();
-
 		$query->select('id');
-
-		// From the rounds table
 		$query->from('#__sportsmanagement_project');
 		$query->where('league_id = ' . $league);
 		$query->order('name ');
 		$db->setQuery($query);
-
-		if (version_compare(JVERSION, '3.0.0', 'ge'))
-		{
-			// Joomla! 3.0 code here
-			$result = $db->loadColumn(0);
-		}
-		elseif (version_compare(JVERSION, '2.5.0', 'ge'))
-		{
-			// Joomla! 2.5 code here
-			$result = $db->loadResultArray(0);
-		}
+try{
+		$result = $db->loadColumn(0);
 
 		$this->project_ids       = implode(",", $result);
 		$this->project_ids_array = $result;
 
 		$count_project = count($result);
 		Log::add(Text::_('Wir verarbeiten ' . $count_project . ' Projekte/Saisons !'), Log::INFO, 'jsmerror');
+        
+        }
+catch (Exception $e)
+{
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), Log::INFO, 'jsmerror');
+    Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), Log::INFO, 'jsmerror');
+}
+        
 		$db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
-
 		return $result;
-
 	}
 
 	/**

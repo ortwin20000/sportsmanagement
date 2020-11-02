@@ -9,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
@@ -120,10 +118,13 @@ class JSMRanking
 	 */
 	var $_roundcodes = null;
 
+	
 	/**
-	 * get instance of ranking. Looks into extension folder too.
-	 *
-	 * @param   string  $type
+	 * JSMRanking::getInstance()
+	 * 
+	 * @param mixed $project
+	 * @param integer $cfg_which_database
+	 * @return
 	 */
 	public static function getInstance($project = null, $cfg_which_database = 0)
 	{
@@ -997,6 +998,7 @@ class JSMRanking
 	{
 		$app       = Factory::getApplication();
 		$option    = $app->input->getCmd('option');
+		$view = $app->input->getVar("view");
 		$db        = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query     = $db->getQuery(true);
 		$starttime = microtime();
@@ -1013,10 +1015,19 @@ class JSMRanking
 
 		if (!isset($this->_roundcodes[(int) $round_id]))
 		{
+			switch ($view)
+{
+				case 'leaguechampionoverview':
+					return false;
+					break;
+				default:
 			Log::add(Text::_('COM_SPORTSMANAGEMENT_RANKING_ERROR_UNKOWN_ROUND_ID'), Log::ERROR, 'jsmerror');
 			Log::add(Text::_('COM_SPORTSMANAGEMENT_GLOBAL_MASTER_TEMPLATE_MISSING_PID'), Log::ERROR, 'jsmerror');
 
-			return false;
+			return false;					
+					break;
+			}
+
 		}
 
 		return $this->_roundcodes[(int) $round_id];

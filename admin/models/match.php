@@ -2645,7 +2645,7 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 			if (empty($data['event_time']))
 			{
 				Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_TIME')), Log::ERROR, 'jsmerror');
-
+				$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_TIME'));
 				return false;
 			}
 		}
@@ -2653,7 +2653,7 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 		if (empty($data['event_sum']))
 		{
 			Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_EVENT_SUM')), Log::ERROR, 'jsmerror');
-
+			$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_EVENT_SUM'));
 			return false;
 		}
 
@@ -2662,7 +2662,7 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 			if ((int) $data['event_time'] > (int) $data['projecttime'])
 			{
 				Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime'])), Log::ERROR, 'jsmerror');
-
+				$this->setError(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime']));
 				return false;
 			}
 		}
