@@ -21,9 +21,9 @@
 			type="text"
 			label="COM_SPORTSMANAGEMENT_GLOBAL_NAME"
 			description="COM_SPORTSMANAGEMENT_GLOBAL_NAME_DESC"
-			size="68"
-			maxlength="100"
-			class="text_area"
+			size="200"
+			maxlength="200"
+			class="input-xxlarge"
 			required="true"/>
 			
 		<field
@@ -31,9 +31,10 @@
 			type="text"
 			label="COM_SPORTSMANAGEMENT_GLOBAL_ALIAS"
 			description="COM_SPORTSMANAGEMENT_GLOBAL_ALIAS_DESC"
-			size="68"
-			maxlength="100"
-			class="form-control form-control-inline"/>
+			size="200"
+			maxlength="200"
+			readonly="true"
+			class="input-xxlarge readonly"/>
 		
     <field
 			name="staffel_id"
@@ -325,6 +326,7 @@ description="COM_SPORTSMANAGEMENT_JSMGCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALE
 				label="COM_SPORTSMANAGEMENT_ADMIN_PROJECT_DESCRIPTION"
 				description="COM_SPORTSMANAGEMENT_ADMIN_PROJECT_DESCRIPTION_DESC"
 				width="450" 
+			       class="span12"
 				filter="JComponentHelper::filterText"/>			
 	</fieldset>	
 

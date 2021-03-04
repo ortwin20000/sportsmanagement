@@ -17,6 +17,9 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * sportsmanagementModeldatabasetool
@@ -1134,26 +1137,59 @@ $message['message'] = $getmessage;
 	function checkAssociations()
 	{
 		$country_assoc_del = '';
+        $country_assoc = array();
 
 		if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
 			$xml      = simplexml_load_file(JPATH_ADMINISTRATOR . '/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml');
 			$document = 'associations';
 		}
-		else
-		{
-			$xml      = Factory::getXML(JPATH_ADMINISTRATOR . '/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml');
-			$document = 'associations';
-		}
+//		else
+//		{
+//			$xml      = Factory::getXML(JPATH_ADMINISTRATOR . '/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml');
+//			$document = 'associations';
+//		}
 
 		if (!File::exists(JPATH_ADMINISTRATOR . '/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml'))
 		{
 			return false;
 		}
+        
+        
+        
+        $url = Uri::root() . '/administrator/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml';
+        $http = HttpFactory::getHttp();
+		$response = $http->get($url);
+        //echo __METHOD__.' '.__LINE__.' response<pre>'.print_r($response->body ,true).'</pre>';
+        $xmlstring = simplexml_load_string($response->body);
+        //echo __METHOD__.' '.__LINE__.' xmlstring<pre>'.print_r($xmlstring,true).'</pre>';
+  
+/*        
+libxml_use_internal_errors(TRUE);
+ 
+$objXmlDocument = simplexml_load_file(JPATH_ADMINISTRATOR . '/components/' . $this->jsmoption . '/helpers/xml_files/associations.xml');
+ 
+if ($objXmlDocument === FALSE) {
+    echo "There were errors parsing the XML file.\n";
+    foreach(libxml_get_errors() as $error) {
+        echo $error->message;
+        $error->line;
+        $error->column;
+    }
+    exit;
+}
+ 
+$objJsonDocument = json_encode($objXmlDocument);
+$arrOutput = json_decode($objJsonDocument, TRUE);        
+*/        
+        
 
 		$params        = ComponentHelper::getParams($this->jsmoption);
 		$country_assoc = $params->get('cfg_country_associations');
-
+        if( is_array($country_assoc) ){
+        $country_assoc = array_merge( array_filter($country_assoc) );
+        }
+        
 		if ($country_assoc)
 		{
 			$country_assoc_del = "'" . implode("','", $country_assoc) . "'";
@@ -1351,7 +1387,7 @@ $message['message'] = $getmessage;
 							 */
 							$this->jsmquery = $this->jsmdb->getQuery(true);
 							$fields         = array(
-								$this->jsmdb->quoteName('picture') . '=' . '\'' . $icon . '\'',
+								//$this->jsmdb->quoteName('picture') . '=' . '\'' . $icon . '\'',
 								$this->jsmdb->quoteName('short_name') . '=' . '\'' . $shortname . '\'',
 								$this->jsmdb->quoteName('middle_name') . '=' . '\'' . $middlename . '\'',
 								$this->jsmdb->quoteName('alias') . '=' . '\'' . $aliasname . '\''

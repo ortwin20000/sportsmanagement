@@ -47,25 +47,29 @@ class sportsmanagementViewcpanel extends sportsmanagementView
 		$project_id = $this->app->getUserState("$this->option.pid", '0');
 		$model      = $this->getModel();
 		$my_text    = '';
+        $country = array();
 
 		$databasetool = BaseDatabaseModel::getInstance("databasetool", "sportsmanagementModel");
 		DEFINE('COM_SPORTSMANAGEMENT_MODEL_ERRORLOG', $databasetool);
 
-		// Für den import die jl tabellen lesen
+		/** Für den import die jl tabellen lesen */
 		$jl_table_import = $databasetool->getJoomleagueTables();
 
 		$params             = ComponentHelper::getParams($this->option);
-		$sporttypes         = $params->get('cfg_sport_types');
+		$this->sporttypes         = $params->get('cfg_sport_types');
 		$sm_quotes          = $params->get('cfg_quotes');
 		$country            = $params->get('cfg_country_associations');
+        if( is_array($country) ){
+        $country = array_merge( array_filter($country) );
+        }
 		$install_agegroup   = ComponentHelper::getParams($this->option)->get('install_agegroup', 0);
 		$cfg_which_database = $params->get('cfg_which_database');
 
 		if ($cfg_which_database)
 		{
-			$sporttypes       = '';
+			$this->sporttypes       = '';
 			$sm_quotes        = '';
-			$country          = '';
+			$country = array();
 			$install_agegroup = '';
 		}
 
@@ -97,83 +101,82 @@ class sportsmanagementViewcpanel extends sportsmanagementView
 
 		if ($sm_quotes)
 		{
-			// Zitate
+			/** Zitate */
 			$result                                                                                 = $databasetool->checkQuotes($sm_quotes);
 			$model->_success_text[Text::_('COM_SPORTSMANAGEMENT_ADMIN_GLOBAL_QUOTES_SUCCESS_TEXT')] = $result;
 		}
 
-		if ($sporttypes)
+		if ($this->sporttypes)
 		{
-			foreach ($sporttypes as $key => $type)
+			foreach ($this->sporttypes as $key => $type)
 			{
 				$checksporttype        = $model->checksporttype($type);
 				$checksporttype_strukt = $databasetool->checkSportTypeStructur($type);
 
 				switch ($type)
 				{
-					case 'soccer':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_SOCCER');
-						break;
-					case 'basketball':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_BASKETBALL');
-						break;
-					case 'handball':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_HANDBALL');
-						break;
-					case 'futsal':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_FUTSAL');
-						break;
-					case 'volleyball':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_VOLLEYBALL');
-						break;
-					case 'american_football':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_AMERICAN_FOOTBALL');
-						break;
-					case 'hockey':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_HOCKEY');
-						break;
-					case 'skater_hockey':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_SKATER_HOCKEY');
-						break;
-					case 'icehockey':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ICEHOCKEY');
-						break;
-					case 'esport_cs':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CS');
-						break;
-					case 'esport_css':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CSS');
-						break;
-					case 'esport_csgo':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CSGO');
-						break;
-					case 'esport_dodc':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_DODC');
-						break;
-					case 'esport_dods':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_DODS');
-						break;
-					case 'generic':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_GENERIC');
-						break;
-					case 'korfball':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_KORFBALL');
-						break;
-					case 'tennis':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_TENNIS');
-						break;
-					case 'tabletennis':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_TABLETENNIS');
-						break;
-					case 'australien_rules_football':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_AUSTRALIEN_RULES_FOOTBALL');
-						break;
-					case 'dart':
-						$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_DART');
-						break;
-
-					default:
-						break;
+				case 'soccer':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_SOCCER');
+				break;
+				case 'basketball':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_BASKETBALL');
+				break;
+				case 'handball':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_HANDBALL');
+				break;
+				case 'futsal':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_FUTSAL');
+				break;
+				case 'volleyball':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_VOLLEYBALL');
+				break;
+				case 'american_football':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_AMERICAN_FOOTBALL');
+				break;
+				case 'hockey':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_HOCKEY');
+				break;
+				case 'skater_hockey':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_SKATER_HOCKEY');
+				break;
+				case 'icehockey':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ICEHOCKEY');
+				break;
+				case 'esport_cs':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CS');
+				break;
+				case 'esport_css':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CSS');
+				break;
+				case 'esport_csgo':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_CSGO');
+				break;
+				case 'esport_dodc':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_DODC');
+				break;
+				case 'esport_dods':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_ESPORT_DODS');
+				break;
+				case 'generic':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_GENERIC');
+				break;
+				case 'korfball':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_KORFBALL');
+				break;
+				case 'tennis':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_TENNIS');
+				break;
+				case 'tabletennis':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_TABLETENNIS');
+				break;
+				case 'australien_rules_football':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_AUSTRALIEN_RULES_FOOTBALL');
+				break;
+				case 'dart':
+				$type_sport_type = Text::_('COM_SPORTSMANAGEMENT_ST_DART');
+				break;
+				default:
+				break;
 				}
 
 				if ($checksporttype)
@@ -285,7 +288,7 @@ class sportsmanagementViewcpanel extends sportsmanagementView
 		{
 		}
 
-		$this->sporttypes = $sporttypes;
+		//$this->sporttypes = $sporttypes;
 		$this->version    = $model->getVersion();
 
 		/**

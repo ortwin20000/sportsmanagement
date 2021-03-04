@@ -20,7 +20,8 @@
  *
  * https://www.spiralscripts.co.uk/Joomla-Tips/modal-windows-in-joomla-3.html
  *
- *
+ * toolbar icons
+ * https://docs.joomla.org/J3.x:Joomla_Standard_Icomoon_Fonts/de
  */
 
 /**
@@ -65,6 +66,17 @@
  *
  */
 
+
+/**
+ * You can use a different css class to change the size. The extension use twitter bootstrap, so you can use the following css classes to control the size of the input :
+ * input-mini
+ * input-small
+ * input-medium
+ * input-large
+ * input-xlarge
+ * input-xxlarge
+ */
+
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -98,7 +110,7 @@ class com_sportsmanagementInstallerScript
 	 * The release value would ideally be extracted from <version> in the manifest file,
 	 * but at preflight, the manifest file exists only in the uploaded temp folder.
 	 */
-	private $release = '3.8.20';
+	private $release = '3.8.50';
 
 	// $language_update = '';
 

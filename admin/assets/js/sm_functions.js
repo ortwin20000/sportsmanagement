@@ -71,14 +71,25 @@ function move_down(sourceid)
         selected.detach().insertAfter(next);
 }
 
+/*
 function changePlayground()
 {
 
 var selected = jQuery( "#jform_picture" ).val();
-//alert(selected);
+console.log('background image = ' + selected);
 jQuery('#roster').css("background-image", "url(../images/com_sportsmanagement/database/rosterground/"+selected+")");
-}
 
+var x = new Image();
+x.src = "/images/com_sportsmanagement/database/rosterground/"+selected+"";
+width = x.width;
+height = x.height;
+console.log('width image = ' + width);
+console.log('height image = ' + height);
+
+
+
+}
+*/
 
 var modjlnav = {
 updateProjects : function(response)

@@ -57,7 +57,9 @@ JHtml::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolower($t
             <th>
 				<?php echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_CLUB_UNIQUE_ID', 'a.unique_id', $this->sortDirection, $this->sortColumn); ?>
                 <br/>
-				<?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUB_NEW_CLIB_ID'); ?></th>
+				<?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUB_NEW_CLIB_ID'); ?>
+		    <br/>
+				<?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUB_FOUNDED_YEAR'); ?>
             </th>
 
             <th width="20">
@@ -182,6 +184,7 @@ $this->dragable_group = 'data-dragable-group="none"';
 
                     <div class="small">
 		<?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($this->item->alias)); ?>
+        <br />
 			<input<?php echo $inputappend; ?>
                             type="text" size="40" class="form-control form-control-inline"
                             name="club_name<?php echo $this->item->id; ?>"
@@ -191,26 +194,13 @@ $this->dragable_group = 'data-dragable-group="none"';
 			
 			<div class="small">
               <?php
-              //echo JHtml::_('sliders.panel', 'Teams: ' . $this->item->name, $this->item->id);
-/*              
-echo HTMLHelper::_('sliders.start', $this->item->id, array('useCookie' => 0));
-echo HTMLHelper::_('sliders.panel', Text::_('Teams ').$this->item->name, $this->item->id);
-echo HTMLHelper::_('sliders.end');
-*/ 
-   //echo HTMLHelper::_('sliders.panel', Text::_('Teams ').$this->item->name, $this->item->id);
-//echo HTMLHelper::_('bootstrap.startAccordion', 'slide-group-'.$this->item->id, $slidesOptions);   
+  
 echo HTMLHelper::_('bootstrap.addSlide', 'slider',  'Teams: ' . $this->item->name, 'slide' . $this->item->id . '_id');   
-   
-   
 $teams = $this->modelclub->teamsofclub($this->item->id);
-//echo '<pre>'.print_r($teams,true).'</pre>';   
 foreach ( $teams as $key => $value )   
 {
   echo $value->name.' ('.$value->id.')<br>';
 }	 
-//echo HTMLHelper::_('bootstrap.endSlide');
-//echo HTMLHelper::_('bootstrap.endAccordion');
-//echo HTMLHelper::_('sliders.end');   
 HTMLHelper::_('bootstrap.endSlide');   
    
    ?>
@@ -266,6 +256,11 @@ HTMLHelper::_('bootstrap.endSlide');
                     <input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
                                                       name="new_club_id<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->new_club_id; ?>"
+                                                      onchange="document.getElementById('cb<?php echo $this->count_i; ?>').checked=true"/>
+			<br/>
+			<input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
+                                                      name="founded_year<?php echo $this->item->id; ?>"
+                                                      value="<?php echo $this->item->founded_year; ?>"
                                                       onchange="document.getElementById('cb<?php echo $this->count_i; ?>').checked=true"/>
 			<br/>
 					<?php echo $this->escape($this->item->state); ?>

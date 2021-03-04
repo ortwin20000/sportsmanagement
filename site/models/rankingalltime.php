@@ -8,9 +8,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Language\Text;
@@ -52,6 +50,9 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 	var $debug_info = false;
 	var $projectid = 0;
 	var $leagueid = 0;
+	static $rankingalltimenotes = array();
+	static $rankingalltimewarnings = array();
+	static $rankingalltimetips = array();
 	/**
 	 * ranking parameters
 	 * @var array
@@ -72,7 +73,6 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 	 */
 	function __construct()
 	{
-		// Reference global application object
 		$app                 = Factory::getApplication();
 		$jinput              = $app->input;
 		$this->alltimepoints = $jinput->request->get('points', '3,1,0', 'STR');
@@ -82,6 +82,14 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 
 		$menu = JMenu::getInstance('site');
 		$item = $menu->getActive();
+        if ( !property_exists($item, 'query') )
+		{
+		$item->query['view'] = '';  
+		}
+        if ( !property_exists($item, 'id') )
+		{
+		$item->id = 0;  
+		}
 
 		$params = $menu->getParams($item->id);
 
@@ -110,15 +118,10 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		}
 		else
 		{
-			// $strXmlFile = JPATH_SITE.DIRECTORY_SEPARATOR.JSM_PATH.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'rankingalltime.xml';
 			$strXmlFile = JPATH_SITE . DIRECTORY_SEPARATOR . JSM_PATH . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'rankingalltime' . DIRECTORY_SEPARATOR . 'tmpl' . DIRECTORY_SEPARATOR . 'default.xml';
-
-			// $xml = simplexml_load_file($strXmlFile);
-
 			$xml      = Factory::getXML($strXmlFile);
 			$children = $xml->document->children();
-
-			// We can now step through each element of the file
+			/** We can now step through each element of the file */
 			foreach ($xml->children() as $field)
 			{
 				foreach ($field->fieldset as $fieldset)
@@ -157,6 +160,30 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 				if (!array_key_exists($r->team_id, $this->teams))
 				{
 					$this->teams[$r->team_id] = $r;
+                    $this->teams[$r->team_id]->cnt_matches       = 0;
+					$this->teams[$r->team_id]->sum_points        = 0;
+					$this->teams[$r->team_id]->neg_points        = 0;
+					$this->teams[$r->team_id]->cnt_won_home      = 0;
+					$this->teams[$r->team_id]->cnt_draw_home     = 0;
+					$this->teams[$r->team_id]->cnt_lost_home     = 0;
+					$this->teams[$r->team_id]->cnt_won           = 0;
+					$this->teams[$r->team_id]->cnt_draw          = 0;
+					$this->teams[$r->team_id]->cnt_lost          = 0;
+					$this->teams[$r->team_id]->sum_team1_result  = 0;
+					$this->teams[$r->team_id]->sum_team2_result  = 0;
+					$this->teams[$r->team_id]->sum_away_for      = 0;
+					$this->teams[$r->team_id]->diff_team_results = 0;
+                    
+                    $this->teams[$r->team_id]->sum_team1_legs = 0;
+                    $this->teams[$r->team_id]->sum_team2_legs = 0;
+                    
+                    $this->teams[$r->team_id]->cnt_lost_away = 0;
+                    $this->teams[$r->team_id]->bonus_points = 0;
+                    $this->teams[$r->team_id]->cnt_won_away = 0;
+                    $this->teams[$r->team_id]->cnt_draw_away = 0;
+                    $this->teams[$r->team_id]->projectteam_slug = '';
+                    $this->teams[$r->team_id]->previousRanking = '';
+                    
 				}
 
 				if ($r->use_finally)
@@ -194,7 +221,8 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		}
 
 		$count_teams = count($this->teams);
-		Log::add(Text::_('Wir verarbeiten ' . $count_teams . ' Vereine !'), Log::INFO, 'jsmerror');
+		self::$rankingalltimetips[] = Text::_('Wir verarbeiten ' . $count_teams . ' Vereine !');
+		//Log::add(Text::_('Wir verarbeiten ' . $count_teams . ' Vereine !'), Log::INFO, 'jsmerror');
 
 		// Echo 'result <pre>'.print_r($result,true).'</pre>';
 		// echo 'teams <pre>'.print_r($this->teams,true).'</pre>';
@@ -326,7 +354,8 @@ catch (Exception $e)
 			$this->_matches = $res;
 
 			$count_matches = count($res);
-			Log::add(Text::_('Wir verarbeiten ' . $count_matches . ' Spiele !'), Log::INFO, 'jsmerror');
+			self::$rankingalltimetips[] = ('Wir verarbeiten ' . $count_matches . ' Spiele !');
+			//Log::add(Text::_('Wir verarbeiten ' . $count_matches . ' Spiele !'), Log::INFO, 'jsmerror');
 		}
 		else
 		{
@@ -847,7 +876,8 @@ try{
 		$this->project_ids_array = $result;
 
 		$count_project = count($result);
-		Log::add(Text::_('Wir verarbeiten ' . $count_project . ' Projekte/Saisons !'), Log::INFO, 'jsmerror');
+	self::$rankingalltimetips[] = Text::_('Wir verarbeiten ' . $count_project . ' Projekte/Saisons !');
+		//Log::add(Text::_('Wir verarbeiten ' . $count_project . ' Projekte/Saisons !'), Log::INFO, 'jsmerror');
         
         }
 catch (Exception $e)
@@ -1121,7 +1151,7 @@ catch (Exception $e)
 				}
 				else
 				{
-					Log::add(Text::_('COM_SPORTSMANAGEMENT_RANKING_NOT_VALID_CRITERIA') . ': ' . $v, Log::WARNING, 'jsmerror');
+self::$rankingalltimetips[] = Text::_('COM_SPORTSMANAGEMENT_RANKING_NOT_VALID_CRITERIA') . ': ' . $v;					
 				}
 			}
 

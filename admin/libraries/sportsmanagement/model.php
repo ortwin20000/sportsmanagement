@@ -35,7 +35,75 @@ use Joomla\CMS\Log\Log;
 class JSMModelAdmin extends AdminModel
 {
 
-
+ /** @var    array    An array of tips */
+	static $_tips = array();
+	/** @var    array    An array of warnings */
+	static $_warnings = array();
+    /** @var    array    An array of notes */
+	static $_notes = array();
+	
+	 /**
+     * sportsmanagementHelper::getTips()
+     * 
+     * @return
+     */
+    public static function getTips()
+	{
+		return self::$_tips;
+	}
+    
+    /**
+     * sportsmanagementHelper::getWarnings()
+     * 
+     * @return
+     */
+    public static function getWarnings()
+	{
+		return self::$_warnings;
+	}
+    
+    /**
+     * sportsmanagementHelper::getNotes()
+     * 
+     * @return
+     */
+    public static function getNotes()
+	{
+		return self::$_notes;
+	}
+	
+	/**
+     * sportsmanagementHelper::setTip()
+     * 
+     * @param mixed $tip
+     * @return void
+     */
+    public static function setTip($tip)
+	{
+		self::$_tips[] = $tip;
+	}
+    
+    /**
+     * sportsmanagementHelper::setWarning()
+     * 
+     * @param mixed $warning
+     * @return void
+     */
+    public static function setWarning($warning)
+	{
+		self::$_warnings[] = $warning;
+	}
+    /**
+     * sportsmanagementHelper::setNote()
+     * 
+     * @param mixed $note
+     * @return void
+     */
+    public static function setNote($note)
+	{
+		self::$_notes[] = $note;
+	}
+    
 	/**
 	 * JSMModelAdmin::__construct()
 	 *
@@ -96,6 +164,9 @@ class JSMModelAdmin extends AdminModel
 		{
 		}
 	}
+    
+    
+
 
 	/**
 	 * Method to save the form data.
@@ -273,10 +344,29 @@ if ( $config->get('debug') )
 					$data['dissolved'] = sportsmanagementHelper::convertDate($data['dissolved'], 0);
 				}
 				break;
-                case 'teamplayer':
+    case 'teamplayer':
                 if (array_key_exists('copy_jform', $post))
 				{
 					$data['picture'] = $post['copy_jform']['picture'];
+				}
+                if ($data['contract_from'] == '')
+				{
+					$data['contract_from'] = '0000-00-00';
+				}
+
+				if ($data['contract_to'] == '')
+				{
+					$data['contract_to'] = '0000-00-00';
+				}
+                
+                if ($data['contract_from'] != '0000-00-00' && $data['contract_from'] != '')
+				{
+					$data['contract_from'] = sportsmanagementHelper::convertDate($data['contract_from'], 0);
+				}
+                
+                if ($data['contract_to'] != '0000-00-00' && $data['contract_to'] != '')
+				{
+					$data['contract_to'] = sportsmanagementHelper::convertDate($data['contract_to'], 0);
 				}
                 
                 break;
@@ -843,7 +933,7 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 							$this->jsmquery->where('team_id =' . $data['id']);
 							$this->jsmquery->where('season_id =' . $value);
 							$this->jsmdb->setQuery($this->jsmquery);
-							$result          = $this->jsmdb->loadObjectList();
+							$result          = $this->jsmdb->loadResult();
 							$delete_season[] = $value;
 
 							if (!$result)
@@ -863,6 +953,17 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 								{
 								}
 							}
+                            else
+                            {
+                            $teamname = $data['teamvalue'][$value];  
+                            $object = new stdClass;
+				$object->id          = $result;
+                $object->teamname          = $teamname;
+				$object->modified    = $this->jsmdate->toSql();
+				$object->modified_by = $this->jsmuser->get('id');
+				$resultupdate = $this->jsmdb->updateObject('#__sportsmanagement_season_team_id', $object, 'id');  
+                                
+                            }
 						}
 
 						$this->jsmquery->clear();
@@ -1413,6 +1514,9 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					case 'season':
 						$row->ordering = substr($row->name, 0, 4);
 						break;
+						case 'division':
+						$row->ordering = $order[$i];
+						break;
 					default:
 						if ( $order[$i] )
 						{
@@ -1516,6 +1620,8 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
  */
 class JSMModelList extends ListModel
 {
+    
+   
 
 	/**
 	 * JSMModelList::__construct()
@@ -1578,7 +1684,12 @@ class JSMModelList extends ListModel
 		Log::addLogger(array('logger' => 'messagequeue'), Log::ALL, array('jsmerror'));
 
 	}
-
+    
+      
+    
+   
+    
+   
 }
 
 
@@ -1593,6 +1704,8 @@ class JSMModelList extends ListModel
  */
 class JSMModelLegacy extends BaseDatabaseModel
 {
+    
+    
 
 	/**
 	 * JSMModelLegacy::__construct()
@@ -1642,6 +1755,14 @@ class JSMModelLegacy extends BaseDatabaseModel
 		*/
 
 	}
+    
+   
+    
+   
+    
+   
+    
+   
 
 }
 

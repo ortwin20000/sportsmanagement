@@ -170,9 +170,8 @@ class sportsmanagementModelProjectteams extends JSMModelList
 		}
 		catch (Exception $e)
 		{
-			$msg  = $e->getMessage(); // Returns "Normally you would have other code...
-			$code = $e->getCode(); // Returns '500';
-			Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $msg, 'error'); // commonly to still display that error
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
 		}
 
 	}
@@ -658,8 +657,7 @@ class sportsmanagementModelProjectteams extends JSMModelList
 
 		if (!$result = $db->loadObjectList())
 		{
-			$app->enqueueMessage(Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_NO_CHANGE_TEAMS'), 'Notice');
-
+			//$app->enqueueMessage(Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_NO_CHANGE_TEAMS'), 'Notice');
 			return false;
 		}
 
@@ -681,7 +679,7 @@ class sportsmanagementModelProjectteams extends JSMModelList
 	 *
 	 * @return
 	 */
-	function getProjectTeams($project_id = 0, $in_used = false)
+	function getProjectTeams($project_id = 0, $in_used = false, $divisionid = 0)
 	{
 		$this->_season_id     = $this->jsmapp->getUserState("$this->jsmoption.season_id", '0');
 		$this->project_art_id = $this->jsmapp->getUserState("$this->jsmoption.project_art_id", '0');
@@ -716,6 +714,10 @@ class sportsmanagementModelProjectteams extends JSMModelList
 			$this->jsmquery->join('LEFT', '#__sportsmanagement_season_team_id AS st on st.team_id = t.id');
 			$this->jsmquery->join('LEFT', '#__sportsmanagement_project_team AS pt ON pt.team_id = st.id');
 			$this->jsmquery->where('pt.project_id = ' . $project_id);
+			if ( $divisionid )
+			{
+				$this->jsmquery->where('pt.division_id = ' . $divisionid);
+			}
 
 			if ($in_used && isset(self::$_pro_teams_in_used))
 			{

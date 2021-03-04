@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung fűr alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage ranking
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
@@ -23,13 +19,9 @@ if (ComponentHelper::getParams('com_sportsmanagement')->get('show_debug_info_fro
 {
 }
 
-// Make sure that in case extensions are written for mentioned (common) views,
-// that they are loaded i.s.o. of the template of this view
 $templatesToLoad = array('globalviews');
 sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
-/**
- * kml file laden
- */
+/** kml file laden */
 if (!empty($this->mapconfig))
 {
 	if ($this->mapconfig['map_kmlfile'] && $this->project)
@@ -188,6 +180,14 @@ else
 						echo $this->loadTemplate('pagnav');
 					}
 				}
+				
+				if (array_key_exists('show_help', $this->config))
+				{
+					if ($this->config['show_help'])
+					{
+						echo $this->loadTemplate('hint');
+					}
+				}
 
 
 				if (array_key_exists('show_projectinfo', $this->config))
@@ -224,13 +224,7 @@ else
 				}
 
 
-				if (array_key_exists('show_help', $this->config))
-				{
-					if ($this->config['show_help'])
-					{
-						echo $this->loadTemplate('hint');
-					}
-				}
+				
 
 
 				if (array_key_exists('show_project_rss_feed', $this->overallconfig))

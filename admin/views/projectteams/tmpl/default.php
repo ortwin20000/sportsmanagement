@@ -23,10 +23,14 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 <form action="<?php echo $this->request_url; ?>" method="post" id="adminForm" name="adminForm">
 	<?PHP
     echo $this->loadTemplate('joomla_version');
+    /*
+    if ( $this->project->fast_projektteam )
+    {
+    echo $this->loadTemplate('jsm_tips');    
+    }
+    echo $this->loadTemplate('jsm_notes');
+    */
 	?>
-    <div>
-		<?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMS_QUICKADD_DESCR'); ?>
-    </div>
     <div>
         <script type="text/javascript">
             var leaguepicture = new Array;
@@ -51,7 +55,7 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 			?>
         </script>
 		<?PHP
-		// Some CSS
+		/** Some CSS */
 		$this->document->addStyleDeclaration(
 			'
 img.item {

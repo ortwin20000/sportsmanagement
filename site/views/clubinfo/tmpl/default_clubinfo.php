@@ -385,7 +385,7 @@ else
 					<?PHP
 				}
 
-
+/*
 				if ($this->config['show_fusion'])
 				{
 					if ($this->familytree)
@@ -425,6 +425,7 @@ else
                     </div>
 					<?php
 				}
+			*/
 				?>
             </div>
 		<?php }

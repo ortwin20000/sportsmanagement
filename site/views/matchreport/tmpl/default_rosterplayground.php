@@ -80,7 +80,7 @@ for ($a = 0; $a < sizeof($favteams1); $a++)
 					$schemaguest = $this->formation2;
 				}
 
-				$backgroundimage = 'media/com_sportsmanagement/rosterground/' . $this->config['roster_playground_select'];
+				$backgroundimage = 'images/com_sportsmanagement/database/rosterground/' . $this->config['roster_playground_select'];
 
 				list($width, $height, $type, $attr) = getimagesize($backgroundimage);
 				$spielfeldhaelfte = $height / 2;
@@ -234,9 +234,16 @@ for ($a = 0; $a < sizeof($favteams1); $a++)
 										{
 											if ($player->pposid == $pos->pposid && $player->ptid == $this->match->projectteam1_id)
 											{
-												$picture2 = sportsmanagementHelper::getDefaultPlaceholder("player");
-												$picture  = ($player->picture != $picture2) ? $player->picture : $player->ppic;
-                                                //$picture  = $player->ppic;
+$picture2 = sportsmanagementHelper::getDefaultPlaceholder("player");
+//if ( $player->ppic )
+//{
+//$picture  = $player->ppic;  
+//}
+//else
+//{
+//$picture  = ($player->picture != $picture2) ? $player->picture : $player->ppic;
+//}
+$picture  = $player->picture; 
 
 												?>
 
@@ -305,7 +312,8 @@ for ($a = 0; $a < sizeof($favteams1); $a++)
 											if ($player->pposid == $pos->pposid && $player->ptid == $this->match->projectteam2_id)
 											{
 												$picture2 = sportsmanagementHelper::getDefaultPlaceholder("player");
-												$picture  = ($player->picture != $picture2) ? $player->picture : $player->ppic;
+												//$picture  = ($player->picture != $picture2) ? $player->picture : $player->ppic;
+                                                $picture  = $player->picture; 
 												?>
                                                 <div id="<?php echo $player->person_id; ?>"
                                                      style="display:<?php echo $div_display; ?>;position:absolute; width:103px; left:<?PHP echo $this->schemaaway[$schemaguest][$testlauf]['gast']['links']; ?>px; top:<?PHP echo $this->schemaaway[$schemaguest][$testlauf]['gast']['oben']; ?>px; text-align:center;">

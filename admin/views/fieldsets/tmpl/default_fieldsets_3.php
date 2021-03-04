@@ -20,7 +20,8 @@ switch ($this->fieldset)
 	 * für die spielfeldpositionen
 	 */
 	case 'playground_jquery':
-		$backgroundimage = Uri::root() . 'media/com_sportsmanagement/rosterground/' . $this->item->picture;
+		//$backgroundimage = Uri::root() . 'media/com_sportsmanagement/rosterground/' . $this->item->picture;
+        $backgroundimage = '../images/com_sportsmanagement/database/rosterground/' . $this->item->picture;
 		list($width, $height, $type, $attr) = getimagesize($backgroundimage);
 		$picture = Uri::root() . 'images/com_sportsmanagement/database/placeholders/placeholder_150_2.png';
 		?>
@@ -279,6 +280,8 @@ switch ($this->fieldset)
                 <fieldset class="adminform">
 
 					<?php
+echo $this->extendeduser->renderFieldset($fieldset->name);
+				/*
 					$fields = $this->extendeduser->getFieldset($fieldset->name);
 
 					if (!count($fields))
@@ -291,6 +294,7 @@ switch ($this->fieldset)
 						echo $field->label;
 						echo $field->input;
 					}
+				*/
 					?>
                 </fieldset>
 				<?php
@@ -453,11 +457,9 @@ switch ($this->fieldset)
 		echo $this->form->renderFieldset('competition');
 		break;
 
-	// Das ist der standard
-	default:
+	case 'picture':
 		?>
-
-        <table class="table">
+		<table class="table">
 			<?php
 			foreach ($this->form->getFieldset($this->fieldset) as $field)
 				:
@@ -513,6 +515,20 @@ switch ($this->fieldset)
 				?>
             </tr>
         </table>
+
+<?php
+		break;
+	// Das ist der standard
+	default:
+		?>
+<div class="row-fluid">
+			<div class="span9">
+<?php
+		echo $this->form->renderFieldset($this->fieldset);
+		?>
+</div>
+	</div>
+
 
         <!-- vielleicht für die zukunft-->
         <script type="text/javascript">

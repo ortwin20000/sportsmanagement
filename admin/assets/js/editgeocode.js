@@ -7,6 +7,7 @@ var countryleaflet;
 var address;
 var street;
 var state;
+var municipality;
 var city;
 var zip;
 var province;
@@ -82,6 +83,26 @@ function getlatlonopenstreet(result)
 {
 dpjQuery("#jform_geocomplete").val(getAddresString());
 dpjQuery("#jform_geocomplete").trigger("geocode");	
+
+// es muss mindestens die stadt angegeben werden  
+if (dpjQuery('#jform_city').length == 0) {
+city = dpjQuery("#jform_location").val();
+}
+else	
+{	
+city = dpjQuery("#jform_city").val();
+}	  
+  
+if (city.length == 0) {  
+dpjQuery("#jform_latitude").val('0.00000000');
+dpjQuery("#jform_longitude").val('0.00000000');	
+addLayer('0.00000000','0.00000000');  
+return '';  
+}
+
+
+
+
 	
 	
 var inp = dpjQuery("#jform_geocomplete").val();
@@ -111,7 +132,10 @@ console.log(val);
 console.log('latitude ' + val.lat);
 console.log('longitude ' + val.lon);
 
-console.log('county ' + val.address.county);
+console.log('134 county ' + val.address.county);
+	
+console.log('136 municipality ' + val.address.municipality);
+	
 console.log('state_district ' + val.address.state_district);
 console.log('state ' + val.address.state);
 console.log('city_district ' + val.address.city_district);
@@ -123,13 +147,15 @@ console.log('neighbourhood ' + val.address.neighbourhood);
 
 
 state = val.address.state;
+municipality = val.address.municipality;	
 
 dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_1_LONG_NAME").val(state);
-dpjQuery("#jform_state").val(state);	
+dpjQuery("#jform_state").val(municipality);	
 
 if ( val.address.county )
 {
 dpjQuery("#extended_COM_SPORTSMANAGEMENT_ADMINISTRATIVE_AREA_LEVEL_2_LONG_NAME").val(val.address.county);	
+//dpjQuery("#jform_state").val(val.address.county);	
 }	
 if ( val.address.state_district )
 {

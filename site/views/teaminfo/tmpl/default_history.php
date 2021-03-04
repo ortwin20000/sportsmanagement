@@ -8,22 +8,15 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 
+unset($this->notes);
+$this->notes[] = Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_HISTORY');
+echo $this->loadTemplate('jsm_notes');
 ?>
-
-
-<h4>
-
-	<?php echo Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_HISTORY'); ?>
-
-</h4>
-
 <table class="<?PHP echo $this->config['table_class']; ?>">
     <thead>
     <tr class="sectiontableheader">
@@ -130,9 +123,10 @@ use Joomla\CMS\Factory;
 		?>
         <tr class="">
             <td><?php echo $season->season; ?></td>
-            <td><?php echo $season->league; ?></td>
+            <td><?php echo JSMCountries::getCountryFlag($season->leaguecountry).''.$season->league; ?></td>
             <td><?php
-
+		if ( $this->config['show_team_hist_picture'] )
+		{
 				$picture = !$season->season_picture ? sportsmanagementHelper::getDefaultPlaceholder('team') : $season->season_picture;
 
 				echo sportsmanagementHelperHtml::getBootstrapModalImage('teaminfohistory' . $season->ptid . '-' . $season->projectid,
@@ -144,6 +138,11 @@ use Joomla\CMS\Factory;
 					$this->modalheight,
 					$this->overallconfig['use_jquery_modal']
 				);
+	}
+else
+      {
+        echo HTMLHelper::image('media/com_sportsmanagement/jl_images/icon_copyright_2.png', '', 'height="30"');
+      }		
 				?></td>
 			<?php if ($this->project->project_type == 'DIVISIONS_LEAGUE')
 			{

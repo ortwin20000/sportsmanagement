@@ -69,13 +69,26 @@ class sportsmanagementView extends BaseHtmlView
 	protected $table_data_div = '';
     public $itemname;
 	
-	public $bootstrap_fileinput_version = '5.1.2';
+    /** https://cdnjs.com/libraries/bootstrap-fileinput */
+	public $bootstrap_fileinput_version = '5.1.4';
+    /** https://cdnjs.com/libraries/popper.js */
+    public $bootstrap_fileinput_popperversion = '2.8.2';
+    
 	public $bootstrap_fileinput_bootstrapversion = '4.3.1';
-	public $bootstrap_fileinput_popperversion = '1.14.7';
+	/** https://cdnjs.com/libraries/leaflet */
 	public $leaflet_version = '1.7.1';
 	public $leaflet_css_integrity = 'sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==';
 	public $leaflet_js_integrity = 'sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==';
 
+	
+    /** @var    array    An array of tips */
+	public $tips = array();
+	/** @var    array    An array of warnings */
+	public $warnings = array();
+    /** @var    array    An array of notes */
+	public $notes = array();
+	
+	
 	/**
 	 * sportsmanagementView::display()
 	 *
@@ -128,9 +141,22 @@ class sportsmanagementView extends BaseHtmlView
         if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
         {
         $this->document->addScript(Uri::root() . 'administrator/components/com_sportsmanagement/assets/js/joomla4functions.js');
+		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css', 'text/css');
+			//$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css', 'text/css'); 
+			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css', 'text/css');
         //$this->document->addScript(Uri::root() . 'media/system/js/searchtools.js');
         }
+	else	
+	{
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css', 'text/css');
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css', 'text/css');        
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css', 'text/css');
+	}	
 		
+?>        
+   
+        
+<?php        
 // css parameter of formbehavior2::select2
 // for details http://ivaynberg.github.io/select2/		
 $this->document->addStyleDeclaration(
@@ -158,6 +184,7 @@ img.car {
 	$this->modalheight    = ComponentHelper::getParams($this->jinput->getCmd('option'))->get('modal_popup_height', 600);
 	$this->modalwidth     = ComponentHelper::getParams($this->jinput->getCmd('option'))->get('modal_popup_width', 900);
 	$this->project_id     = $this->jinput->get('pid');
+    $this->_persontype     = $this->jinput->get('persontype');
 	$this->jsmmessage     = '';
 	$this->jsmmessagetype = 'notice';
 		
@@ -165,6 +192,7 @@ img.car {
 		switch ($this->view)
 		{
 			case 'smquotetxt':
+            case 'installhelper':
 				break;
 			default:
 				$this->state          = $this->get('State');
@@ -288,6 +316,8 @@ case 'position';
 case 'agegroup';
 case 'sportstype';		
 case 'eventtype';
+case 'project';		
+case 'jlextassociation';			
 $this->app->setUserState('com_sportsmanagement.itemname', Text::_($this->item->name) );
 break;
 case 'teamplayer';
@@ -400,6 +430,7 @@ break;
 				case 'predictiongroups';
 				case 'predictionmembers';
 				case 'predictiontemplates';
+				case 'predictionrounds';
 					sportsmanagementHelper::addSubmenu('predictions');
 					break;
 				default:
@@ -461,8 +492,9 @@ break;
 				//case 'projects':
 				//case 'players':
 				case 'predictiongames':
-				case 'jlextfederations':
-				case 'jlextassociations':
+				case 'predictionrounds':
+				//case 'jlextfederations':
+				//case 'jlextassociations':
 				//case 'jlextcountries':
 				//case 'agegroups':
 				//case 'eventtypes':
@@ -475,7 +507,7 @@ break;
 				//case 'teams':
 				//case 'playgrounds':
 				//case 'rounds':
-				case 'divisions':
+				//case 'divisions':
 				case 'extrafields':
 				//case 'teamplayers':
 					JHtmlSidebar::addFilter(
@@ -561,14 +593,14 @@ break;
              break;
              }
 
-			if (isset($this->federation))
-			{
-				JHtmlSidebar::addFilter(
-					Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_FEDERATION'),
-					'filter_federation',
-					HTMLHelper::_('select.options', $this->federation, 'value', 'text', $this->state->get('filter.federation'), true)
-				);
-			}
+//			if (isset($this->federation))
+//			{
+//				JHtmlSidebar::addFilter(
+//					Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_FEDERATION'),
+//					'filter_federation',
+//					HTMLHelper::_('select.options', $this->federation, 'value', 'text', $this->state->get('filter.federation'), true)
+//				);
+//			}
 
 			if (isset($this->unique_id))
 			{
@@ -853,6 +885,7 @@ document.getElementById("filter_season").classList.add("filter_season");
 				case 'predictionmembers':
 				case 'templates':
 				case 'predictiongroups':
+				case 'predictionrounds':
 				case 'jlextdfbkeyimport':
 				case 'transifex';
 				case 'predictions';
@@ -866,6 +899,7 @@ document.getElementById("filter_season").classList.add("filter_season");
 					case 'jsmopenligadb';
                 case 'smimageimports';
 					case 'smquotestxt';
+                    case 'installhelper';
 				break;
 				default:
 					/**
@@ -895,20 +929,35 @@ document.getElementById("filter_season").classList.add("filter_season");
 			ToolbarHelper::help('JHELP_COMPONENTS_SPORTSMANAGEMENT_CPANEL', false, $cfg_help_server . 'SM-Backend:' . $view);
 			ToolbarHelper::divider();
 		}
+        
+        switch ($this->view)
+		{
+		case 'rosterpositions';
+        $title  = Text::_('JTOOLBAR_BATCH');
+		$layout = new JLayoutFile('rosterpositions', JPATH_ROOT . '/components/com_sportsmanagement/layouts');
+		$html   = $layout->render();
+		Toolbar::getInstance('toolbar')->appendButton('Custom', $html, 'batch');
+        $modal_params           = array();
+        $modal_params['title']  = Text::_('JLIB_HTML_BEHAVIOR_UPLOADER_CURRENT_TITLE');
+		$modal_params['url']    = 'index.php?option=com_sportsmanagement&view=imagelist&author=&fieldid=&tmpl=component&imagelist=1&asset=com_sportsmanagement&folder=rosterground&type=rosterground';
+		$modal_params['height'] = $this->modalheight;
+		$modal_params['width']  = $this->modalwidth;
+		echo HTMLHelper::_('bootstrap.renderModal', 'rosterpositions', $modal_params);
+		break;
+        }
 
-		/**
-		 * test
-		 */
+		/** test */
 		$title  = Text::_('JTOOLBAR_BATCH');
 		$layout = new JLayoutFile('newissue', JPATH_ROOT . '/components/com_sportsmanagement/layouts');
 		$html   = $layout->render();
 		Toolbar::getInstance('toolbar')->appendButton('Custom', $html, 'batch');
 
 		$modal_params           = array();
+        $modal_params['title']  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_GITHUB_ADD_ISSUE');
 		$modal_params['url']    = 'index.php?option=com_sportsmanagement&view=github&layout=addissue&tmpl=component&issuelayout=' . $this->layout . '&issueview=' . $this->view;
 		$modal_params['height'] = $this->modalheight;
 		$modal_params['width']  = $this->modalwidth;
-		echo HTMLHelper::_('bootstrap.renderModal', 'collapseModal', $modal_params);
+		echo HTMLHelper::_('bootstrap.renderModal', 'newissue', $modal_params);
 
 	}
 }

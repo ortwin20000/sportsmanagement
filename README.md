@@ -7,7 +7,7 @@ Auch im Extension zu finden: https://extensions.joomla.org/extension/sports-mana
 Das Team
 ================
 * Entwickler: diddipoeler
-* Entwicklungsunterstützung: appukonrad, tdittmann, llambion 
+* Entwicklungsunterstützung: jst71, appukonrad, tdittmann, llambion 
 * Language manager & Wiki: stony
 * Übersetzer: sk-plehanovec, teddy
 * Tester: svdoldie
@@ -37,7 +37,9 @@ Extensions ?
 
 Änderungen
 ---------------------
-*   31-10-2020: **3.8.30** Alle Meister einer Liga
+*   03-03-2021: **3.8.50** Anpassungen Joomla 4
+*   15-02-2021: **3.8.40** Historische Namen einer Mannschaft hinterlegen
+*   01-01-2021: **3.8.30** Alle Meister einer Liga, Tippspiel:4 Halbfinalisten tippbar mit konfigurierbare Punkte
 *   06-10-2020: **3.8.20** Sportart Wasserball hinzugefügt
 *   03-10-2020: **3.8.10** Neue Felder Countries
 *   12-09-2020: **3.8.00** Neue Felder Spielstätte, Personen und Vereine

@@ -15,13 +15,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 
-// Reference global application object
 $app = Factory::getApplication();
-// JInput object
 $jinput      = $app->input;
 $view        = $jinput->getVar("view");
-$modalheight = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal_popup_height', 600);
-$modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal_popup_width', 900);
 ?>
 <!-- START: Contentheading -->
 <div class="<?php echo $this->divclassrow; ?>" id="sectionheader">
@@ -315,27 +311,26 @@ $modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal
 			<?PHP
 			break;
 		case 'matrix':
-			?>
-            <table class="table">
-                <tr>
-                    <td class="contentheading">
-						<?php
-						echo '&nbsp;' . Text::_('COM_SPORTSMANAGEMENT_MATRIX');
+unset($this->notes);        
+
+						$ausgabe = '&nbsp;' . Text::_('COM_SPORTSMANAGEMENT_MATRIX');
 						if ($this->divisionid)
 						{
-							echo " " . $this->division->name;
+							$ausgabe .= " " . $this->division->name;
 						}
 						if ($this->roundid)
 						{
-							echo " - " . $this->round->name;
+							$ausgabe .= " - " . $this->round->name;
 						}
 						?>
-                    </td>
-                </tr>
-            </table>
+
             <br/>
 			<?PHP
+$this->notes[] = $ausgabe;
+echo $this->loadTemplate('jsm_notes');            
 			break;
+            
+            
 		case 'roster':
 			?>
             <table class="table">
@@ -394,13 +389,16 @@ $modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal
 			<?PHP
 			break;
 		case 'teaminfo':
+unset($this->notes);
 			?>
-            <h4>
-				<?php echo Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_PAGE_TITLE') . " - " . $this->team->tname;
+            <!-- <h4> -->
+				<?php 
+                $ausgabe = Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_PAGE_TITLE') . " - " . $this->team->tname;
+                //echo Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_PAGE_TITLE') . " - " . $this->team->tname;
 				if ($this->showediticon)
 				{
 					$link = "index.php?option=com_sportsmanagement&tmpl=component&view=editprojectteam&ptid=" . $this->projectteamid . "&tid=" . $this->teamid . "&p=" . $this->project->id;
-					echo sportsmanagementHelperHtml::getBootstrapModalImage(
+					$ausgabe .= sportsmanagementHelperHtml::getBootstrapModalImage(
 						'projectteamedit' . $this->projectteamid,
 						'administrator/components/com_sportsmanagement/assets/images/edit.png',
 						Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTTEAMINFO_EDIT_DETAILS'),
@@ -412,7 +410,7 @@ $modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal
 					);
 
 					$link = "index.php?option=com_sportsmanagement&tmpl=component&view=editteam&ptid=" . $this->projectteamid . "&tid=" . $this->teamid . "&p=" . $this->project->id;
-					echo sportsmanagementHelperHtml::getBootstrapModalImage(
+					$ausgabe .= sportsmanagementHelperHtml::getBootstrapModalImage(
 						'teamedit' . $this->projectteamid,
 						'administrator/components/com_sportsmanagement/assets/images/teams.png',
 						Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMINFO_EDIT_DETAILS'),
@@ -429,28 +427,22 @@ $modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal
 					//echo "no permission";
 				}
 				?>
-            </h4>
-
+            <!-- </h4> -->
 
 			<?PHP
+$this->notes[] = $ausgabe;
+echo $this->loadTemplate('jsm_notes');
 			break;
 		case 'clubinfo':
-			?>
-<!--
-<div vocab="http://schema.org/" typeof="SportsTeam">
+unset($this->notes);
+$this->notes[] = Text::_('COM_SPORTSMANAGEMENT_CLUBINFO_TITLE') . " " . $this->club->name;
 
-	<span property="legalName">
--->
-            <h4>
-				<?php
-				echo Text::_('COM_SPORTSMANAGEMENT_CLUBINFO_TITLE') . " " . $this->club->name;
+			//	echo Text::_('COM_SPORTSMANAGEMENT_CLUBINFO_TITLE') . " " . $this->club->name;
 
 				if ($this->showediticon)
 				{
-
 					$link = sportsmanagementHelperRoute::getClubInfoRoute($this->project->id, $this->club->id, "club.edit");
-
-					echo sportsmanagementHelperHtml::getBootstrapModalImage(
+					$this->notes[] = sportsmanagementHelperHtml::getBootstrapModalImage(
 						'clubedit' . $this->club->id,
 						'administrator/components/com_sportsmanagement/assets/images/edit.png',
 						Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBINFO_EDIT_DETAILS'),
@@ -460,32 +452,23 @@ $modalwidth  = ComponentHelper::getParams($jinput->getCmd('option'))->get('modal
 						$this->modalheight,
 						$this->overallconfig['use_jquery_modal']
 					);
-
-
 				}
-				?>
-            </h4>
-	<!--
-	</span>
 
-</div>	
--->
-			<?PHP
+echo $this->loadTemplate('jsm_notes');            
 			break;
 		default:
 			?>
-
-            <table class="table" id="sectionheader">
-                <tr>
-                    <td class="contentheading">
-
-						<?php
-						echo $this->headertitle;
-						?>
-                    </td>
-                </tr>
-            </table>
-
+<!--Note box blau -->
+<div class="color-box" id="sectionheader">
+					<div class="shadow">
+						<div class="info-tab note-icon" title="sectionheader"><i></i></div>
+						<div class="note-box">
+							<p><strong><?php echo $this->headertitle; ?></strong>
+                            </p>
+						</div>
+					</div>
+</div>
+<!--Note box blau -->
             <br/>
 			<?PHP
 			break;

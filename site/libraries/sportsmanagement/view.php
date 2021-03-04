@@ -23,6 +23,37 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\HTML\HTMLHelper;
 
+
+if ( ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors', 0) 
+&& ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_foruser', 0)
+&& ( ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_foruser', 0) == Factory::getUser()->get('id') )
+)
+{
+ini_set('display_errors', ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_front', 0));
+ini_set('display_startup_errors', ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_front', 0));  
+
+if ( !ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_level', "") )
+{
+error_reporting(E_ALL);
+}
+else
+{
+$usedlevel = ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_level', "");
+$levels = (is_array($usedlevel)) ? implode(" | ", $usedlevel) : $usedlevel;
+//error_reporting($levels);
+error_reporting(E_NOTICE);     
+}  
+    
+
+if ( ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('show_jsm_errors_file', 0) )
+{
+ini_set('error_log', "jsm-errors.log");    
+}
+
+    
+}
+
+
 /**
  *
  * welche joomla version ?
@@ -62,6 +93,14 @@ $addfontawesome = $params_com->get('add_fontawesome');
 /** Welche joomla version ? */
 if (version_compare(JVERSION, '3.0.0', 'ge'))
 {
+/** css für die nachrichten */
+$document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css', 'text/css');
+$document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css', 'text/css');   
+$document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css', 'text/css');        
+?>        
+
+<?php       
+    
 	if ($cssflags)
 	{
 		$stylelink = Uri::root() . 'components/com_sportsmanagement/libraries/flag-icon/css/flag-icon.css';
@@ -136,6 +175,13 @@ class sportsmanagementView extends HtmlView
 	
 	public $leaflet_locatecontrol = '0.72.0';
 	public $leaflet_routing_machine = '3.2.12';
+    
+    /** @var    array    An array of tips */
+	public $tips = array();
+	/** @var    array    An array of warnings */
+	public $warnings = array();
+    /** @var    array    An array of notes */
+	public $notes = array();
 
 	/**
 	 * sportsmanagementView::display()
@@ -153,19 +199,15 @@ class sportsmanagementView extends HtmlView
 		 * JLog::INFO, JLog::WARNING, JLog::ERROR, JLog::ALL, JLog::EMERGENCY or JLog::CRITICAL
 		 */
 		Log::addLogger(array('logger' => 'messagequeue'), Log::ALL, array('jsmerror'));
-		/**
-		 * fehlermeldungen datenbankabfragen
-		 */
+		/** fehlermeldungen datenbankabfragen */
 		Log::addLogger(array('logger' => 'database', 'db_table' => '#__sportsmanagement_log_entries'), Log::ALL, array('dblog'));
-		/**
-		 * laufzeit datenbankabfragen
-		 */
+		/** laufzeit datenbankabfragen */
 		Log::addLogger(array('logger' => 'database', 'db_table' => '#__sportsmanagement_log_entries'), Log::ALL, array('dbperformance'));
 
-		// Reference global application object
+		/** Reference global application object */
 		$this->app = Factory::getApplication();
 
-		// JInput object
+		/** JInput object */
 		$this->jinput = $this->app->input;
 
 		$this->modalheight = ComponentHelper::getParams($this->jinput->getCmd('option'))->get('modal_popup_height', 600);
@@ -182,8 +224,10 @@ class sportsmanagementView extends HtmlView
 
 		$this->action = $this->uri->toString();
 		$this->params = $this->app->getParams();
+        $this->extended = array();
+        $this->extended2 = array();
 
-		// Get a refrence of the page instance in joomla
+		/** Get a refrence of the page instance in joomla */
 		$this->document           = Factory::getDocument();
 		$this->option             = $this->jinput->getCmd('option');
 		$this->user               = Factory::getUser();
@@ -212,6 +256,15 @@ class sportsmanagementView extends HtmlView
 
 		switch ($this->view)
 		{
+		  case 'predictionrules':
+          case 'predictionresults':
+          case 'predictionranking':
+          case 'predictionusers':
+          case 'predictionentry':
+          $this->config        = sportsmanagementModelPrediction::getPredictionTemplateConfig($this->getName());
+		$this->overallconfig = sportsmanagementModelPrediction::getPredictionOverallConfig();
+          $this->config        = array_merge($this->overallconfig, $this->config);
+          break;
 			case 'jltournamenttree':
 				$this->project       = sportsmanagementModelProject::getProject(sportsmanagementModelProject::$cfg_which_database);
 				$this->overallconfig = sportsmanagementModelProject::getOverallConfig(sportsmanagementModelProject::$cfg_which_database);

@@ -41,9 +41,9 @@ JHtml::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolower($t
                 <?php echo HTMLHelper::_('grid.checkall'); ?>
             </th>
             <th class="title">
-				<?php
-				echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_NAME_OF_PROJECT', 'p.name', $this->sortDirection, $this->sortColumn);
-				?>
+	<?php
+	echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_NAME_OF_PROJECT', 'p.name', $this->sortDirection, $this->sortColumn);
+	?>
             </th>
             <th class="title">
 				<?php
@@ -70,9 +70,13 @@ JHtml::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolower($t
 				?>
             </th>
             <th class="title">
-				<?php
-				echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_AGEGROUP', 'ag.name', $this->sortDirection, $this->sortColumn);
-				?>
+	<?php
+	echo HTMLHelper::_('grid.sort', 'COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_AGEGROUP', 'ag.name', $this->sortDirection, $this->sortColumn);
+	?>
+	<br>
+	<?php
+	echo Text::_('COM_SPORTSMANAGEMENT_SETTINGS_PROJECTTEAMS_QUICKADD');
+	?>	    
             </th>
             <th class="title">
 				<?php
@@ -263,6 +267,36 @@ echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/asset
 						'value', 'text', $this->item->agegroup_id
 					);
 					?>
+                    <br>  
+<?php
+
+					$class   = "btn-group btn-group-yesno";
+					$options = array(
+						HTMLHelper::_('select.option', '0', Text::_('JNO')),
+						HTMLHelper::_('select.option', '1', Text::_('JYES'))
+					);
+
+					$html   = array();
+					$html[] = '<fieldset id="fast_projektteam' . $this->item->id . '" class="' . $class . '" >';
+
+					foreach ($options as $in => $option)
+					{
+						$checked = ($option->value == $this->item->fast_projektteam) ? ' checked="checked"' : '';
+						$btn     = ($option->value == $this->item->fast_projektteam && $this->item->fast_projektteam) ? ' active btn-success' : ' ';
+						$btn     = ($option->value == $this->item->fast_projektteam && !$this->item->fast_projektteam) ? ' active btn-danger' : $btn;
+
+						$onchange = ' onchange="document.getElementById(\'cb' . $this->count_i . '\').checked=true"';
+						$html[]   = '<input type="radio" style="display:none;" id="fast_projektteam' . $this->item->id . $in . '" name="fast_projektteam' . $this->item->id . '" value="'
+							. $option->value . '"' . $onchange . ' />';
+
+						$html[] = '<label for="fast_projektteam' . $this->item->id . $in . '"' . $checked . ' class="btn' . $btn . '" >'
+							. Text::_($option->text) . '</label>';
+					}
+
+					echo implode($html);
+					?>    			
+			
+			
                 </td>
 
                 <td class="center">

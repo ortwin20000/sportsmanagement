@@ -42,6 +42,8 @@ $app = Factory::getApplication();
 
 // JInput object
 $jinput = $app->input;
+$ajax    = $jinput->getVar('ajax', 0, 'default', 'POST');
+$ajaxmod = $jinput->getVar('ajaxmodid', 0, 'default', 'POST');
 
 $document = Factory::getDocument();
 /**
@@ -133,16 +135,47 @@ if (!empty($league_assoc_id) && !$ende_if)
 
 foreach ($points as $row)
 {
-	$federationselect[$row->name] = $helper->getFederationSelect($row->name, $row->id);
-	?>
-    <script>
-        console.log('tabpoints = ' + '<?php echo $row->name;?>');
-    </script>
-	<?php
+$federationselect[$row->name] = $helper->getFederationSelect($row->name, $row->id);
+$countryassocselect[$row->name] = array();
+$leagueselect[$row->name] = array();
+$countrysubassocselect[$row->name] = array();
+$countrysubsubassocselect[$row->name] = array();
+$countrysubsubsubassocselect[$row->name] = array();
+$projectselect[$row->name] = array();
+$divisionsselect[$row->name] = array();
+	
+$countryassocselect[$row->name]['assocs'] = array();	
+$countrysubassocselect[$row->name]['assocs'] = array();	
+$countrysubsubassocselect[$row->name]['subassocs'] = array();
+$countrysubsubsubassocselect[$row->name]['subsubassocs'] = array();
+$leagueselect[$row->name]['leagues'] = array();
+$projectselect[$row->name]['projects'] = array();
+$projectselect[$row->name]['teams'] = array();	
+	
+?>
+<script>
+console.log('tabpoints = ' + '<?php echo $row->name;?>');
+</script>
+<?php
 }
 
 $federationselect['NON'] = $helper->getFederationSelect('NON', 0);
+$countryassocselect['NON'] = array();
+$countryassocselect['NON']['assocs'] = array();
+$leagueselect['NON'] = array();
+$countrysubassocselect['NON'] = array();
+$countrysubassocselect['NON']['assocs'] = array();
+$countrysubsubassocselect['NON'] = array();
+$countrysubsubsubassocselect['NON'] = array();
+$projectselect['NON'] = array();
+$divisionsselect['NON'] = array();
 
+$countrysubsubassocselect['NON']['subassocs'] = array();
+$countrysubsubsubassocselect['NON']['subsubassocs'] = array();
+$leagueselect['NON']['leagues'] = array();
+$projectselect['NON']['projects'] = array();
+$projectselect['NON']['teams'] = array();	
+	
 $country_federation = $helper->getCountryFederation($country_id);
 
 if (!$country_federation)
@@ -181,16 +214,58 @@ foreach ($points as $row)
 	$script[] = "$('#jlamtopfederation" . $row->name . $module->id . "').change(function(){";
 	$script[] = "var value = $('#jlamtopfederation" . $row->name . $module->id . "').val();";
 	$script[] = "var url = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getcountryassoc&country=' + value;";
-	$script[] = "console.log('country value = ' + value );";
-	$script[] = "console.log('country url = ' + url );";
-	$script[] = "$.ajax({";
+	$script[] = "console.log('".__LINE__." country value = ' + value );";
+	$script[] = "console.log('".__LINE__." country url = ' + url );";
+    
+    /** sollte man überlegen */
+    /*
+    $script[] = "
+  ajaxRequest = $.ajax({
+    method: 'POST',
+    crossDomain: true,
+    dataType: 'json',
+    crossOrigin: true,
+    async: true,
+    contentType: 'application/json',
+    //data: data,
+    headers: {
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers' : 'Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization',
+        'Access-Control-Allow-Origin': '*',
+        'Control-Allow-Origin': '*',
+        'cache-control': 'no-cache',
+        'Content-Type': 'application/json'
+    },
+    url: url,
+    success: function(response){
+        console.log('Respond was: ', response);
+    },
+    error: function (request, status, error) {
+        console.log('There was an error: ', request.responseText);
+    }
+  })
+
+  ";
+  */
+    
+    
+    
+    
+    
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url,";
-	$script[] = "dataType: 'json',";
+	$script[] = "dataType: 'json',
+    cache: false,
+    headers: {
+     'Content-Type': 'application/json'
+    },";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data1) {";
+	$script[] = "})
+    ajaxRequest.done(function(data1) {";
 	$script[] = "$('#jlamtopassoc" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopassoc" . $row->name . $module->id . " option').remove();";
-	$script[] = "console.log(data1);";
+	$script[] = "console.log(' data1 = ' + data1);";
 	$script[] = "});";
 	$script[] = "";
 	$script[] = "						$.each(data1, function (i, val) {";
@@ -199,15 +274,41 @@ foreach ($points as $row)
 	$script[] = "							jQuery('#jlamtopassoc" . $row->name . $module->id . "').append(option);";
 	$script[] = "						});";
 	$script[] = "						$('#jlamtopassoc" . $row->name . $module->id . "').trigger('liszt:updated');";
-	$script[] = "					});";
+	$script[] = "					})
+    ajaxRequest.fail(function(jqXHR, textStatus, errorThrown, data1) {
+    console.log('".__LINE__." fehler ');
+    console.error(
+            '".__LINE__." The following error occurred: '+
+            textStatus, errorThrown
+        );
+        console.log('Result: ' + textStatus + ' : ' + errorThrown + ':' + jqXHR.status + ' :' + jqXHR.statusText);
+        
+        //console.log(' data1 = ' + data1);
+  })
+  ajaxRequest.always(function(data1) {
+    console.log('".__LINE__." finished ');
+    //console.log(' data1 = ' + data1);
+    jQuery('select#jlamtopassoc" . $row->name . $module->id . " option').remove();
+    $.each(data1, function (i, val) {
+    var option = $('<option>');
+				option.text(val.text).val(val.value);
+								jQuery('#jlamtopassoc" . $row->name . $module->id . "').append(option);
+						});
+    $('#jlamtopassoc" . $row->name . $module->id . "').trigger('liszt:updated');
+    
+  })
+    
+    
+    ;";
 
 	$script[] = "var valcountry = $('#jlamtopfederation" . $row->name . $module->id . "').val();";
 	$script[] = "var url = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getAssocLeagueSelect&country=' + valcountry;";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data2) {";
+	$script[] = "})
+    ajaxRequest.done(function(data2) {";
 	$script[] = "$('#jlamtopleagues" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopleagues" . $row->name . $module->id . " option').remove();";
 	$script[] = "jQuery('select#jlamtopprojects" . $row->name . $module->id . " option').remove();";
@@ -231,11 +332,12 @@ foreach ($points as $row)
 	$script[] = "var url = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getCountrySubAssocSelect&assoc_id=' + value;";
 	$script[] = "console.log('assoc_id value = ' + value );";
 	$script[] = "console.log('assoc_id url = ' + url );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data3) {";
+	$script[] = "})
+    ajaxRequest.done(function(data3) {";
 	$script[] = "$('#jlamtopsubassoc" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopsubassoc" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data3);";
@@ -251,11 +353,12 @@ foreach ($points as $row)
 
 	$script[] = "var valcountry = $('#jlamtopfederation" . $row->name . $module->id . "').val();";
 	$script[] = "var url = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getAssocLeagueSelect&country=' + valcountry + '&assoc_id=' + value;";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data4) {";
+	$script[] = "})
+    ajaxRequest.done(function(data4) {";
 	$script[] = "$('#jlamtopleagues" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopleagues" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data4);";
@@ -277,11 +380,12 @@ foreach ($points as $row)
 	$script[] = "var url5 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getCountrySubSubAssocSelect&subassoc_id=' + value5;";
 	$script[] = "console.log('subassoc_id value5 = ' + value5 );";
 	$script[] = "console.log('subassoc_id url5 = ' + url5 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url5,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data5) {";
+	$script[] = "})
+    ajaxRequest.done(function(data5) {";
 	$script[] = "$('#jlamtopsubsubassoc" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopsubsubassoc" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data5);";
@@ -299,11 +403,12 @@ foreach ($points as $row)
 	$script[] = "var url6 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getAssocLeagueSelect&country=' + valcountry6 + '&assoc_id=' + value5;";
 	$script[] = "console.log('subassoc_id value5 = ' + value5 );";
 	$script[] = "console.log('subassoc_id url6 = ' + url6 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url6,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data6) {";
+	$script[] = "})
+    ajaxRequest.done(function(data6) {";
 	$script[] = "$('#jlamtopleagues" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopleagues" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data6);";
@@ -325,11 +430,12 @@ foreach ($points as $row)
 	$script[] = "var url7 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getCountrySubSubAssocSelect&subassoc_id=' + value7;";
 	$script[] = "console.log('subassoc_id value7 = ' + value7 );";
 	$script[] = "console.log('subassoc_id url7 = ' + url7 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url7,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data7) {";
+	$script[] = "})
+    ajaxRequest.done(function(data7) {";
 	$script[] = "$('#jlamtopsubsubsubassoc" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopsubsubsubassoc" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data7);";
@@ -347,11 +453,12 @@ foreach ($points as $row)
 	$script[] = "var url8 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getAssocLeagueSelect&country=' + valcountry8 + '&assoc_id=' + value7;";
 	$script[] = "console.log('assoc_id value7 = ' + value7 );";
 	$script[] = "console.log('assoc_id url8 = ' + url8 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url8,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data8) {";
+	$script[] = "})
+    ajaxRequest.done(function(data8) {";
 	$script[] = "$('#jlamtopleagues" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopleagues" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data8);";
@@ -373,11 +480,12 @@ foreach ($points as $row)
 	$script[] = "var url9 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getProjectSelect&league_id=' + value9;";
 	$script[] = "console.log('league_id value9 = ' + value9 );";
 	$script[] = "console.log('league_id url9 = ' + url9 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url9,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data9) {";
+	$script[] = "})
+    ajaxRequest.done(function(data9) {";
 	$script[] = "$('#jlamtopprojects" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopprojects" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data9);";
@@ -410,11 +518,12 @@ loadHtml = \"<p id='loadingDiv-\"
 	$script[] = "var url10 = 'index.php?option=com_sportsmanagement&format=json&tmpl=component&task=ajax.getProjectTeams&project_id=' + value10;";
 	$script[] = "console.log('project_id value10 = ' + value10 );";
 	$script[] = "console.log('project_id url10 = ' + url10 );";
-	$script[] = "$.ajax({";
+	$script[] = "ajaxRequest = $.ajax({";
 	$script[] = "url: url10,";
 	$script[] = "dataType: 'json',";
 	$script[] = "type : 'POST'";
-	$script[] = "}).done(function(data10) {";
+	$script[] = "})
+    ajaxRequest.done(function(data10) {";
 	$script[] = "$('#jlamtopteams" . $row->name . $module->id . " option').each(function() {";
 	$script[] = "jQuery('select#jlamtopteams" . $row->name . $module->id . " option').remove();";
 	$script[] = "console.log(data10);";
@@ -489,6 +598,30 @@ $('ul.jsmpage').append('<li class=\'nav-item\' ><a href=\"' + data11.link + '\">
 $script[] = "});";
 
 Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
+
+/** php fehler unterbinden */
+if ( !array_key_exists('assocs', $countryassocselect[$country_federation]) ) {
+$countryassocselect[$country_federation]['assocs'] = array();
+}
+if ( !array_key_exists('subassocs', $countrysubsubassocselect[$country_federation]) ) {
+$countrysubsubassocselect[$country_federation]['subassocs'] = array();
+}
+if ( !array_key_exists('leagues', $leagueselect[$country_federation]) ) {
+$leagueselect[$country_federation]['leagues'] = array();
+}
+
+if ( !array_key_exists('subsubassocs', $countrysubsubsubassocselect[$country_federation]) ) {
+$countrysubsubsubassocselect[$country_federation]['subsubassocs'] = array();
+}
+
+if ( !array_key_exists('divisions', $divisionsselect[$country_federation]) ) {
+$divisionsselect[$country_federation]['divisions'] = array();
+}
+
+if ( !array_key_exists('teams', $projectselect[$country_federation]) ) {
+$projectselect[$country_federation]['teams'] = array();
+}
+
 
 /** Regionalverband */
 if ($country_id)

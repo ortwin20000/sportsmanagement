@@ -1067,6 +1067,7 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_season_team_id` (
   `cr_picture` varchar(255) DEFAULT NULL,
   `cr_logo_big` varchar(255) DEFAULT NULL,
   `kaderlink` VARCHAR( 250 ) NULL DEFAULT NULL,
+  `teamname` VARCHAR( 75 ) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) ,
   UNIQUE KEY `combi` (`team_id`,`season_id`) ,
   KEY `team_id` (`team_id`),
@@ -1132,6 +1133,10 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_season_team_person_id` (
   `jl_update` TINYINT(1) NOT NULL DEFAULT '0',
   `cr_picture` varchar(255) DEFAULT NULL,
   `position_id` INT( 11 ) NOT NULL DEFAULT  '0',
+  
+  `contract_from` DATE NOT NULL DEFAULT '0000-00-00' ,
+  `contract_to` DATE NOT NULL DEFAULT '0000-00-00' ,
+  
   PRIMARY KEY (`id`) ,
   UNIQUE KEY `combi` (`person_id`,`season_id`,`team_id`,`persontype`) ,
   KEY `team_id` (`team_id`),

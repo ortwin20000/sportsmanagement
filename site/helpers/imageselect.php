@@ -63,23 +63,41 @@ abstract class ImageSelectSM
 	{
 		$document          = Factory::getDocument();
 		$app               = Factory::getApplication();
+        $modalheight = ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('modal_popup_height', 600);
+		$modalwidth  = ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('modal_popup_width', 900);
+        
+		if ($app->isClient('site'))
+		{
+		$link = 'administrator/';
+		$link2 = 'administrator/';
+        $use_jquery_modal = 0;
+        $modalheight = 500;
+		}
+		else
+		{
+		$link = '';
+		$link2 = '';
+        $use_jquery_modal = 0;
+		}
+		
 		self::$_foldertype = $type;
 
-		$modalheight = ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('modal_popup_height', 600);
-		$modalwidth  = ComponentHelper::getParams(Factory::getApplication()->input->getCmd('option'))->get('modal_popup_width', 900);
+		
 
 		$baseFolder = Uri::root();// .'images/com_sportsmanagement/database/'.ImageSelect::getfolder($type);
 		$funcname   = preg_replace("/^[.]*/", '', $fieldid);
 
-		switch (self::$_view)
-		{
-			case 'projectteam':
-				$typefolder = $type;
-				break;
-			default:
-				$typefolder = $type;
-				break;
-		}
+$typefolder = $type;
+
+//		switch (self::$_view)
+//		{
+//			case 'projectteam':
+//				$typefolder = $type;
+//				break;
+//			default:
+//				$typefolder = $type;
+//				break;
+//		}
 
 		/**
 		 *
@@ -211,7 +229,7 @@ $img.attr("src", "' . Uri::root() . '" + select);
 			$layoutdrag = 'upload';
 		}
 
-		$link = 'index.php?option=com_sportsmanagement&amp;view=imagehandler&amp;layout=' . $layoutdrag . '&amp;type=' .
+		$link .= 'index.php?option=com_sportsmanagement&amp;view=imagehandler&amp;layout=' . $layoutdrag . '&amp;type=' .
 			$type . '&amp;field=' . $fieldname . '&amp;fieldid=' . $fieldid . '&amp;tmpl=component&pid=0&mid=0&imagelist=';
 
 		//        $link2 = 'index.php?option=com_sportsmanagement&amp;view=imagehandler&amp;type=' .
@@ -220,7 +238,7 @@ $img.attr("src", "' . Uri::root() . '" + select);
 		$link2 = 'index.php?option=com_media&amp;view=images' .
 			'&amp;asset=com_sportsmanagement&amp;folder=com_sportsmanagement/database/' . self::getfolder($typefolder) . '&author=&amp;fieldid=' . $fieldid . '&amp;tmpl=component';
 */
-$link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .
+$link2 .= 'index.php?option=com_sportsmanagement&view=imagelist' .
 			'&imagelist=1&asset=com_sportsmanagement&folder=' . self::getfolder($typefolder) . '&author=&fieldid=' . $fieldid . '&tmpl=component&type='.$type.'&fieldname=' . $fieldname;
 
 		$document->addScriptDeclaration($js);
@@ -230,11 +248,27 @@ $link2 = 'index.php?option=com_sportsmanagement&view=imagelist' .
 		$imageselect .= "\n&nbsp;<table><tr><td><input style=\"background: #ffffff;\" type=\"text\" id=\"" . $fieldid . "\" name=\"" . $fieldname . "\"  value=\"" .
 			$value . "\" disabled=\"disabled\" size=\"100\" /></td></tr>";
 		$imageselect .= "<tr><td><div class=\"button2-left\"><div class=\"blank\">";
-		$imageselect .= sportsmanagementHelper::getBootstrapModalImage('upload' . $funcname, '', Text::_('JLIB_HTML_BEHAVIOR_UPLOADER_CURRENT_TITLE'), '20', Uri::base() . $link, $modalwidth, $modalheight);
+		
+if ($app->isClient('site'))
+{
+$imageselect .= sportsmanagementHelperHtml::getBootstrapModalImage('upload' . $funcname, 'images/com_sportsmanagement/database/jl_images/up.png', Text::_('JLIB_HTML_BEHAVIOR_UPLOADER_CURRENT_TITLE'), '20', Uri::base() . $link, $modalwidth, $modalheight,$use_jquery_modal);		
+}
+else
+{
+$imageselect .= sportsmanagementHelper::getBootstrapModalImage('upload' . $funcname, '', Text::_('JLIB_HTML_BEHAVIOR_UPLOADER_CURRENT_TITLE'), '20', Uri::base() . $link, $modalwidth, $modalheight);	
+}
 		$imageselect .= "</div></div>\n";
 
 		$imageselect .= "<div class=\"button2-left\"><div class=\"blank\">";
-		$imageselect .= sportsmanagementHelper::getBootstrapModalImage('select' . $funcname, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' '.Factory::getApplication()->getUserState("com_sportsmanagement.itemname", ''), '20', Uri::base() . $link2, $modalwidth, $modalheight);
+		
+if ($app->isClient('site'))
+{
+$imageselect .= sportsmanagementHelperHtml::getBootstrapModalImage('select' . $funcname, 'images/com_sportsmanagement/database/jl_images/zoom.png', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' '.Factory::getApplication()->getUserState("com_sportsmanagement.itemname", ''), '20', Uri::base() . $link2, $modalwidth, $modalheight,$use_jquery_modal);	
+}
+else
+{		
+$imageselect .= sportsmanagementHelper::getBootstrapModalImage('select' . $funcname, '', Text::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE').' '.Factory::getApplication()->getUserState("com_sportsmanagement.itemname", ''), '20', Uri::base() . $link2, $modalwidth, $modalheight);
+}
 		$imageselect .= "</div></div>\n";
 
 		$imageselect .= "<div class=\"button2-left\"><div class=\"blank\"><a class=\"btn btn-primary\" title=\"" .
@@ -353,6 +387,9 @@ console.log('getfolder: ' + '<?php echo $type;  ?>' );
 				break;
 			case "rounds":
 				return "rounds";
+				break;
+                case "rosterground":
+				return "rosterground";
 				break;
 			case "agegroups":
 				return "agegroups";
