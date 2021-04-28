@@ -832,6 +832,24 @@ foreach ($current as $ptid => $team)
 				echo '</td>';
 				echo "\n";
 				break;
+                
+                
+                case 'SHOOTERRINGS':
+                	echo '<td class="rankingrow"';
+
+				if ($color != '' && $config['use_background_row_color'])
+				{
+					echo ' style="background-color:' . $color . '"';
+				}
+
+				echo '>';
+				printf($format, $team->shooterrings);
+
+				echo '</td>';
+				echo "\n";
+                
+                
+                break;
 
 			case 'LASTGAMES':
 				echo '<td class="rankingrow lastgames"';
@@ -895,6 +913,20 @@ foreach ($current as $ptid => $team)
 				break;
 		}
 	}
+
+switch ( $this->project->sport_type_name )
+    {
+        case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+        foreach ($team->shooterringsperround as $count_i => $item)
+		{
+		  echo '<td>';
+          printf($format, $item);
+          echo '</td>';
+          }
+
+        break;
+    }
+
 
 	echo '</tr>';
 	echo "\n";

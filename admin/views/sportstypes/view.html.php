@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage sportstypes
@@ -11,10 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Table\Table;
@@ -32,7 +27,6 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 class sportsmanagementViewSportsTypes extends sportsmanagementView
 {
 
-
 	/**
 	 * sportsmanagementViewSportsTypes::init()
 	 *
@@ -47,7 +41,6 @@ class sportsmanagementViewSportsTypes extends sportsmanagementView
 
 		$this->table = Table::getInstance('sportstype', 'sportsmanagementTable');
 
-		// Sportart filter
 		$lists['sportart'] = $myoptions;
 		$this->lists       = $lists;
 
@@ -60,14 +53,11 @@ class sportsmanagementViewSportsTypes extends sportsmanagementView
 	 */
 	protected function addToolbar()
 	{
-
-		// Set toolbar items for the page
 		$this->title = Text::_('COM_SPORTSMANAGEMENT_ADMIN_SPORTSTYPES_TITLE');
 		ToolbarHelper::addNew('sportstype.add');
 		ToolbarHelper::editList('sportstype.edit');
 		ToolbarHelper::custom('sportstype.import', 'upload', 'upload', Text::_('JTOOLBAR_UPLOAD'), false);
 		ToolbarHelper::archiveList('sportstype.export', Text::_('JTOOLBAR_EXPORT'));
-
 		parent::addToolbar();
 	}
 }

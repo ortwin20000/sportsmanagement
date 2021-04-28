@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage eventsranking
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
@@ -46,19 +42,20 @@ class sportsmanagementViewEventsRanking extends sportsmanagementView
 		$this->teamid     = $this->model->getTeamId();
 		$this->teams      = sportsmanagementModelProject::getTeamsIndexedById(0, 'name', $this->jinput->getInt('cfg_which_database', 0));
 		$this->favteams   = sportsmanagementModelProject::getFavTeams($this->jinput->getInt('cfg_which_database', 0));
-		$this->eventtypes = sportsmanagementModelProject::getEventTypes(sportsmanagementModelEventsRanking::$eventid, $this->jinput->getInt('cfg_which_database', 0));
+		$this->eventtypes = sportsmanagementModelProject::getEventTypes(sportsmanagementModelEventsRanking::$eventid, $this->jinput->getInt('cfg_which_database', 0), $this->project->sports_type_id );
 		$this->limit      = $this->model->getLimit();
 		$this->limitstart = $this->model->getLimitStart();
 		$this->pagination = $this->get('Pagination');
-
-		if ($this->project->sport_type_name == 'COM_SPORTSMANAGEMENT_ST_DART')
-		{
-			$this->eventranking = $this->model->getEventRankings($this->limit, $this->limitstart, null, true);
-		}
-		else
-		{
-			$this->eventranking = $this->model->getEventRankings($this->limit, $this->limitstart, null, false);
-		}
+        
+        switch ( $this->project->sport_type_name )
+        {
+        case 'COM_SPORTSMANAGEMENT_ST_DART':
+        $this->eventranking = $this->model->getEventRankings($this->limit, $this->limitstart, null, true,$this->project->sports_type_id);
+        break;
+        default:
+        $this->eventranking = $this->model->getEventRankings($this->limit, $this->limitstart, null, false,$this->project->sports_type_id);
+        break;    
+        }
 
 		$this->multiple_events = count($this->eventtypes) > 1;
 
@@ -70,14 +67,14 @@ class sportsmanagementViewEventsRanking extends sportsmanagementView
 		}
 		else
 		{
-			// Next query will result in an array with exactly 1 statistic id
+			/** Next query will result in an array with exactly 1 statistic id */
 			$evid = array_keys($this->eventtypes);
 
-			// Selected one valid eventtype, so show its name
+			/** Selected one valid eventtype, so show its name */
 			$prefix .= " - " . Text::_($this->eventtypes[$evid[0]]->name);
 		}
 
-		// Set page title
+		/** Set page title */
 		$titleInfo = sportsmanagementHelper::createTitleInfo($prefix);
 
 		if (!empty($this->teamid) && array_key_exists($this->teamid, $this->teams))

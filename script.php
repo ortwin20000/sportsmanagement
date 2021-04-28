@@ -110,7 +110,8 @@ class com_sportsmanagementInstallerScript
 	 * The release value would ideally be extracted from <version> in the manifest file,
 	 * but at preflight, the manifest file exists only in the uploaded temp folder.
 	 */
-	private $release = '3.8.50';
+	private $release = '3.8.83';
+    private $old_release = '3.8.82';
 
 	// $language_update = '';
 
@@ -307,10 +308,14 @@ class com_sportsmanagementInstallerScript
 	 */
 	function preflight($route,  $adapter)
 	{
+$this->oldRelease = $this->getParam('version');
+echo '<p> Aktion ' .  $route . '</p>';
+echo '<p> neue Version ' .  $this->release . '</p>';
+echo '<p> alte Version ' .  $this->oldRelease . '</p>';
 
 		if ($route == 'update')
 		{
-			$this->oldRelease = $this->getParam('version');
+			//$this->oldRelease = $this->getParam('version');
 
 			if (version_compare($this->oldRelease, $this->release, 'lt'))
 			{
@@ -327,20 +332,31 @@ class com_sportsmanagementInstallerScript
 
 					if ($eid = $db->loadResult())
 					{
+					   // Delete old row.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true)
+			->delete($db->quoteName('#__schemas'))
+			->where($db->quoteName('extension_id') . ' = '.$eid);
+		$db->setQuery($query);
+		$db->execute();
+                       
+                       
+                       
 						$query->clear();
 						$query->insert($db->quoteName('#__schemas'));
 						$query->columns(array($db->quoteName('extension_id'), $db->quoteName('version_id')));
 						$query->values($eid . ', ' . $db->quote($this->oldRelease));
 						$db->setQuery($query);
+                        $db->execute();
 
-						if (version_compare(JVERSION, '3.0.0', 'ge'))
-						{
-							$db->execute();
-						}
-						else
-						{
-										$db->query();
-						}
+//						if (version_compare(JVERSION, '3.0.0', 'ge'))
+//						{
+//							$db->execute();
+//						}
+//						else
+//						{
+//										$db->query();
+//						}
 					}
 				}
 				catch (Exception $e)
@@ -605,7 +621,9 @@ Like this extension?
 			'/administrator/components/com_sportsmanagement/views/treeto/tmpl/edit.php',
 			'/administrator/components/com_sportsmanagement/views/treeto/tmpl/edit_3.php',
 
-					  '/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit.php',
+'/administrator/components/com_sportsmanagement/layouts/joomla/searchtools/default.php',
+
+		  '/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit.php',
 			'/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit_3.php',
 			'/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit_description.php',
 			'/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit_3_description.php',
@@ -614,10 +632,10 @@ Like this extension?
 			'/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit_picture.php',
 			'/administrator/components/com_sportsmanagement/views/teamperson/tmpl/edit_3_picture.php',
 
-					  '/administrator/components/com_sportsmanagement/views/treetonode/tmpl/edit.php',
+		  '/administrator/components/com_sportsmanagement/views/treetonode/tmpl/edit.php',
 			'/administrator/components/com_sportsmanagement/views/treetonode/tmpl/edit_3.php',
 
-					  '/administrator/components/com_sportsmanagement/views/treetonode/tmpl/edit_3_description.php',
+		  '/administrator/components/com_sportsmanagement/views/treetonode/tmpl/edit_3_description.php',
 			'/administrator/components/com_sportsmanagement/views/treetonode/tmpl/form.php',
 			'/administrator/components/com_sportsmanagement/views/treetonode/tmpl/form_description.php',
 		);

@@ -14,6 +14,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
 
 $this->saveOrder = $this->sortColumn == 'obj.ordering';
 if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
@@ -86,7 +87,7 @@ JHtml::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolower($t
 		<?php
     foreach ($this->items as $this->count_i => $this->item)
 	{
-//$this->count_i = $i;
+
 if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
 {
 $this->dragable_group = 'data-dragable-group="none"';
@@ -146,7 +147,8 @@ $this->dragable_group = 'data-dragable-group="none"';
                 <td class="center">
 					<?php
 					$desc = Text::_($this->item->name);
-					echo sportsmanagementHelper::getPictureThumb($this->item->icon, $desc, 0, 21, 4);
+echo sportsmanagementHelper::getBootstrapModalImage('collapseModallogo_icon' . $this->item->id, Uri::root() . $this->item->icon, $desc, '20', Uri::root() . $this->item->icon);                    
+                    
 					?>
                 </td>
                 <td class="center">

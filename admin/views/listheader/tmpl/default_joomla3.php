@@ -201,7 +201,7 @@ $html = HTMLHelper::_('links.linksgroups', $groupedButtons);
 	<?php else : ?>
     <div id="j-main-container">
 		<?php endif; ?>
-<!-- <div id="filter-bar" class="btn-toolbar"> -->
+
 <?php
 switch ($view)
 {
@@ -225,6 +225,9 @@ case 'seasons':
 case 'smquotes':
 case 'teamplayers':				
 case 'teams':		
+case 'sportstypes':
+case 'rosterpositions':
+case 'clubnames':
 echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 break;
 case 'githubinstall':
@@ -270,4 +273,4 @@ break;
 	    
 <?PHP
 ?>
-<!-- </div> -->
+

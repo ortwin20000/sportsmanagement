@@ -31,21 +31,6 @@ use Joomla\CMS\Log\Log;
  */
 class sportsmanagementViewprojectteams extends sportsmanagementView
 {
-	/**
-	 * A \JForm instance with filter fields.
-	 *
-	 * @var    \JForm
-	 * @since  3.6.3
-	 */
-	public $filterForm;
-
-	/**
-	 * An array with active filters.
-	 *
-	 * @var    array
-	 * @since  3.6.3
-	 */
-	public $activeFilters;
 
 	/**
 	 * sportsmanagementViewprojectteams::init()
@@ -93,8 +78,7 @@ class sportsmanagementViewprojectteams extends sportsmanagementView
 		$total      = $this->get('Total');
 		$pagination = $this->get('Pagination');
 
-		$table       = Table::getInstance('projectteam', 'sportsmanagementTable');
-		$this->table = $table;
+		$this->table       = Table::getInstance('projectteam', 'sportsmanagementTable');
 
 		if ($this->project_art_id == 3)
 		{
@@ -123,7 +107,7 @@ class sportsmanagementViewprojectteams extends sportsmanagementView
 		$res1         = array();
 		$notusedteams = array();
 
-		if ($ress = $this->model->getProjectTeams($this->project_id, false))
+		if ( $ress = $this->model->getProjectTeams($this->project_id, false) )
 		{
 			$teamslist = array();
 
@@ -151,27 +135,27 @@ class sportsmanagementViewprojectteams extends sportsmanagementView
 			$lists['project_teams'] = '<select name="project_teamslist[]" id="project_teamslist" style="width:250px; height:300px;" class="inputbox" multiple="true" size="10"></select>';
 		}
 
-		if ($ress1 = $this->model->getTeams())
+		if ( $ress1 = $this->model->getTeams() )
 		{
-			if ($ress = $this->model->getProjectTeams($this->project_id, false))
+			if ( $ress = $this->model->getProjectTeams($this->project_id, false) )
 			{
-				foreach ($ress1 as $res1)
+				foreach ( $ress1 as $res1 )
 				{
 					$used = 0;
 
-					foreach ($ress as $res)
+					foreach ( $ress as $res )
 					{
-						if ($res1->value == $res->season_team_id)
+						if ( $res1->value == $res->season_team_id )
 						{
 							$used = 1;
 						}
 					}
 
-					if ($used == 0 && !empty($res1->info))
+					if ( $used == 0 && !empty($res1->info) )
 					{
 						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text . ' (' . $res1->info . ')');
 					}
-					elseif ($used == 0 && empty($res1->info))
+					elseif ( $used == 0 && empty($res1->info) )
 					{
 						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text);
 					}
@@ -179,9 +163,9 @@ class sportsmanagementViewprojectteams extends sportsmanagementView
 			}
 			else
 			{
-				foreach ($ress1 as $res1)
+				foreach ( $ress1 as $res1 )
 				{
-					if (empty($res1->info))
+					if ( empty($res1->info) )
 					{
 						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text);
 					}
@@ -297,16 +281,7 @@ class sportsmanagementViewprojectteams extends sportsmanagementView
 			break;
 		}
 		
-try
-{		
-$this->filterForm    = $this->model->getFilterForm();
-$this->activeFilters = $this->model->getActiveFilters();
-}
-catch (Exception $e)
-{
-Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getCode()), Log::ERROR, 'jsmerror');
-Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERROR, 'jsmerror');	
-}		
+	
 
 	}
 
@@ -345,6 +320,7 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERR
 		$modal_params['url']    = 'index.php?option=com_sportsmanagement&view=projectteams&layout=changeteams&tmpl=component&pid=' . $this->project_id;
 		$modal_params['height'] = $this->modalheight;
 		$modal_params['width']  = $this->modalwidth;
+        $modal_params['modalWidth']  = '60';
 		echo HTMLHelper::_('bootstrap.renderModal', 'collapseModalchangeTeams', $modal_params);
 
 		$layout = new JLayoutFile('assignteams', JPATH_ROOT . '/components/com_sportsmanagement/layouts');
@@ -354,6 +330,7 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERR
 		$modal_params['url']    = 'index.php?option=com_sportsmanagement&view=projectteams&layout=editlist&tmpl=component&pid=' . $this->project_id;
 		$modal_params['height'] = $this->modalheight;
 		$modal_params['width']  = $this->modalwidth;
+        $modal_params['modalWidth']  = '60';
 		echo HTMLHelper::_('bootstrap.renderModal', 'collapseModalassignTeams', $modal_params);
 
 		ToolbarHelper::custom('projectteam.copy', 'copy', 'copy', Text::_('JTOOLBAR_DUPLICATE'), true);

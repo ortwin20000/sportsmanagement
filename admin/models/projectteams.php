@@ -436,24 +436,19 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 		$this->project_art_id = $this->jsmapp->getUserState("$this->jsmoption.project_art_id", '0');
 		$this->sports_type_id = $this->jsmapp->getUserState("$this->jsmoption.sports_type_id", '0');
 
-		// Noch das land der liga
+		/** Noch das land der liga */
 		$this->jsmquery->clear();
 		$this->jsmquery->select('l.country,p.season_id,p.project_type,p.use_nation');
 		$this->jsmquery->from('#__sportsmanagement_league as l');
 		$this->jsmquery->join('INNER', '#__sportsmanagement_project as p on p.league_id = l.id');
 		$this->jsmquery->where('p.id = ' . self::$_project_id);
-
 		$this->jsmdb->setQuery($this->jsmquery);
 		$result = $this->jsmdb->loadObject();
 
 		if ($this->project_art_id == 3)
 		{
 			$this->jsmquery->clear();
-
-			// Select some fields
 			$this->jsmquery->select("st.id AS value,concat(t.lastname,' - ',t.firstname,'' ) AS text,t.info");
-
-			// From table
 			$this->jsmquery->from('#__sportsmanagement_person AS t');
 			$this->jsmquery->join('INNER', '#__sportsmanagement_season_person_id AS st on st.person_id = t.id');
 			$this->jsmquery->where('st.season_id = ' . $this->_season_id);
@@ -463,11 +458,7 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 		else
 		{
 			$this->jsmquery->clear();
-
-			// Select some fields
 			$this->jsmquery->select('st.id AS value,t.name AS text,t.info');
-
-			// From table
 			$this->jsmquery->from('#__sportsmanagement_team AS t');
 			$this->jsmquery->join('INNER', '#__sportsmanagement_season_team_id AS st on st.team_id = t.id');
 			$this->jsmquery->join('INNER', '#__sportsmanagement_club AS c ON c.id = t.club_id');
@@ -931,6 +922,7 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 		$this->setState('filter.search', $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string'));
 		$this->setState('filter.state', $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string'));
 		$this->setState('filter.search_nation', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
+        $this->setState('filter.search_division', $this->getUserStateFromRequest($this->context . '.filter.search_division', 'filter_search_division', ''));
 		$this->setState('filter.playground_id', $this->getUserStateFromRequest($this->context . '.filter.playground_id', 'filter_playground_id', ''));
 		$this->setState('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'list_limit', $this->jsmapp->get('list_limit'), 'int'));
 		$this->setState('list.start', $this->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0, 'int'));
@@ -1052,9 +1044,9 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 
 		$this->jsmquery->where('tl.project_id = ' . self::$_project_id);
 
-		if (self::$_division_id)
+		if ($this->getState('filter.search_division'))
 		{
-			$this->jsmquery->where('tl.division_id = ' . self::$_division_id);
+			$this->jsmquery->where('tl.division_id = ' . $this->getState('filter.search_division'));
 		}
 
 		if ($this->getState('filter.search_nation'))

@@ -280,27 +280,39 @@ var <?php echo $placeholder; ?> = new Array;
 	}
 	
 	
+
 	/**
 	 * sportsmanagementHelper::getBootstrapModalImage()
-	 *
-	 * @param   string  $target
-	 * @param   string  $picture
-	 * @param   string  $text
-	 * @param   string  $picturewidth
-	 * @param   string  $url
-	 * @param   string  $width
-	 * @param   string  $height
-	 *
+	 * 
+	 * @param string $target
+	 * @param string $picture
+	 * @param string $text
+	 * @param string $picturewidth
+	 * @param string $url
+	 * @param string $width
+	 * @param string $height
+	 * @param string $extrabutton
+	 * @param string $modalWidth
 	 * @return
 	 */
-	public static function getBootstrapModalImage($target = '', $picture = '', $text = '', $picturewidth = '20', $url = '', $width = '100', $height = '200', $extrabutton = '')
+	public static function getBootstrapModalImage($target = '', $picture = '', $text = '', $picturewidth = '20', $url = '', $width = '100', $height = '200', $extrabutton = '',$modalWidth = '80')
 	{
 		$app = Factory::getApplication();
-
-		// JInput object
 		$jinput = $app->input;
-
+		
+		
+		
+		
+		if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+		$modaltext = '<a href="#' . $target . '" title="' . $text . '" data-bs-toggle="modal" ' .'data-bs-target="#' . $target . '">';	
+		$footer = '<button type="button" class="btn btn-default" data-bs-dismiss="modal">' . Text::_('JCANCEL') . '</button> '.$extrabutton;
+		}
+		else
+		{
 		$modaltext = '<a href="#' . $target . '" title="' . $text . '" data-toggle="modal" >';
+		$footer = '<button type="button" class="btn btn-default" data-dismiss="modal">' . Text::_('JCANCEL') . '</button> '.$extrabutton;
+		}
 
 		if ($picture)
 		{
@@ -326,7 +338,9 @@ var <?php echo $placeholder; ?> = new Array;
 				'url'    => $url,
 				'height' => $height,
 				'width'  => $width,
-				'footer' => '<button type="button" class="btn btn-default" data-dismiss="modal">' . Text::_('JCANCEL') . '</button> '.$extrabutton
+                'bodyHeight'  => '60',
+				'modalWidth'  => $modalWidth,
+				'footer' => $footer
 			)
 		);
 

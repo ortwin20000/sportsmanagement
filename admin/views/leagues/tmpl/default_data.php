@@ -14,6 +14,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
 
 $this->saveOrder = $this->sortColumn == 'obj.ordering';
 
@@ -107,9 +108,9 @@ JHtml::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolower($t
     <tbody <?php if ( $this->saveOrder && version_compare(substr(JVERSION, 0, 3), '4.0', 'ge') ) :?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($this->sortDirection); ?>" <?php endif; ?>>
 	<?php
 
-    foreach ($this->items as $i => $this->item)
+    foreach ($this->items as $this->count_i => $this->item)
 	{
-$this->count_i = $i;
+
 if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
 {
 $this->dragable_group = 'data-dragable-group="none"';
@@ -120,7 +121,7 @@ $this->dragable_group = 'data-dragable-group="none"';
 		$checked    = HTMLHelper::_('jgrid.checkedout', $this->count_i, $this->user->get('id'), $this->item->checked_out_time, 'leagues.', $canCheckin);
 		$canChange  = $this->user->authorise('core.edit.state', 'com_sportsmanagement.league.' . $this->item->id) && $canCheckin;
 		?>
-        <tr class="row<?php echo $i % 2; ?>" <?php echo $this->dragable_group; ?>>
+        <tr class="row<?php echo $this->count_i % 2; ?>" <?php echo $this->dragable_group; ?>>
             <td class="center">
 				<?php
 				echo $this->pagination->getRowOffset($this->count_i);
@@ -187,57 +188,32 @@ $this->dragable_group = 'data-dragable-group="none"';
             </td>
             <td class="center">
 				<?php
-				if (empty($this->item->picture))
-				{
-					$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_NO_IMAGE') . COM_SPORTSMANAGEMENT_PICTURE_SERVER . $this->item->picture;
-                    $image_attributes['title'] = $imageTitle;
-					echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/delete.png', $imageTitle, $image_attributes);
-				}
-                elseif ($this->item->picture == sportsmanagementHelper::getDefaultPlaceholder("player"))
-				{
-					$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ADMIN_PERSONS_DEFAULT_IMAGE');
-                    $image_attributes['title'] = $imageTitle;
-					echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/information.png', $imageTitle, $image_attributes);
-				}
-				else
-				{
-					?>
-                    <a href="<?php echo COM_SPORTSMANAGEMENT_PICTURE_SERVER . $this->item->picture; ?>"
-                       title="<?php echo $this->item->name; ?>" class="modal">
-                        <img src="<?php echo COM_SPORTSMANAGEMENT_PICTURE_SERVER . $this->item->picture; ?>"
-                             alt="<?php echo $this->item->name; ?>" width="20"/>
-                    </a>
-					<?PHP
-				}
-				?>
+                echo sportsmanagementHelper::getBootstrapModalImage('collapseModallogo_picture' . $this->item->id, Uri::root() . $this->item->picture, $imageTitle, '20', Uri::root() . $this->item->picture);
+ 				?>
             </td>
             <td class="center">
 				<?php
 
-				$class   = "btn-group btn-group-yesno";
-				$options = array(
-					HTMLHelper::_('select.option', '0', Text::_('JNO')),
-					HTMLHelper::_('select.option', '1', Text::_('JYES'))
-				);
 
-				$html   = array();
-				$html[] = '<fieldset id="published_act_season' . $this->item->id . '" class="' . $class . '" >';
-				foreach ($options as $in => $option)
-				{
-					$checked = ($option->value == $this->item->published_act_season) ? ' checked="checked"' : '';
-					$btn     = ($option->value == $this->item->published_act_season && $this->item->published_act_season) ? ' active btn-success' : ' ';
-					$btn     = ($option->value == $this->item->published_act_season && !$this->item->published_act_season) ? ' active btn-danger' : $btn;
-
-					$onchange = ' onchange="document.getElementById(\'cb' . $this->count_i . '\').checked=true"';
-					$html[]   = '<input type="radio" style="display:none;" id="published_act_season' . $this->item->id . $in . '" name="published_act_season' . $this->item->id . '" value="'
-						. $option->value . '"' . $onchange . ' />';
-
-					$html[] = '<label for="published_act_season' . $this->item->id . $in . '"' . $checked . ' class="btn' . $btn . '" >'
-						. Text::_($option->text) . '</label>';
-
-				}
-
-				echo implode($html);
+$this->switcher_onchange = ' onchange="document.getElementById(\'cb' . $this->count_i . '\').checked=true"';
+$this->switcher_options = array(
+						HTMLHelper::_('select.option', '0', Text::_('JNO')),
+						HTMLHelper::_('select.option', '1', Text::_('JYES'))
+					);
+                    
+$this->switcher_value = $this->item->published_act_season;    
+$this->switcher_name = 'published_act_season' . $this->item->id;    
+$this->switcher_attr = 'id="' . $this->item->id . '"'; 
+$this->switcher_item_id = $this->item->id;           
+/** welche joomla version ? */
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+echo $this->loadTemplate('switcher4');    
+}
+elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
+{    
+echo $this->loadTemplate('switcher3');
+}   
 				?>
             </td>
             <td class="center">

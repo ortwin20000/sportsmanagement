@@ -40,7 +40,7 @@ use Joomla\CMS\Uri\Uri;
 				<?php
 				if (!empty($match['location'])) echo '<span style="white-space:nowrap;">' . $match['location'] . '</span> ';
 				echo ' <span style="white-space:nowrap;">' . $match['date'] . '</span> '
-					. ' <span style="white-space:nowrap;">' . $match['time'] . ' Uhr</span> ';
+					. ' <span style="white-space:nowrap;">' . $match['time'] . Text::_('MOD_SPORTSMANAGEMENT_MATCHES_CLOCK') . '</span> ';
 				if (isset($match['meeting'])) echo ' <span style="white-space:nowrap;">' . $match['meeting'] . '</span> ';
 				?>
 
@@ -147,6 +147,7 @@ use Joomla\CMS\Uri\Uri;
 		 
 		 //echo '<pre>'.print_r($match['referee'],true).'</pre>';
      $output = '';
+if (array_key_exists('referee', $match)) {
      foreach( $match['referee'] as $key => $value )
      {
      $output .= '<span style="float:right;">';  
@@ -160,6 +161,7 @@ use Joomla\CMS\Uri\Uri;
        
      $output .=  htmlspecialchars(sportsmanagementHelper::formatName(null, $value->firstname, $value->nickname, $value->lastname, $params->get("referee_name_format")), ENT_QUOTES, 'UTF-8').'</span><br>';
      }
+		}
 		 $output .=  '<br>'.$match['spectators'];  
       echo $output;
 		 

@@ -60,9 +60,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 
 		$this->projectteamsel = Factory::getApplication()->input->getvar('projectteam', 0);
 
-		$table       = Table::getInstance('match', 'sportsmanagementTable');
-		$this->table = $table;
-
+		$this->table       = Table::getInstance('match', 'sportsmanagementTable');
 		$this->project_id     = $app->getUserState("$option.pid", '0');
 		$this->project_art_id = $app->getUserState("$option.project_art_id", '0');
 
@@ -81,18 +79,16 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		}
 
 		$mdlProject = BaseDatabaseModel::getInstance('Project', 'sportsmanagementModel');
-		$projectws  = $mdlProject->getProject($this->project_id);
+		$this->projectws  = $mdlProject->getProject($this->project_id);
 
 		$mdlRound = BaseDatabaseModel::getInstance('Round', 'sportsmanagementModel');
 		$roundws  = $mdlRound->getRound($this->rid);
 
-		// Build the html selectlist for rounds
+		/** Build the html selectlist for rounds */
 		$ress = sportsmanagementHelper::getRoundsOptions($this->project_id, 'ASC', true);
 
-		/**
-		 * dadurch werden die spaltenbreiten optimiert
-		 */
-		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/form_control.css', 'text/css');
+		/** dadurch werden die spaltenbreiten optimiert */
+		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/form_control.css');
 
 		foreach ($ress as $res)
 		{
@@ -108,7 +104,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 
 		$lists['project_rounds2'] = HTMLHelper::_('select.genericList', $project_roundslist, 'rid', 'class="inputbox" ', 'value', 'text', $roundws->id);
 
-		// Diddipoeler rounds for change in match
+		/** Diddipoeler rounds for change in match */
 		$project_change_roundslist = array();
 
 		if ($ress = sportsmanagementHelper::getRoundsOptions($this->project_id, 'ASC', true))
@@ -119,7 +115,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		$lists['project_change_rounds'] = $project_change_roundslist;
 		unset($project_change_roundslist);
 
-		// Build the html options for teams
+		/** Build the html options for teams */
 		foreach ($this->items as $row)
 		{
 			if ($row->divhomeid == '')
@@ -190,7 +186,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		/** Build the html options for article */
 		$articles[] = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_ARTICLE'));
 
-		if ($res = sportsmanagementHelper::getArticleList($projectws->category_id))
+		if ($res = sportsmanagementHelper::getArticleList($this->projectws->category_id))
 		{
 			$articles = array_merge($articles, $res);
 		}
@@ -241,9 +237,15 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		$this->option     = $option;
 		$this->matches    = $this->model->prepareItems($this->items);
 		$this->ress       = $ress;
-		$this->projectws  = $projectws;
+//		$this->projectws  = $projectws;
 		$this->roundws    = $roundws;
 		$this->prefill    = $params->get('use_prefilled_match_roster', 0);
+
+
+if ( !array_key_exists('search_mode', $this->lists) )
+{
+$this->lists['search_mode'] = '';
+}
 
 		switch ($this->getLayout())
 		{

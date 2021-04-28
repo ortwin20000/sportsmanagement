@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage updates
@@ -11,17 +9,21 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
 $version           = '1.0.68';
+
+$minor = 0;
+$major = 0;
+$build = 0;
+$revision = '';
+
 $updateFileDate    = '2018-09-3';
 $updateFileTime    = '00:05';
-$updateDescription = '<span style="color:orange">Update Picture Path.</span>';
+$updateDescription = '<span style="color:orange">'.Text::_('COM_SPORTSMANAGEMENT_GLOBAL_UPDATES_PICTURE_PATH').'</span>';
 $excludeFile       = 'false';
 
 $maxImportTime = ComponentHelper::getParams('com_sportsmanagement')->get('max_import_time', 0);

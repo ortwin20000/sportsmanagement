@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung fűr alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage ranking
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 
@@ -276,6 +272,13 @@ $column_names = explode(',', $this->config['ordered_columns_names']);
 				echo $column_names[$k];
 				echo '</span></th>';
 				break;
+                
+            case 'SHOOTERRINGS':
+				echo '<th class="headers">';
+				echo '<span class="hasTip" title="' . $toolTipTitle . '::' . $toolTipText . '">';
+				echo $column_names[$k];
+				echo '</span></th>';
+				break;
 
 			default:
 				echo '<th class="headers">';
@@ -285,6 +288,23 @@ $column_names = explode(',', $this->config['ordered_columns_names']);
 				break;
 		}
 	}
+    
+    
+    switch ( $this->project->sport_type_name )
+    {
+        case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+        foreach ($this->rounds as $count_i => $item)
+		{
+		  echo '<th class="headers">';
+          echo '<span class="hasTip" title="' . $toolTipTitle . '::' . $toolTipText . '">';
+				echo $item->roundcode;
+          echo '</span></th>';
+          }
+        break;
+    }
+    
+    
+    
 	?>
 </tr>
 </thead>

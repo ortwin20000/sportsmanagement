@@ -13,7 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 
-unset($this->notes);
+$this->notes = array();
 $this->notes[] = Text::_('COM_SPORTSMANAGEMENT_TEAMINFO_HISTORY');
 echo $this->loadTemplate('jsm_notes');
 ?>
@@ -141,7 +141,17 @@ echo $this->loadTemplate('jsm_notes');
 	}
 else
       {
-        echo HTMLHelper::image('media/com_sportsmanagement/jl_images/icon_copyright_2.png', '', 'height="30"');
+        //echo HTMLHelper::image('media/com_sportsmanagement/jl_images/icon_copyright_2.png', '', 'height="30"');
+        echo sportsmanagementHelperHtml::getBootstrapModalImage('teaminfohistory' . $season->ptid . '-' . $season->projectid,
+					'media/com_sportsmanagement/jl_images/icon_copyright_2.png',
+					$this->team->name,
+					'50',
+					'',
+					$this->modalwidth,
+					$this->modalheight,
+					$this->overallconfig['use_jquery_modal']
+				);
+        
       }		
 				?></td>
 			<?php if ($this->project->project_type == 'DIVISIONS_LEAGUE')

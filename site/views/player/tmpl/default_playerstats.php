@@ -173,6 +173,28 @@ $this->LeaguehistoryPlayer = array();
 			{
 				$model           = $this->getModel();
 				$this->inoutstat = $model->getInOutStats($player_hist->project_id, $player_hist->ptid, $player_hist->tpid);
+                
+if ( !property_exists($this->inoutstat, "played") )
+{                
+$this->inoutstat->played = 0;
+}
+if ( !property_exists($this->inoutstat, "started") )
+{                
+$this->inoutstat->started = 0;
+}
+if ( !property_exists($this->inoutstat, "in") )
+{                
+$this->inoutstat->in = 0;
+}
+if ( !property_exists($this->inoutstat, "out") )
+{                
+$this->inoutstat->out = 0;
+}
+if ( !property_exists($this->inoutstat, "playedtime") )
+{                
+$this->inoutstat->playedtime = 0;
+}
+
 
 				// gespielte zeit
 				if (!isset($this->overallconfig['person_events']))
@@ -282,6 +304,36 @@ $this->LeaguehistoryPlayer = array();
                         </td>
 						<?PHP
 					}
+
+if ( !array_key_exists( $player_hist->league_id, $this->LeaguehistoryPlayer ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id] = array();              
+}              
+              
+if ( !array_key_exists( 'played', $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id]['played'] = 0;              
+}
+if ( !array_key_exists( 'started', $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id]['started'] = 0;              
+} 
+if ( !array_key_exists( 'in', $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id]['in'] = 0;              
+} 
+if ( !array_key_exists( 'out', $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id]['out'] = 0;              
+} 
+if ( !array_key_exists( 'playedtime', $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id]['playedtime'] = 0;              
+}               
+              
+              
+              
+              
               
               $this->LeaguehistoryPlayer[$player_hist->league_id]['league'] = $player_hist->league_name;
               $this->LeaguehistoryPlayer[$player_hist->league_id]['played'] += $this->inoutstat->played;
@@ -336,14 +388,18 @@ $this->LeaguehistoryPlayer = array();
               
 					if ($this->config['show_career_events_stats'])
 					{
-						/**
-						 *                    stats per project
-						 */
+						/** stats per project */
 						if (count($this->AllEvents))
 						{
 							foreach ($this->AllEvents as $eventtype)
 							{
 								$stat = $player->getPlayerEvents($eventtype->id, $player_hist->project_id, $player_hist->ptid);
+                                
+                                
+if ( !array_key_exists( $eventtype->name, $this->LeaguehistoryPlayer[$player_hist->league_id] ) );
+{              
+$this->LeaguehistoryPlayer[$player_hist->league_id][$eventtype->name] = 0;              
+}                                
                               $this->LeaguehistoryPlayer[$player_hist->league_id][$eventtype->name] += $stat;
 								?>
 
@@ -478,7 +534,7 @@ $this->LeaguehistoryPlayer = array();
         <thead>
         <tr class="sectiontableheader">
             <th class="td_l" class="nowrap"><?php echo Text::_('COM_SPORTSMANAGEMENT_PERSON_COMPETITION'); ?></th>              
-<th class="td_c">
+            <th class="td_c">
 				<?php
 				$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_PLAYED');
 				$picture    = $picture_path_sport_type_name . '/played.png';
@@ -489,7 +545,14 @@ $this->LeaguehistoryPlayer = array();
 
 				echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
 				?></th>
-<th class="td_c"><?php
+                
+                <?php
+                if ($this->config['show_substitution_stats'])
+			{
+                if ((isset($this->overallconfig['use_jl_substitution'])) && ($this->overallconfig['use_jl_substitution'] == 1))
+				{
+                ?>
+                <th class="td_c"><?php
 						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_STARTROSTER');
 						$picture    = $picture_path_sport_type_name . '/startroster.png';
 						if (!curl_init($picture))
@@ -517,7 +580,7 @@ $this->LeaguehistoryPlayer = array();
 						echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
 						?></th>
 
- <th class="td_c"><?php
+                    <th class="td_c"><?php
 						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PLAYED_TIME');
 						$picture    = $picture_path_sport_type_name . '/uhr.png';
 						if (!curl_init($picture))
@@ -526,7 +589,12 @@ $this->LeaguehistoryPlayer = array();
 						}
 						echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'height' => 11));
 						?></th>
+                        
+                        
+                        
 <?php
+}
+}
 if (count($this->AllEvents))
 				{
 					foreach ($this->AllEvents as $eventtype)
@@ -572,6 +640,10 @@ echo $player_hist_league['league'];
 echo $player_hist_league['played'];
 ?>                    
 </td>
+<?php
+if ($this->config['show_substitution_stats'])
+{
+?>
 <td class="td_l" nowrap="nowrap">
 <?php
 echo $player_hist_league['started'];
@@ -593,6 +665,9 @@ echo $player_hist_league['playedtime'];
 ?>                    
 </td>
 <?php
+}
+
+
 if (count($this->AllEvents))
 				{
 					foreach ($this->AllEvents as $eventtype)

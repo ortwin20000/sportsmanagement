@@ -68,6 +68,22 @@ class sportsmanagementView extends BaseHtmlView
 	protected $table_data_class = '';
 	protected $table_data_div = '';
     public $itemname;
+    
+    /**
+	 * A \JForm instance with filter fields.
+	 *
+	 * @var    \JForm
+	 * @since  3.6.3
+	 */
+	public $filterForm;
+
+	/**
+	 * An array with active filters.
+	 *
+	 * @var    array
+	 * @since  3.6.3
+	 */
+	public $activeFilters;
 	
     /** https://cdnjs.com/libraries/bootstrap-fileinput */
 	public $bootstrap_fileinput_version = '5.1.4';
@@ -137,20 +153,20 @@ class sportsmanagementView extends BaseHtmlView
 
 		/** alles aufrufen was für die views benötigt wird */
 		$this->document = Factory::getDocument();
-		//$this->document->addStyleSheet(Uri::root() . 'components/com_sportsmanagement/assets/css/flex.css', 'text/css');
+		//$this->document->addStyleSheet(Uri::root() . 'components/com_sportsmanagement/assets/css/flex.css');
         if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
         {
         $this->document->addScript(Uri::root() . 'administrator/components/com_sportsmanagement/assets/js/joomla4functions.js');
-		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css', 'text/css');
-			//$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css', 'text/css'); 
-			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css', 'text/css');
+		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css');
+			//$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css'); 
+			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css');
         //$this->document->addScript(Uri::root() . 'media/system/js/searchtools.js');
         }
 	else	
 	{
-$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css', 'text/css');
-$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css', 'text/css');        
-$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css', 'text/css');
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css');
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css');        
+$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css');
 	}	
 		
 ?>        
@@ -260,13 +276,90 @@ if (preg_match("/ordering/i", $this->sortColumn)) {
 		{
 			case 'predictions';
 			case 'extensions';
-
-				// Case 'github';
-				break;
+			break;
 			default:
-				$this->model = $this->getModel();
-				break;
+			$this->model = $this->getModel();
+			break;
 		}
+        
+        switch ($this->view)
+		{
+			case 'seasons';
+            case 'leagues';
+            case 'sportstypes':
+            case 'jlextfederations':
+            case 'jlextcountries':
+            case 'jlextassociations':
+            case 'positions':
+            case 'eventtypes':
+            case 'agegroups':
+
+            case 'clubs':
+            case 'teams':
+            case 'players':
+            case 'playgrounds':
+            case 'rosterpositions':
+
+//            case 'extrafields':
+//            case 'statistics':
+            case 'clubnames':
+
+//            case 'smquotes':
+
+case 'divisions':
+case 'projectreferees':
+case 'projectteams':				
+case 'rounds':
+case 'teamplayers':
+            
+            $this->filterForm    = $this->model->getFilterForm();
+            $this->activeFilters = $this->model->getActiveFilters();
+            
+/** welche joomla version ? */
+if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
+{
+$this->document->addScriptDeclaration(
+"
+$('.js-stools-btn-clear').addClass('disabled');                        
+$(document).on('click','.js-stools-btn-filter', function(){
+console.log('hallo filter options');
+    //your code here
+$('.js-stools-container-filters').toggleClass('js-stools-container-filters-visible');
+ });
+
+ $(document).on('click','.js-stools-btn-clear', function(){
+console.log('hallo zurücksetzen');
+    //your code here
+
+//$('.js-stools-container-filters').removeClass('js-stools-container-filters-visible');
+//this.form.submit();
+Joomla.resetFilters(this);
+ });
+"
+);
+                    
+                    
+if ( $this->activeFilters )
+{
+$this->document->addScriptDeclaration(
+						"
+$('.js-stools-btn-clear').removeClass('disabled');						
+						");
+
+}                    
+                    
+                    
+                    
+}                      
+            
+            
+            
+            
+            
+            
+			break;
+		}
+        
 
 		/** bei der einzelverarbeitung */
 		if ($this->layout == 'edit'
@@ -355,7 +448,7 @@ break;
 			if ($this->format != 'json')
 			{
 				/** dadurch werden die spaltenbreiten optimiert */
-				$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/form_control.css', 'text/css');
+				$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/form_control.css');
 			}
 
 			switch ($this->view)

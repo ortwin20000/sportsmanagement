@@ -166,12 +166,13 @@ class JSMRanking
 		return $obj;
 	}
 
+	
 	/**
-	 * set project id.
-	 *
-	 * inits project object and parameters
-	 *
-	 * @param   int  $id
+	 * JSMRanking::setProjectId()
+	 * 
+	 * @param mixed $id
+	 * @param integer $cfg_which_database
+	 * @return void
 	 */
 	function setProjectId($id, $cfg_which_database = 0)
 	{
@@ -183,14 +184,18 @@ class JSMRanking
 		$this->_data = null;
 	}
 
+	
 	/**
-	 * returns ranking
-	 *
-	 * @param   int roundid from
-	 * @param   int roundid to
-	 * @param   int division id
+	 * JSMRanking::getRanking()
+	 * 
+	 * @param mixed $from
+	 * @param mixed $to
+	 * @param mixed $division
+	 * @param integer $cfg_which_database
+	 * @param string $sports_type_name
+	 * @return
 	 */
-	function getRanking($from = null, $to = null, $division = null, $cfg_which_database = 0)
+	function getRanking($from = null, $to = null, $division = null, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -206,8 +211,7 @@ class JSMRanking
 
 		self::setDivisionId($division, $cfg_which_database);
 
-		$teams = self::_collect(null, $cfg_which_database);
-
+		$teams = self::_collect(null, $cfg_which_database,$sports_type_name);
 		$rankings = self::_buildRanking($teams, $cfg_which_database);
 
 		return $rankings;
@@ -230,7 +234,7 @@ class JSMRanking
 	 *
 	 * @param   array int project team ids: only collect for games between specified teams (usefull for head to head)
 	 */
-	function _collect($ptids = null, $cfg_which_database = 0)
+	function _collect($ptids = null, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -240,12 +244,46 @@ class JSMRanking
 		$to       = $this->_to;
 		$division = $this->_division;
 
-		//		$project  	= $this->_project->getProject();
 		$project = sportsmanagementModelProject::getProject($cfg_which_database, __METHOD__);
-		$data    = self::_initData($cfg_which_database);
+		$data    = self::_initData($cfg_which_database,$sports_type_name);
 
-		foreach ((array) $data->_matches as $match)
+// echo __METHOD__.' '.__LINE__ .' data <pre>'.print_r($data,true).'</pre>';
+
+
+	
+		  switch ($sports_type_name)
 		{
+		case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+        foreach ((array) $data->_matches as $match)
+		{
+        $homeId = $match->projectteam1_id;
+			$awayId = $match->projectteam2_id;
+            if ( array_key_exists($homeId, $data->_teams) )
+            {
+            $home = $data->_teams[$homeId];
+            $home->sum_team1_result  += $match->home_score;
+			$home->sum_team2_result  += $match->away_score;
+            $home->shooterrings  += $match->home_score;
+            $home->shooterringsperround[$match->roundcode] = $match->home_score;
+            }
+            if ( array_key_exists($awayId, $data->_teams) )
+            {
+			$away = $data->_teams[$awayId];
+            $away->sum_team1_result  += $match->away_score;
+			$away->sum_team2_result  += $match->home_score;
+            $away->shooterrings  += $match->away_score;
+            
+            
+            }
+//            $home = new JSMRankingTeamClass(0);
+//            $away = new JSMRankingTeamClass(0);
+            
+            
+            }
+        break;
+        default:
+    	foreach ((array) $data->_matches as $match)
+		{      
 			if (!isset($data->_teams[$match->projectteam1_id]) || $data->_teams[$match->projectteam1_id]->_is_in_score === 0
 				|| !isset($data->_teams[$match->projectteam2_id]) || $data->_teams[$match->projectteam2_id]->_is_in_score === 0
 			)
@@ -376,16 +414,12 @@ class JSMRanking
 						case 1:
 							$home->cnt_wot++;
 							$home->cnt_wot_home++;
-							/**
-							 * keine summierung für hockey
-							 */
+							/** keine summierung für hockey */
 							//						$home->cnt_won++;
 							//						$home->cnt_won_home++;
 							$away->cnt_lot++;
 							$away->cnt_lot_away++;
-							/**
-							 * keine summierung für hockey
-							 */
+							/** keine summierung für hockey */
 							// $away->cnt_lost++;
 							// $away->cnt_lost_home++;
 							break;
@@ -682,7 +716,12 @@ class JSMRanking
 			$away->diff_team_games      = $away->sum_team1_games - $away->sum_team2_games;
 
 			$away->sum_away_for += $away_score;
-		}
+        }    
+            break;
+            }
+            
+            
+		
 
 		return $data->_teams;
 	}
@@ -692,7 +731,7 @@ class JSMRanking
 	 *
 	 * @return object with properties _teams and _matches
 	 */
-	function _initData($cfg_which_database = 0)
+	function _initData($cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -706,12 +745,12 @@ class JSMRanking
 
 		if (version_compare(JSM_JVERSION, '4', 'eq'))
 		{
-			$data = self::_cachedGetData($this->_projectid, $this->_division, $cfg_which_database);
+			$data = self::_cachedGetData($this->_projectid, $this->_division, $cfg_which_database,$sports_type_name);
 		}
 
 		if (version_compare(JSM_JVERSION, '3', 'eq'))
 		{
-			$data = self::_cachedGetData($this->_projectid, $this->_division, $cfg_which_database);
+			$data = self::_cachedGetData($this->_projectid, $this->_division, $cfg_which_database,$sports_type_name);
 		}
 
 		return $data;
@@ -722,12 +761,12 @@ class JSMRanking
 	 *
 	 * @param   int project id
 	 */
-	public static function _cachedGetData($pid, $division, $cfg_which_database = 0)
+	public static function _cachedGetData($pid, $division, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$data = new stdclass;
 
-		$data->_teams   = self::_initTeams($pid, $division, $cfg_which_database);
-		$data->_matches = self::_getMatches($pid, $division, $cfg_which_database);
+		$data->_teams   = self::_initTeams($pid, $division, $cfg_which_database,$sports_type_name);
+		$data->_matches = self::_getMatches($pid, $division, $cfg_which_database,$sports_type_name);
 
  //echo '<pre>'.print_r($data->_teams,true).'</pre>';
  //echo '<pre>'.print_r($data->_matches,true).'</pre>';
@@ -752,7 +791,7 @@ class JSMRanking
 	 *
 	 * @return array of JSMRankingTeam objects
 	 */
-	public static function _initTeams($pid, $division, $cfg_which_database = 0)
+	public static function _initTeams($pid, $division, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -870,17 +909,29 @@ class JSMRanking
 	 *
 	 * @return array
 	 */
-	public static function _getMatches($pid, $division, $cfg_which_database = 0)
+	public static function _getMatches($pid, $division, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app       = Factory::getApplication();
 		$option    = $app->input->getCmd('option');
 		$db        = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query     = $db->getQuery(true);
 		$starttime = microtime();
-
 		$viewName = $app->input->getVar("view");
 
-		//		$query =
+
+        switch ($sports_type_name)
+		{
+		case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+        
+        break;
+        default:
+        $query->where('( (m.team1_result IS NOT NULL AND m.team2_result IS NOT NULL) OR (m.alt_decision=1) ) ');
+        $query->where('m.projectteam1_id > 0 AND m.projectteam2_id > 0');
+        break;
+        }
+
+
+
 		$query->select('m.id');
 		$query->select('m.projectteam1_id');
 		$query->select('m.projectteam2_id');
@@ -916,7 +967,7 @@ class JSMRanking
 		$query->join('INNER', '#__sportsmanagement_project_team AS pt1 ON m.projectteam1_id = pt1.id ');
 		$query->join('INNER', '#__sportsmanagement_round AS r ON m.round_id = r.id');
 
-		$query->where('( (m.team1_result IS NOT NULL AND m.team2_result IS NOT NULL) OR (m.alt_decision=1) ) ');
+//		$query->where('( (m.team1_result IS NOT NULL AND m.team2_result IS NOT NULL) OR (m.alt_decision=1) ) ');
 		$query->where('m.published = 1');
 		$query->where('r.published = 1');
 		$query->where('pt1.project_id = ' . $db->Quote($pid));
@@ -927,26 +978,34 @@ class JSMRanking
 		}
 
 		$query->where('(m.cancel IS NULL OR m.cancel = 0)');
-		$query->where('m.projectteam1_id > 0 AND m.projectteam2_id > 0');
+//		$query->where('m.projectteam1_id > 0 AND m.projectteam2_id > 0');
+
+
+
+
+
 
 		switch ($viewName)
 		{
-			case 'rankingalltime':
-				break;
-			default:
-				$query->where('m.count_result');
-				break;
+		case 'rankingalltime':
+		break;
+		default:
+		$query->where('m.count_result');
+		break;
 		}
 
 		$db->setQuery($query);
 
 		$res     = $db->loadObjectList();
+//echo __METHOD__.' '.__LINE__ .' res <pre>'.print_r($res,true).'</pre>';        
 		$matches = array();
 
 		foreach ((array) $res as $r)
 		{
 			$matches[$r->id] = $r;
 		}
+
+//echo __METHOD__ .' '.__LINE__. ' matches <pre>'.print_r($matches,true).'</pre>';
 
 		return $matches;
 	}
@@ -1169,14 +1228,18 @@ class JSMRanking
 		return $this->_criteria;
 	}
 
+	
 	/**
-	 * returns home ranking
-	 *
-	 * @param   int roundid from
-	 * @param   int roundid to
-	 * @param   int division id
+	 * JSMRanking::getRankingHome()
+	 * 
+	 * @param mixed $from
+	 * @param mixed $to
+	 * @param mixed $division
+	 * @param integer $cfg_which_database
+	 * @param string $sports_type_name
+	 * @return
 	 */
-	function getRankingHome($from = null, $to = null, $division = null, $cfg_which_database = 0)
+	function getRankingHome($from = null, $to = null, $division = null, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -1198,14 +1261,18 @@ class JSMRanking
 		return $rankings;
 	}
 
+
 	/**
-	 * returns away ranking
-	 *
-	 * @param   int roundid from
-	 * @param   int roundid to
-	 * @param   int division id
+	 * JSMRanking::getRankingAway()
+	 * 
+	 * @param mixed $from
+	 * @param mixed $to
+	 * @param mixed $division
+	 * @param integer $cfg_which_database
+	 * @param string $sports_type_name
+	 * @return
 	 */
-	function getRankingAway($from = null, $to = null, $division = null, $cfg_which_database = 0)
+	function getRankingAway($from = null, $to = null, $division = null, $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
@@ -1333,6 +1400,23 @@ class JSMRanking
 
 		return (int) $res;
 	}
+    
+    
+    /**
+     * JSMRanking::_cmpShooterrings()
+     * 
+     * @param mixed $a
+     * @param mixed $b
+     * @return
+     */
+    function _cmpShooterrings($a, $b)
+	{
+		$res = -($a->shooterrings - $b->shooterrings);
+
+		return (int) $res;
+	}
+    
+    
 
 	/**
 	 * Point comparison
@@ -1799,6 +1883,9 @@ class JSMRankingTeamClass
 	var $diff_team_legs = 0;
 	var $round = 0;
 	var $rank = 0;
+    var $shooterrings = 0;
+    var $shooterringsperround = array();
+    
 
 	/**
 	 * JSMRankingTeamClass::JSMRankingTeam()

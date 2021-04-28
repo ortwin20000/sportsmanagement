@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage updates
@@ -11,16 +9,16 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
 
 jimport('joomla.filter.output');
 
-// Prüft vor Benutzung ob die gewünschte Klasse definiert ist
+/** Prüft vor Benutzung ob die gewünschte Klasse definiert ist */
 if (!class_exists('sportsmanagementHelper'))
 {
 	// Add the classes for handling
@@ -29,7 +27,7 @@ if (!class_exists('sportsmanagementHelper'))
 	BaseDatabaseModel::getInstance("sportsmanagementHelper", "sportsmanagementModel");
 }
 
-$uri = Factory::getUri();
+$uri = Uri::getInstance();
 
 $table = Factory::getApplication()->input->getVar('table');
 $uri->delVar('table');
@@ -47,9 +45,15 @@ $link = $uri->toString();
 <?PHP
 
 $version           = '1.0.53';
+
+$minor = 0;
+$major = 0;
+$build = 0;
+$revision = '';
+
 $updateFileDate    = '2016-02-01';
 $updateFileTime    = '00:05';
-$updateDescription = '<span style="color:orange">Update Timestamp Fields.</span>';
+$updateDescription = '<span style="color:orange">'.Text::_('COM_SPORTSMANAGEMENT_GLOBAL_UPDATES_TIMESTAMP').'</span>';
 $excludeFile       = 'false';
 
 $maxImportTime = ComponentHelper::getParams('com_sportsmanagement')->get('max_import_time', 0);

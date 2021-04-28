@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage fields
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
@@ -50,10 +46,7 @@ class JFormFieldprojectpositionlist extends \JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		// Reference global application object
 		$this->jsmapp = Factory::getApplication();
-
-		// JInput object
 		$this->jsmjinput = $this->jsmapp->input;
 		$this->jsmoption = $this->jsmjinput->getCmd('option');
 
@@ -62,7 +55,6 @@ class JFormFieldprojectpositionlist extends \JFormFieldList
 		$project_team_id = $this->jsmapp->getUserState("$this->jsmoption.project_team_id", '0');
 		$pid             = $this->jsmapp->getUserState("$this->jsmoption.pid", '0');
 
-		// Initialize variables.
 		$options   = array();
 		$select_id = Factory::getApplication()->input->getVar('id');
 		$db        = Factory::getDbo();
@@ -91,7 +83,6 @@ class JFormFieldprojectpositionlist extends \JFormFieldList
 			$row->text = Text::_($row->text);
 		}
 
-		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);
 
 		return $options;

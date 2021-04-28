@@ -23,6 +23,12 @@ CREATE TABLE IF NOT EXISTS `#__sportsmanagement_associations` (
   `zipcode` VARCHAR(10) NOT NULL DEFAULT '' ,
   `location` VARCHAR(50) NOT NULL DEFAULT '' ,
   `state` VARCHAR(50) NOT NULL DEFAULT '' ,
+  
+  `founded` DATE NOT NULL DEFAULT '0000-00-00' ,
+  `dissolved` DATE NOT NULL DEFAULT '0000-00-00' ,
+  `dissolved_year` VARCHAR(4) NULL DEFAULT NULL,
+  `founded_year` VARCHAR(4) NULL DEFAULT NULL,
+  
   PRIMARY KEY (`id`),
   KEY `country` (`country`),
   KEY `parent_id` (`parent_id`),
@@ -55,6 +61,12 @@ CREATE TABLE IF NOT EXISTS `#__sportsmanagement_federations` (
   `zipcode` VARCHAR(10) NOT NULL DEFAULT '' ,
   `location` VARCHAR(50) NOT NULL DEFAULT '' ,
   `state` VARCHAR(50) NOT NULL DEFAULT '' ,
+  
+  `founded` DATE NOT NULL DEFAULT '0000-00-00' ,
+  `dissolved` DATE NOT NULL DEFAULT '0000-00-00' ,
+  `dissolved_year` VARCHAR(4) NULL DEFAULT NULL,
+  `founded_year` VARCHAR(4) NULL DEFAULT NULL,
+  
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
@@ -377,6 +389,10 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_match` (
   `match_timestamp` INT( 11 ) NOT NULL DEFAULT  '0',
   `next_match_id` INT(11) NOT NULL DEFAULT '0' ,
   `openligaid` int(11) DEFAULT NULL,
+  `ringetotal` int(11) DEFAULT NULL,
+  `ringetotal_team1` int(11) DEFAULT NULL,
+  `ringetotal_team2` int(11) DEFAULT NULL,
+  
   PRIMARY KEY (`id`),
   KEY `round_id` (`round_id`),
   KEY `projectteam1_id` (`projectteam1_id`),
@@ -853,7 +869,8 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_project` (
   `linkedin` VARCHAR(250) NOT NULL DEFAULT '' ,
   `twitter` VARCHAR(250) NOT NULL DEFAULT '' ,
   `facebook` VARCHAR(250) NOT NULL DEFAULT '' ,
-  
+  `single_matches` SMALLINT(6) NOT NULL DEFAULT '0' ,
+  `use_smallcaliber` TINYINT(1)  NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   KEY `league_id` (`league_id`),
   KEY `season_id` (`season_id`),
@@ -958,6 +975,8 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_project_team` (
   `published` TINYINT(1) NOT NULL DEFAULT '1' ,
   `cr_picture` varchar(255) DEFAULT NULL,
   `finaltablerank` tinyint(1) NOT NULL DEFAULT '0',
+  `picturenotes` TEXT NULL DEFAULT NULL ,
+  
   PRIMARY KEY (`id`) ,
   KEY `project_id` (`project_id`),
   KEY `team_id` (`team_id`),
@@ -1626,6 +1645,12 @@ CREATE TABLE IF NOT EXISTS `#__sportsmanagement_match_single` (
   `double_team1_player2` int(11) NOT NULL DEFAULT '0',
   `double_team2_player1` int(11) NOT NULL DEFAULT '0',
   `double_team2_player2` int(11) NOT NULL DEFAULT '0',
+  `ringetotal` int(11) DEFAULT NULL,
+  
+  `ringetotal_projectteam1_id` int(11) DEFAULT NULL,
+  `ringetotal_projectteam2_id` int(11) DEFAULT NULL,
+  `ringetotal_teamplayer1_id` int(11) DEFAULT NULL,
+  `ringetotal_teamplayer2_id` int(11) DEFAULT NULL,
   
   PRIMARY KEY (`id`),
   KEY `round_id` (`round_id`),

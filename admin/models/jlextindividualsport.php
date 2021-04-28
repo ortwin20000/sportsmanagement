@@ -82,15 +82,135 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$pks      = Factory::getApplication()->input->getVar('cid', null, 'post', 'array');
 		$post     = Factory::getApplication()->input->post->getArray(array());
 		$match_id = $post['match_id'];
+        $projectteam1_id = $post['projectteam1_id'];
+        $projectteam2_id = $post['projectteam2_id'];
 
 		$result_tie_break = 0;
+        $save_match = false;
 
-		$this->jsmquery->select('use_tie_break,game_parts,sports_type_id');
-		$this->jsmquery->from('#__sportsmanagement_project');
-		$this->jsmquery->where('id = ' . (int) $post['project_id']);
+		$this->jsmquery->select('p.use_tie_break,p.game_parts,p.sports_type_id');
+		$this->jsmquery->from('#__sportsmanagement_project as p');
+		$this->jsmquery->where('p.id = ' . (int) $post['project_id']);
 		$this->jsmdb->setQuery($this->jsmquery);
 		$use_tie_break    = $this->jsmdb->loadObject();
 		$result_tie_break = $use_tie_break->game_parts;
+        
+        $this->jsmquery->clear();
+        $this->jsmquery->select('*');
+        $this->jsmquery->from('#__sportsmanagement_sports_type as p');
+        $this->jsmquery->where('p.id = ' . $use_tie_break->sports_type_id);
+		$this->jsmdb->setQuery($this->jsmquery);
+		$sports_type_id_name   = $this->jsmdb->loadObject();
+        
+        
+
+        switch ($sports_type_id_name->name)
+		{
+		case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+        $mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
+        /** event selektieren */
+        $this->jsmquery->clear();
+        $this->jsmquery->select('p.id');
+        $this->jsmquery->from('#__sportsmanagement_eventtype as p');
+        $this->jsmquery->where('p.sports_type_id = ' . $sports_type_id_name->id);
+		$this->jsmdb->setQuery($this->jsmquery);
+		$event_type_id   = $this->jsmdb->loadResult();
+        
+        $ringetotal = 0;
+        
+//        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($pks,true).'</pre>'), 'error');
+//        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($post,true).'</pre>'), 'error');
+        for ($x = 0; $x < count($pks); $x++)
+		{
+		$save_match = true;  
+		$rowmatch                          = new stdClass;
+		$rowmatch->id                      = $pks[$x];
+        $rowmatch->teamplayer1_id       = $post['teamplayer1_id' . $pks[$x]];
+        
+        $rowmatch->team1_result       = $post['team1_result' . $pks[$x]];
+        $rowmatch->team2_result       = $post['team2_result' . $pks[$x]];
+        
+        if ( !$rowmatch->team1_result )
+        {
+            $rowmatch->team1_result = 0;
+        }
+        if ( !$rowmatch->team2_result )
+        {
+            $rowmatch->team2_result = 0;
+        }
+        
+        $rowmatch->ringetotal       = $rowmatch->team1_result;
+        
+        $rowmatch->modified    = $this->jsmdate->toSql();
+		$rowmatch->modified_by = $this->jsmuser->get('id');
+        try
+		{
+		$result_update = $this->jsmdb->updateObject('#__sportsmanagement_match_single', $rowmatch, 'id', true);
+        $ringetotal += $rowmatch->ringetotal;
+		}
+		catch (Exception $e)
+		{
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+		}
+        
+        /** jetzt noch das ereignis speichern */
+        $this->jsmquery->clear();
+        $this->jsmquery->select('me.id');
+        $this->jsmquery->from('#__sportsmanagement_match_event as me');
+        $this->jsmquery->where('me.event_type_id = ' . $event_type_id);
+        $this->jsmquery->where('me.teamplayer_id = ' . $post['teamplayer1_id' . $pks[$x]] );
+        $this->jsmquery->where('me.projectteam_id = ' . $projectteam1_id );
+        $this->jsmquery->where('me.match_id = ' . $match_id);
+        $this->jsmdb->setQuery($this->jsmquery);
+		$match_event_id   = $this->jsmdb->loadResult();
+        
+        if ( !$match_event_id )
+        {
+        $profile = new stdClass;
+        $profile->event_type_id = $event_type_id;
+        $profile->teamplayer_id = $post['teamplayer1_id' . $pks[$x]];
+        $profile->projectteam_id = $projectteam1_id;
+        $profile->match_id = $match_id;
+        $profile->event_sum = $rowmatch->ringetotal;
+        $result = $this->jsmdb->insertObject('#__sportsmanagement_match_event', $profile);    
+            
+        }
+
+
+
+
+
+        
+        
+          
+        }
+        
+        if ( $save_match )
+        {
+        $rowmatch = new stdClass;
+        $rowmatch->id = $match_id;
+        $rowmatch->team1_result = $ringetotal;
+        $rowmatch->ringetotal = $ringetotal;
+        $rowmatch->modified    = $this->jsmdate->toSql();
+		$rowmatch->modified_by = $this->jsmuser->get('id');
+        try
+		{
+		$result_update = $this->jsmdb->updateObject('#__sportsmanagement_match', $rowmatch, 'id', true);
+        //$ringetotal += $rowmatch->ringetotal;
+		}
+		catch (Exception $e)
+		{
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+		}
+        }
+
+
+
+
+        break;
+        case 'COM_SPORTSMANAGEMENT_ST_TENNIS':
 
 		if ($use_tie_break->use_tie_break)
 		{
@@ -410,9 +530,11 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		}
 		catch (Exception $e)
 		{
-			Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getCode()), Log::ERROR, 'jsmerror');
-			Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), Log::ERROR, 'jsmerror');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
 		}
+        break;
+        }
 
 		// Proceed with the save
 		// return parent::save($data);
@@ -447,30 +569,31 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 	 */
 	function deleteevents($match_id, $teamplayer1_id, $event_id)
 	{
-		$app = Factory::getApplication();
 
-		// Create a new query object.
-		$db    = sportsmanagementHelper::getDBConnection();
-		$query = $db->getQuery(true);
-
-		// Alte ereignisse löschen
-		$query = $db->getQuery(true);
-		$query->clear();
-		$query->delete()->from('#__sportsmanagement_match_event')->where('match_id = ' . $match_id . ' AND teamplayer_id = ' . $teamplayer1_id . ' AND event_type_id = ' . $event_id);
-		$db->setQuery($query);
+//		// Create a new query object.
+//		$db    = sportsmanagementHelper::getDBConnection();
+//		$query = $db->getQuery(true);
+//
+//		// Alte ereignisse löschen
+//		$query = $db->getQuery(true);
+        
+		$this->jsmquery->clear();
+		$this->jsmquery->delete()->from('#__sportsmanagement_match_event')->where('match_id = ' . $match_id . ' AND teamplayer_id = ' . $teamplayer1_id . ' AND event_type_id = ' . $event_id);
+		
 		try{
-		$resultdel = $db->execute();
+		  $this->jsmdb->setQuery($this->jsmquery);
+		$resultdel = $this->jsmdb->execute();
 }
 			catch (Exception $e)
 			{
 				$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
                 $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
-              //$this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($this->jsmquery->dump(),true).'</pre>'), 'error');
+              $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($this->jsmquery->dump(),true).'</pre>'), 'error');
 			}
 	
-		if (!$resultdel)
-		{
-		}
+//		if (!$resultdel)
+//		{
+//		}
 
 	}
 
@@ -486,9 +609,9 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 	 */
 	function insertevents($match_id, $projectteam1_id, $teamplayer1_id, $event_id)
 	{
-		$app                   = Factory::getApplication();
-		$db                    = sportsmanagementHelper::getDBConnection();
-		$query                 = $db->getQuery(true);
+//		$app                   = Factory::getApplication();
+//		$db                    = sportsmanagementHelper::getDBConnection();
+//		$query                 = $db->getQuery(true);
 		$event                 = new stdClass;
 		$event->match_id       = $match_id;
 		$event->projectteam_id = $projectteam1_id;
@@ -496,12 +619,18 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$event->event_type_id  = $event_id;
 		$event->event_sum      = 1;
 
-		// Insert the object into the user profile table.
-		$resultins = Factory::getDbo()->insertObject('#__sportsmanagement_match_event', $event);
-
-		if (!$resultins)
-		{
-		}
+try{
+		$resultins = $this->jsmdb->insertObject('#__sportsmanagement_match_event', $event);
+}
+			catch (Exception $e)
+			{
+				$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+                $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+              //$this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($this->jsmquery->dump(),true).'</pre>'), 'error');
+			}
+//		if (!$resultins)
+//		{
+//		}
 
 	}
 

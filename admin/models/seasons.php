@@ -63,6 +63,8 @@ class sportsmanagementModelSeasons extends JSMModelList
 			's.modified',
 			's.modified_by',
 			's.checked_out',
+            'state',
+            'search_nation',
 			's.checked_out_time'
 		);
 		parent::__construct($config);
@@ -203,10 +205,8 @@ class sportsmanagementModelSeasons extends JSMModelList
 		$this->setState('filter.search', $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search'));
 		$this->setState('filter.state', $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string'));
 		$this->setState('filter.search_nation', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
-		
 		$this->setState('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'list_limit', $this->jsmapp->get('list_limit'), 'int'));
 		$this->setState('list.start', $this->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0, 'int'));
-		
 		$orderCol = $this->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', '', 'string');
 
 		if (!in_array($orderCol, $this->filter_fields))
@@ -291,7 +291,7 @@ class sportsmanagementModelSeasons extends JSMModelList
 				break;
 			default:
 				$this->jsmquery->clear();
-				$this->jsmquery->select(implode(",", $this->filter_fields));
+				$this->jsmquery->select('s.*');
 				$this->jsmquery->select('uc.name AS editor');
 				$this->jsmquery->from('#__sportsmanagement_season as s');
 				$this->jsmquery->join('LEFT', '#__users AS uc ON uc.id = s.checked_out');

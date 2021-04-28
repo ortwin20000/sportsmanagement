@@ -35,6 +35,9 @@ $dispatcher->trigger('onContentBeforeDisplay', array('com_media.file', &$this->_
 
 ?>
 <script>
+var currentModal = window.parent.Joomla.Modal.getCurrent();
+console.log("modal: " + currentModal);
+
 function exportToForm(img) {
 //     alert(img);
 //     alert('<?php echo $this->folder; ?>');
@@ -51,8 +54,8 @@ logopfad = 'images/com_sportsmanagement/database/<?php echo $this->folder; ?>/' 
 console.log("logopfad : " + logopfad );	
 window.parent.selectImage_<?php echo $this->type; ?>(img, img,fieldname ,fieldid);
 //window.closeModal();
-window.parent.jQuery('.modal.in').modal('hide');
-     
+//window.parent.jQuery('.modal.in').modal('hide');
+window.parent.Joomla.Modal.getCurrent().close();     
  }
 
 </script>
@@ -74,8 +77,11 @@ $this->modalheight
 $image_attributes['title'] = Text::_('COM_SPORTSMANAGEMENT_GLOBAL_ADD');
 $image_attributes['id'] = $this->_tmp_img->file;		  
 $image_attributes['onclick'] = "javascript:exportToForm('".$this->_tmp_img->file."')";
-echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/ok.png', '', $image_attributes);	  	
+//echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/ok.png', '', $image_attributes);	  	
 ?>
+<div class="small">  
+<button onclick="exportToForm('<?php echo $this->_tmp_img->file;?> ')"><?php echo Text::_('COM_SPORTSMANAGEMENT_GLOBAL_ADD'); ?></button>
+</div> 
 </div>
 <div class="media-browser-item-info">
 <?php

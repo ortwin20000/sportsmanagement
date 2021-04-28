@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage jlextindividualsportes
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
@@ -60,6 +56,8 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 	 */
 	function _displayDefault($tpl)
 	{
+	   $lists['search_mode'] = '';
+       
 		$this->state         = $this->get('State');
 		$this->sortDirection = $this->state->get('list.direction');
 		$this->sortColumn    = $this->state->get('list.ordering');
@@ -69,15 +67,15 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 		$project_id      = $this->app->getUserState("$this->option.pid", '0');
 		$match_id        = $this->jinput->getInt('id', 0);
 		$rid             = $this->jinput->getInt('rid', 0);
-		$projectteam1_id = $this->jinput->getInt('team1', 0);
-		$projectteam2_id = $this->jinput->getInt('team2', 0);
+		$this->projectteam1_id = $this->jinput->getInt('team1', 0);
+		$this->projectteam2_id = $this->jinput->getInt('team2', 0);
 
 		$mdlProject = BaseDatabaseModel::getInstance("Project", "sportsmanagementModel");
-		$projectws  = $mdlProject->getProject($project_id);
+		$this->projectws   = $mdlProject->getProject($project_id);
 		$mdlRound   = BaseDatabaseModel::getInstance("Round", "sportsmanagementModel");
 		$roundws    = $mdlRound->getRound($rid);
 
-		$this->model->checkGames($projectws, $match_id, $rid, $projectteam1_id, $projectteam2_id);
+		$this->model->checkGames($this->projectws , $match_id, $rid, $this->projectteam1_id, $this->projectteam2_id);
 
 		$matches    = $this->get('Items');
 		$total      = $this->get('Total');
@@ -85,7 +83,7 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 
 		$teams[] = HTMLHelper::_('select.option', '0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_TEAM_PLAYER'));
 
-		if ($projectteams = $this->model->getPlayer($projectteam1_id, $project_id))
+		if ($projectteams = $this->model->getPlayer($this->projectteam1_id, $project_id))
 		{
 			$teams = array_merge($teams, $projectteams);
 		}
@@ -95,7 +93,7 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 
 		$teams[] = HTMLHelper::_('select.option', '0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_TEAM_PLAYER'));
 
-		if ($projectteams = $this->model->getPlayer($projectteam2_id, $project_id))
+		if ($projectteams = $this->model->getPlayer($this->projectteam2_id, $project_id))
 		{
 			$teams = array_merge($teams, $projectteams);
 		}
@@ -113,15 +111,15 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 		$this->match_id = $match_id;
 		$this->rid      = $rid;
 
-		$this->projectteam1_id = $projectteam1_id;
-		$this->projectteam2_id = $projectteam2_id;
+//		$this->projectteam1_id = $projectteam1_id;
+//		$this->projectteam2_id = $projectteam2_id;
 
-		$this->projectws = $projectws;
+		//$this->projectws = $projectws;
 		$this->roundws   = $roundws;
 
-		if ($result = $this->model->getPlayer($projectteam1_id, $project_id))
+		if ($result = $this->model->getPlayer($this->projectteam1_id, $project_id))
 		{
-			$this->getHomePlayer = $this->model->getPlayer($projectteam1_id, $project_id);
+			$this->getHomePlayer = $this->model->getPlayer($this->projectteam1_id, $project_id);
 		}
 		else
 		{
@@ -132,9 +130,9 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 			$this->getHomePlayer = $exportplayer;
 		}
 
-		if ($result = $this->model->getPlayer($projectteam2_id, $project_id))
+		if ($result = $this->model->getPlayer($this->projectteam2_id, $project_id))
 		{
-			$this->getAwayPlayer = $this->model->getPlayer($projectteam2_id, $project_id);
+			$this->getAwayPlayer = $this->model->getPlayer($this->projectteam2_id, $project_id);
 		}
 		else
 		{

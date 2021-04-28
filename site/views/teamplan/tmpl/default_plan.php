@@ -16,6 +16,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
 $history_link = '';
+
 if ($this->config['show_comments_count'] == 1 || $this->config['show_comments_count'] == 2)
 {
 	$commmentsInstance = sportsmanagementModelComments::CreateInstance($this->config);
@@ -268,9 +269,18 @@ if (!empty($this->matches))
 			$k          = 0;
 			$counter    = 1;
 			$round_date = '';
-
+            
 			foreach ($this->matches as $match)
 			{
+			 
+            $away = '';
+            $home = '';
+            $homeclub = 0;
+			$awayclub = 0;
+            $home_projectteam_id = 0;
+            $guest_projectteam_id = 0;
+            $hometeam = new stdclass;
+            $guestteam = new stdclass;
 
 				if ($this->config['show_historylink'])
 				{
@@ -285,8 +295,11 @@ if (!empty($this->matches))
 				$hometeam            = $this->teams[$match->projectteam1_id];
 				$home_projectteam_id = $hometeam->projectteamid;
 
-				$guestteam            = $this->teams[$match->projectteam2_id];
+				if ( $match->projectteam2_id )
+                {
+                $guestteam            = $this->teams[$match->projectteam2_id];
 				$guest_projectteam_id = $guestteam->projectteamid;
+                }
 
 				if ($match->team1 == $this->favteams)
 				{
@@ -313,6 +326,10 @@ if (!empty($this->matches))
 						$home = sprintf('%s', $hometeam->name);
 					}
 				}
+                $homeclub = $hometeam->club_id;
+                
+                if ( property_exists($guestteam, "id") )
+                {
 
 				if (!empty($this->ptid))
 				{
@@ -331,8 +348,9 @@ if (!empty($this->matches))
 					}
 				}
 
-				$homeclub = $hometeam->club_id;
+				//$homeclub = $hometeam->club_id;
 				$awayclub = $guestteam->club_id;
+                }
 
 				$favStyle = '';
 				if ($this->config['highlight_fav'] && !$teamid)
@@ -584,6 +602,8 @@ if (!empty($this->matches))
 									);
 								$teamA .= '</td>';
 								$teamB .= '<td class="' . $class2 . '"  id="teamplan-spielgastlogo">';
+                                if ( property_exists($guestteam, "id") )
+                    {
 								$teamB .= sportsmanagementModelProject::getClubIconHtml(
 										$guestteam,
 										1,
@@ -595,6 +615,7 @@ if (!empty($this->matches))
 										$this->modalheight,
 										$this->overallconfig['use_jquery_modal']
 									) . ' ';
+                                    }
 								$teamB .= '</td>';
 							}
 							break;
@@ -615,6 +636,8 @@ if (!empty($this->matches))
 									);
 								$teamA .= '</td>';
 								$teamB .= '<td class="' . $class2 . '" id="teamplan-spielgastlogo">';
+                                if ( property_exists($guestteam, "id") )
+                    {
 								$teamB .= sportsmanagementModelProject::getClubIconHtml(
 										$guestteam,
 										1,
@@ -626,6 +649,7 @@ if (!empty($this->matches))
 										$this->modalheight,
 										$this->overallconfig['use_jquery_modal']
 									) . ' ';
+                                    }
 								$teamB .= '</td>';
 							}
 							break;
@@ -646,6 +670,8 @@ if (!empty($this->matches))
 									);
 								$teamA .= '</td>';
 								$teamB .= '<td class="' . $class2 . '" id="teamplan-spielgastlogo">';
+                                if ( property_exists($guestteam, "id") )
+                    {
 								$teamB .= sportsmanagementModelProject::getClubIconHtml(
 										$guestteam,
 										1,
@@ -657,6 +683,7 @@ if (!empty($this->matches))
 										$this->modalheight,
 										$this->overallconfig['use_jquery_modal']
 									) . ' ';
+                                    }
 								$teamB .= '</td>';
 							}
 							break;
@@ -667,7 +694,10 @@ if (!empty($this->matches))
 								$teamA .= JSMCountries::getCountryFlag($hometeam->country);
 								$teamA .= '</td>';
 								$teamB .= '<td class="' . $class2 . '" id="teamplan-spielgastlogo">';
+                                if ( property_exists($guestteam, "id") )
+                    {
 								$teamB .= JSMCountries::getCountryFlag($guestteam->country);
+                                }
 								$teamB .= '</td>';
 							}
 							break;
@@ -684,20 +714,27 @@ if (!empty($this->matches))
 
 								$teamA .= '</td>';
 								$teamB .= '<td class="' . $class2 . '" id="teamplan-spielgastlogo">';
+                                if ( property_exists($guestteam, "id") )
+                    {
 								$teamB .= sportsmanagementHelper::getPictureThumb(
 									$guestteam->picture,
 									$guestteam->name,
 									$this->config['team_picture_width'],
 									'auto', 1
 								);
+                                }
 								$teamB .= '</td>';
 							}
 							break;
 					}
 
 					$seperator = '<td width="10" id="teamplan-sepeator">' . $this->config['seperator'] . '</td>';
+					//$isFavTeam = in_array($guestteam->id, $this->favteams);
+                    if ( property_exists($guestteam, "id") )
+                    {
 					$isFavTeam = in_array($guestteam->id, $this->favteams);
 					$away      = sportsmanagementHelper::formatTeamName($guestteam, "g" . $match->id . "t" . $guestteam->id, $this->config, $isFavTeam, $awaylink, Factory::getApplication()->input->getInt('cfg_which_database', 0));
+                    }
 					$teamB .= '<td class="' . $class2 . '" id="teamplan-spielgast">' . $away . '</td>';
 
 					if (!$match->cancel)

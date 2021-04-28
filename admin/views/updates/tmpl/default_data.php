@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 $templatesToLoad = array('footer', 'listheader');
 sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
@@ -79,39 +80,34 @@ $this->endPanel = 'endPanel';
 				$link       = 'index.php?option=com_sportsmanagement&tmpl=component&view=update&task=update.save&file_name=' . $row['file_name'];
 				?>
                 <td class="center" nowrap="nowrap">
-                    <!--
-                <a    rel="{handler: 'iframe',size: {x: <?php echo $modalwidth; ?>,y: <?php echo $modalheight; ?>}}"
-                 href="index.php?option=com_sportsmanagement&tmpl=component&view=update&task=update.save&file_name=<?php echo $row['file_name']; ?>"
-                  class="modal">
-                                    <?php
-					echo $row['file_name'];
-					?>
-                            </a>
-                  
-                            <a    href="javascript:openLink('<?php echo $link; ?>')">
-                    <?php
-
-					$image = 'icon-16-Teams.png';
-					$title = '';
-					echo HTMLHelper::_(
-						'image', 'administrator/components/com_sportsmanagement/assets/images/' . $image,
-						Text::_('COM_SPORTSMANAGEMENT_ADMIN_CLUBS_EDIT_DETAILS'),
-						'title= "' . $title . '"'
-					);
-
-
-					?>
-                </a>
-                                    -->
+                   
 					<?PHP
-					$name             = "myModal";
-					$html             = '<a href="#modal-' . $i . '" data-toggle="modal" class="btn">' . $row['file_name'] . '</a>';
-					$params           = array();
-					$params['title']  = "test";
-					$params['url']    = 'index.php?option=com_sportsmanagement&tmpl=component&view=update&task=update.save&file_name=' . $row['file_name'];
-					$params['height'] = 400;
-					$params['width']  = "100%";
-					echo $html .= HTMLHelper::_('bootstrap.renderModal', 'modal-' . $i, $params);
+$link = 'index.php?option=com_sportsmanagement&tmpl=component&view=update&task=update.save&file_name=' . $row['file_name'];
+echo sportsmanagementHelper::getBootstrapModalImage('ModalSelect' . $i, Uri::root() . 'administrator/components/com_sportsmanagement/assets/images/link.png', Text::_('COM_SPORTSMANAGEMENT_ADMIN_UPDATES_MAKE_UPDATE'), '20', Uri::base() . $link, $this->modalwidth, $this->modalheight);
+/*
+$html = '<a href="#' . '" title="' . Text::_('') . '" data-bs-toggle="modal"' .'data-bs-target="#ModalSelect' . $i . '">'.      'starten '.'</a>';
+
+$html .= HTMLHelper::_(
+				'bootstrap.renderModal',
+				'ModalSelect' . $i,
+				array(
+					'title'       => Text::_('COM_SPORTSMANAGEMENT_ADMIN_UPDATES_MAKE_UPDATE'),
+					'url'         => 'index.php?option=com_sportsmanagement&tmpl=component&view=update&task=update.save&file_name=' . $row['file_name'],
+					'height'      => '400px',
+					'width'       => '800px',
+					'bodyHeight'  => 70,
+					'modalWidth'  => 80,
+					'footer'      => '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">'
+										. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>',
+				)
+			);
+echo $html;		
+*/
+echo $row['file_name'];
+
+
+
+
 
 					?>
                 </td>

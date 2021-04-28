@@ -1,23 +1,36 @@
 // ajax save substitution
-window.addEvent('domready', function()
-{	
-// neuen wechsel speichern     
-$$(".button-save-subst").addEvent('click', save_new_subst);
+jQuery(document).ready(function($){
+	
+// neuen kommentar speichern 	
+$(".button-save-comment").on('click', function(event){
+    save_new_comment();
+});	
+// neuen wechsel speichern    
+$(".button-save-subst").on('click', function(event){
+    save_new_subst();
+});	
 // neues ereignis speichern  
-$$(".button-save-event").addEvent('click', save_new_event);
-// neuen kommentar speichern  
-$$(".button-save-comment").addEvent('click', save_new_comment);
+$(".button-save-event").on('click', function(event){
+    save_new_event();
+});	
 // hier wird die funktion für das löschen der
 // wechsel hinzugefügt
-$$(".button-delete-subst").addEvent('click', button_delete_subst);
+$(".button-delete-subst").on('click', function(event){
+    button_delete_subst();
+});	
 // hier wird die funktion für das löschen der
-// kommentare hinzugefügt
-$$(".button-delete-commentary").addEvent('click', button_delete_commentary);
+// kommentare hinzugefügt	
+$(".button-delete-commentary").on('click', function(event){
+    button_delete_commentary();
+});		
+// hier wird die funktion für das löschen der
+// ereignis hinzugefügt	
+$(".button-delete-event").on('click', function(event){
+    button_delete_event();
+});			
 
-// hier wird die funktion für das löschen der
-// ereignis hinzugefügt
-//$$(".button-delete-event").addEvent('click', button_delete_event);
 	
+
 });
 
 // hier sind die funktionen

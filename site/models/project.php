@@ -141,6 +141,13 @@ class sportsmanagementModelProject extends BaseDatabaseModel
 	 * @var array
 	 */
 	var $_matches = null;
+    
+    /** @var    array    An array of tips */
+	static $tips = array();
+	/** @var    array    An array of warnings */
+	static $warnings = array();
+    /** @var    array    An array of notes */
+	static $notes = array();
 
 	/**
 	 * sportsmanagementModelProject::__construct()
@@ -639,16 +646,11 @@ class sportsmanagementModelProject extends BaseDatabaseModel
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
 
-		// Get a db connection.
 		$db    = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query = $db->getQuery(true);
 
 		$query->select('id');
-
-		// From
 		$query->from('#__sportsmanagement_division');
-
-		// Where
 		$query->where('project_id = ' . (int) self::$projectid);
 
 		if ($divLevel == 1)
@@ -665,18 +667,13 @@ class sportsmanagementModelProject extends BaseDatabaseModel
 
 		if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
-			// Joomla! 3.0 code here
 			$res = $db->loadColumn();
-		}
-		elseif (version_compare(JVERSION, '2.5.0', 'ge'))
-		{
-			// Joomla! 2.5 code here
-			$res = $db->loadResultArray();
 		}
 
 		if (count($res) == 0)
 		{
-			echo Text::_('COM_SPORTSMANAGEMENT_RANKING_NO_SUBLEVEL_DIVISION_FOUND') . $divLevel;
+			//echo Text::_('COM_SPORTSMANAGEMENT_RANKING_NO_SUBLEVEL_DIVISION_FOUND') . $divLevel;
+            self::$warnings[] = Text::_('COM_SPORTSMANAGEMENT_RANKING_NO_SUBLEVEL_DIVISION_FOUND') . $divLevel;
 		}
 
 		return $res;
@@ -1024,19 +1021,20 @@ class sportsmanagementModelProject extends BaseDatabaseModel
 		}
 	}
 
+	
 	/**
 	 * sportsmanagementModelProject::getEventTypes()
-	 *
-	 * @param   integer  $evid
-	 *
+	 * 
+	 * @param string $evid
+	 * @param integer $cfg_which_database
+	 * @param integer $sports_type_id
 	 * @return
 	 */
-	public static function getEventTypes($evid = '', $cfg_which_database = 0)
+	public static function getEventTypes($evid = '', $cfg_which_database = 0, $sports_type_id = 0)
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
 
-		// Get a db connection.
 		$db    = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query = $db->getQuery(true);
 
@@ -1048,8 +1046,12 @@ class sportsmanagementModelProject extends BaseDatabaseModel
 
 		if ($evid)
 		{
-			$query->where("me.event_type_id IN (" . $evid . ")");
+		$query->where("me.event_type_id IN (" . $evid . ")");
 		}
+        if ( $sports_type_id )
+        {
+        $query->where('et.sports_type_id = ' . $sports_type_id);
+        }
 
 		$db->setQuery($query);
 		$result = $db->loadObjectList('etid');

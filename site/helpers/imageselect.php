@@ -187,8 +187,7 @@ document.getElementById('" . $fieldid . "_preview').src = pictureprev;
 			
 			
 		//window.addEvent('domready', function()
-        jQuery(document).ready(function()
-		{
+        jQuery(document).ready(function(){
 		console.log('fieldid: " . $fieldid . "');	
 		select = document.getElementById('" . $fieldid . "').value;
 		console.log('select : ' + select  );
@@ -278,7 +277,12 @@ $imageselect .= sportsmanagementHelper::getBootstrapModalImage('select' . $funcn
 			Text::_('JCLEAR') . "\" href=\"#\" onclick=\"clear_" . $fieldid . "();\">" . Text::_('JCLEAR') . "</a></div></div>";
 
 		$imageselect .= "</td></tr>\n";
-		$imageselect .= "\n<tr><td><input type=\"hidden\" id=\"a_" . $fieldname . "\" name=\"" . $fieldname . "\" value=\"" . $value . "\" /></td></tr></table>";
+		$imageselect .= "\n<tr><td><input type=\"hidden\" id=\"a_" . $fieldname . "\" name=\"" . $fieldname . "\" value=\"" . $value . "\" /></td></tr>";
+        if ( $type == 'events' )
+        {
+        $imageselect .= "\n<tr><td><input type=\"hidden\" id=\"copy_" . $fieldid . "\" name=\"" . $fieldname . "\" value=\"" . $value . "\" /></td></tr>";
+        }
+        $imageselect .= "\n</table>";
 
 		return $imageselect;
 	}
