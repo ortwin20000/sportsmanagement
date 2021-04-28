@@ -1004,11 +1004,13 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 			$abpfiff = date('H:i', strtotime($time) + ($gcalendar_id->game_regular_time + $gcalendar_id->halftime) * 60);
 
 			$start->setDateTime($date2 . 'T' . $anstoss . date("P", strtotime($row->match_date)));
+			$start->setDateTime($date2 . 'T' . $anstoss . '+02:00');
 			$start->setTimeZone($row->timezone);
 			$event->setStart($start);
 
 			$end = new Google_Service_Calendar_EventDateTime;
 			$end->setDateTime($date2 . 'T' . $abpfiff . ':00' . date("P", strtotime($date2 . ' ' . $abpfiff . ':00')));
+			$end->setDateTime($date2 . 'T' . $abpfiff . ':00+02:00');
 			$end->setTimeZone($row->timezone);
 			$event->setEnd($end);
 
@@ -1308,7 +1310,11 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 
 			$object->projectteam1_id         = $post['projectteam1_id' . $pks[$x]];
 			$object->projectteam2_id         = $post['projectteam2_id' . $pks[$x]];
+<<<<<<< HEAD
+			$object->playground_id         = $post['playground_id' . $pks[$x]];
+=======
 
+>>>>>>> upstream/master
 			$object->team1_single_matchpoint = $post['team1_single_matchpoint' . $pks[$x]];
 			$object->team2_single_matchpoint = $post['team2_single_matchpoint' . $pks[$x]];
             
