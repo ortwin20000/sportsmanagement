@@ -93,7 +93,7 @@ $logo_width            = ComponentHelper::getParams($option)->get('logo_picture_
 	<?php echo Text::_("COM_SPORTSMANAGEMENT_VERSION"); ?> :
 	<?php
 	// Echo HTMLHelper::link('index.php?option='.$option.'&amp;view=about',sprintf('Version %1$s (diddipoeler)',sportsmanagementHelper::getVersion()));
-	echo sprintf('%1$s (diddipoeler)', sportsmanagementHelper::getVersion());
+	echo sprintf('%1$s (diddipoeler) - Anpassungen für Faustball von Andreas Haunold', sportsmanagementHelper::getVersion());
 	?>
     <br/>
 
