@@ -1310,11 +1310,7 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 
 			$object->projectteam1_id         = $post['projectteam1_id' . $pks[$x]];
 			$object->projectteam2_id         = $post['projectteam2_id' . $pks[$x]];
-<<<<<<< HEAD
 			$object->playground_id         = $post['playground_id' . $pks[$x]];
-=======
-
->>>>>>> upstream/master
 			$object->team1_single_matchpoint = $post['team1_single_matchpoint' . $pks[$x]];
 			$object->team2_single_matchpoint = $post['team2_single_matchpoint' . $pks[$x]];
             
