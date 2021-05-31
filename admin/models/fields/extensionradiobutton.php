@@ -11,7 +11,7 @@
  * https://hotexamples.com/examples/-/FormFieldRadio/-/php-FormFieldradio-class-examples.html
  */
 defined('_JEXEC') or die;
-use Joomla\CMS\Form\Field\RadioField;
+JFormHelper::loadFieldClass('radio');
 
 /**
  * welche joomla version ?
@@ -25,8 +25,6 @@ if (version_compare(substr(JVERSION, 0, 1), '4', 'eq'))
 }
 else
 {
-	#include_once JPATH_LIBRARIES . '/joomla/form/fields/radio.php';
-
 	class JSMFormField extends JFormFieldRadio
 	{
 
