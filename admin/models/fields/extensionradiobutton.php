@@ -25,7 +25,7 @@ if (version_compare(substr(JVERSION, 0, 1), '4', 'eq'))
 }
 else
 {
-	include_once JPATH_LIBRARIES . '/joomla/form/fields/radio.php';
+	JFormHelper::loadFieldClass('radio');
 
 	class JSMFormField extends JFormFieldRadio
 	{
