@@ -125,7 +125,8 @@ class modJSMCalendarHelper
 
 		foreach ($cal::$matches as $row)
 		{
-			$created = new Date($row['date'], $offset);
+			// $created = new Date($row['date'], $offset);
+			$created = new Date($row['date']);
 
 			if (version_compare(JVERSION, '3.0.0', 'ge'))
 			{
