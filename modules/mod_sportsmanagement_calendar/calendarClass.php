@@ -256,6 +256,7 @@ class PHPCalendar
 						$todaylink = $click;
 						$s         .= $class . 'jlcCalendarTodayLink' . $tdEnd
 							. '<a class="hasTip jlcCalendarToday jlcmodal' . $this->modid . '"'
+							. ' data-bs-toggle="modal" data-bs-target="#myModal' . $this->modid . '"'
 							. ' href="' . $link . '" onclick="' . $click . '"';
 						$s         .= $modalrel . " >$divday</a>";
 					}
