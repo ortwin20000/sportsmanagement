@@ -263,6 +263,7 @@ class PHPCalendar
 					{
 						$s .= (($link == "") ? $class . $tdEnd . $divday : "jlcCalendarDay"
 							. $tdEnd . '<a class="jlcCalendarDay hasTip jlcmodal' . $this->modid
+							. '" data-bs-toggle="modal" data-bs-target="#myModal' . $this->modid
 							. '" href="' . $link . '" onclick="' . $click . '"'
 							. $modalrel . " >$divday</a>");
 					}

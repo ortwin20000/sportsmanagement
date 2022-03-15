@@ -227,7 +227,8 @@ class modJSMCalendarHelper
 		$row = $db->loadObjectList();
 
 		jimport('joomla.utilities.date');
-		$created = new Date($row[0]->match_date, $offset);
+		// $created = new Date($row[0]->match_date, $offset);
+		$created = new Date($row[0]->match_date);
 
 		if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
@@ -690,7 +691,8 @@ class JSMCalendar extends PHPCalendar
 			$row    = $matches[$x];
 			$thispm = $row['project_id'] . '_' . $row['matchcode'] . '_' . $row['type'];
 
-			$da = new Date($row['date'], $offset);
+			// $da = new Date($row['date'], $offset);
+			$da = new Date($row['date']);
 
 			if ($div != $da->$dateformat($dateoutformat))
 			{
@@ -712,7 +714,8 @@ class JSMCalendar extends PHPCalendar
 
 			if (isset($matches[$x + 1]))
 			{
-				$nd = new Date($matches[$x + 1]['date'], $offset);
+				// $nd = new Date($matches[$x + 1]['date'], $offset);
+				$nd = new Date($matches[$x + 1]['date']);
 			}
 			else
 			{
