@@ -1583,8 +1583,18 @@ $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($t
 			{
 			if ( is_array($post['team1_result_split' . $pks[$x]]) )
 				{
-$object->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
-			$object->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);
+					foreach($post['team1_result_split' . $pks[$x]] as $value)
+					{
+						$result_split[] = preg_replace( '/[^0-9]/', '', $value );
+					}			
+					$post['team1_result_split' . $pks[$x]] = $result_split;
+					$object->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
+					foreach($post['team2_result_split' . $pks[$x]] as $value)
+					{
+						$result_split2[] = preg_replace( '/[^0-9]/', '', $value );
+					}
+					$post['team2_result_split' . $pks[$x]] = $result_split2;
+					$object->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);
 				}
 }
 			catch (Exception $e)
