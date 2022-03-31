@@ -140,7 +140,7 @@ if ($this->templateConfig['show_id'] == 1) $columns++;
                     <p class="smallsub">
 						<?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($this->item->alias)); ?></p>
                 </td>
-                <td class="center">
+                <td class="center" id="round_date_first4">
 					<?php
 
 					/**
@@ -156,10 +156,15 @@ if ($this->templateConfig['show_id'] == 1) $columns++;
 					 * echo HTMLHelper::_('calendar', Factory::getDate()->format('Y-m-d'), 'date', 'date', '%Y-%m-%d', $attribs); ?>
 					 */
 
-
+/*
 					$attribs = array(
 						'onChange' => "document.getElementById('cb" . $this->count_i . "').checked=true",
 					);
+			*/
+$attribs['class'] = 'input-large';
+$attribs['size'] = '10';
+$attribs['maxlength'] = '10';
+$attribs['onChange'] = "document.getElementById('cb" . $this->count_i . "').checked=true";			
 					$date1   = sportsmanagementHelper::convertDate($this->item->round_date_first, 1);
 					$append  = '';
 					if (($date1 == '00-00-0000') || ($date1 == ''))
@@ -177,7 +182,7 @@ if ($this->templateConfig['show_id'] == 1) $columns++;
 					?>
                 </td>
                 <td class="center">&nbsp;-&nbsp;</td>
-                <td class="center">
+                <td class="center" id="round_date_last4">
 					<?php
 					$date2  = sportsmanagementHelper::convertDate($this->item->round_date_last, 1);
 					$append = '';
