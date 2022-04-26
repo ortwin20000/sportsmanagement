@@ -1,0 +1,85 @@
+<changelogs>
+<!--
+	<changelog>
+		<element>com_sportsmanagement</element>
+		<type>component</type>
+		<version>3.15.00</version>
+		<note>
+			<item>Initial Version</item>
+		</note>
+		<security>
+			<item><![CDATA[<p>No security issues.</p>]]></item>
+		</security>
+		<fix>
+			<item>No fix</item>
+		</fix>
+		<language>
+			<item>German</item>
+		</language>
+		<addition>
+			<item>Change log Server added.</item>
+		</addition>
+		<change>
+			<item>No change</item>
+		</change>
+		<remove>
+			<item>No remove</item>
+		</remove>
+		
+		
+	</changelog>
+	-->
+	<changelog>
+		<element>com_sportsmanagement</element>
+		<type>component</type>
+		<version>3.16.00</version>
+		<security>
+			<item><![CDATA[<p>No security issues.</p>]]></item>
+		</security>
+		<fix>
+			
+			
+			<item>Vereins Wappen hochladen name wird zu Symbole
+#1284 closed 16 hours ago</item>
+<item>
+Joomla 4: Datumsanzeige bei Spielen
+#1423 closed yesterday</item>
+<item>
+Create an easy way to add (your) page to a list of sites that use JSM
+#1344 closed 2 days ago</item>
+<item>
+J4: Spieldetails bearbeiten Backend
+#1438 closed 2 days ago</item>
+<item>
+J4: Anlegen Statistik
+#1433 closed 2 days ago</item>
+<item>
+J4: Buttons mit Mehrfachauswahl
+#1434 closed 3 days ago</item>
+<item>
+Joomla 4: Ergebnisbearbeitung im Frontend wird nicht angezeigt
+#1273 closed 3 days ago</item>
+<item>
+Mannschaftsbeschreibung wird nicht im Frontend angezeigt
+#1420 closed 6 days ago</item>
+<item>
+J4: Matchreport
+#1432 closed 6 days ago</item>
+		</fix>
+		<language>
+			<item>German</item>
+		</language>
+		<addition>
+			<item>Neues Feld im Projekt zur Eingabe Mehrfachereignisse</item>
+		</addition>
+		<change>
+			<item>No change</item>
+		</change>
+		<remove>
+			<item>No remove</item>
+		</remove>
+		<note>
+			<item>Neues Feld im Projekt zur Eingabe Mehrfachereignisse</item>
+		</note>
+	</changelog>
+</changelogs>

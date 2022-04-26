@@ -118,8 +118,8 @@ public static function getMatchReferees($match_id = 0, $cfg_which_database = 0)
         if ( $total_referees )
         {
         $query->clear();
-		$query->select('p.id,pref.id AS person_id,p.firstname,p.lastname,pos.name AS position_name,CONCAT_WS(\':\',p.id,p.alias) AS person_slug');
-		$query->select('mr.project_position_id,pos.name as position_name');
+		$query->select('p.id,pref.id AS person_id,p.firstname,p.lastname,pos.name AS position_name,CONCAT_WS(\':\',p.id,p.alias) AS person_slug,p.nickname ');
+		$query->select('mr.project_position_id,pos.name as position_name,pref.picture');
 		$query->from('#__sportsmanagement_match_referee AS mr');
 		$query->join('LEFT', '#__sportsmanagement_project_referee AS pref ON mr.project_referee_id=pref.id');
 		$query->join('INNER', '#__sportsmanagement_season_person_id AS spi ON pref.person_id=spi.id');
@@ -3464,18 +3464,31 @@ $jinput = $app->input;
 		{
 			case 'com_content':
 				$query->from('#__content as c');
+				$query->order('created DESC');
 				break;
 			case 'com_k2':
 				$query->from('#__k2_items as c');
+				$query->order('created DESC');
 				break;
 			default:
 				$query->from('#__content as c');
 				break;
 		}
 
+		if ( $project_category_id )
+		{
 		$query->where('catid =' . $project_category_id);
+		}
+		try{
 		Factory::getDBO()->setQuery($query);
 		$result = Factory::getDBO()->loadObjectList();
+	}
+catch (RuntimeException $e)
+				{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+$app->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($query->dump(), true) . '</pre>', 'Error');
+				}
 
 		return $result;
 	}
