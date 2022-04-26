@@ -1581,22 +1581,24 @@ $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($t
 
 			try
 			{
-			if ( is_array($post['team1_result_split' . $pks[$x]]) )
+				if ( is_array($post['team1_result_split' . $pks[$x]]) )
 				{
 					foreach($post['team1_result_split' . $pks[$x]] as $value)
 					{
 						$result_split[] = preg_replace( '/[^0-9]/', '', $value );
 					}			
 					$post['team1_result_split' . $pks[$x]] = $result_split;
+					unset($result_split);
 					$object->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
 					foreach($post['team2_result_split' . $pks[$x]] as $value)
 					{
-						$result_split2[] = preg_replace( '/[^0-9]/', '', $value );
+						$result_split[] = preg_replace( '/[^0-9]/', '', $value );
 					}
-					$post['team2_result_split' . $pks[$x]] = $result_split2;
+					$post['team2_result_split' . $pks[$x]] = $result_split;
+					unset($result_split);
 					$object->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);
 				}
-}
+			}
 			catch (Exception $e)
 			{
         $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
