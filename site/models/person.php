@@ -214,44 +214,66 @@ class sportsmanagementModelPerson extends BaseDatabaseModel
 	 */
 	function _getProjectTeamIds4UserId($userId)
 	{
+	   $app = Factory::getApplication();
+	   $db = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
+	$query = $db->getQuery(true);
+    $projectTeamIds = array();
+    $res = array();
+    
 		/** Team player */
-        self::$jsmquery->clear(); 
-		self::$jsmquery->select('tp.projectteam_id');
-		self::$jsmquery->from('#__sportsmanagement_person AS pr');
-		self::$jsmquery->join('INNER', '#__sportsmanagement_season_team_person_id AS tp ON tp.person_id = pr.id');
-		self::$jsmquery->where('pr.user_id = ' . $userId);
-		self::$jsmquery->where('pr.published = 1');
-		self::$jsmquery->where('tp.persontype = 1');
-
-		self::$jsmdb->setQuery(self::$jsmquery);
-
-		$projectTeamIds = array();
-
-		if (version_compare(JVERSION, '3.0.0', 'ge'))
+        $query->clear(); 
+		$query->select('st1.id');
+		$query->from('#__sportsmanagement_person AS pr');
+		$query->join('INNER', '#__sportsmanagement_season_team_person_id AS tp ON tp.person_id = pr.id');
+        $query->join('INNER', '#__sportsmanagement_season_team_id as st1 ON st1.team_id = tp.team_id AND st1.season_id = tp.season_id');
+		$query->where('pr.user_id = ' . $userId);
+		$query->where('pr.published = 1');
+		$query->where('tp.persontype = 1');
+try
+{
+$db->setQuery($query);
+if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
 			/** Joomla! 3.0 code here */
-			$projectTeamIds = self::$jsmdb->loadColumn();
+			$projectTeamIds = $db->loadColumn();
 		}
+}
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+}
 
 		/** Team_staff */
-        self::$jsmquery->clear(); 
-		self::$jsmquery->select('tp.projectteam_id');
-		self::$jsmquery->from('#__sportsmanagement_person AS pr');
-		self::$jsmquery->join('INNER', '#__sportsmanagement_season_team_person_id AS tp ON tp.person_id = pr.id');
-		self::$jsmquery->where('pr.user_id = ' . $userId);
-		self::$jsmquery->where('pr.published = 1');
-		self::$jsmquery->where('tp.persontype = 2');
+        $query->clear(); 
+		$query->select('st1.id');
+		$query->from('#__sportsmanagement_person AS pr');
+		$query->join('INNER', '#__sportsmanagement_season_team_person_id AS tp ON tp.person_id = pr.id');
+        $query->join('INNER', '#__sportsmanagement_season_team_id as st1 ON st1.team_id = tp.team_id AND st1.season_id = tp.season_id');
+		$query->where('pr.user_id = ' . $userId);
+		$query->where('pr.published = 1');
+		$query->where('tp.persontype = 2');
 
-		self::$jsmdb->setQuery(self::$jsmquery);
-
+try
+{
+		$db->setQuery($query);
 		if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
 			/** Joomla! 3.0 code here */
-			$res = self::$jsmdb->loadColumn();
+			$res = $db->loadColumn();
 		}
+}
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+}
+
+
+
 		
 		$projectTeamIds = array_merge($projectTeamIds, $res);
-		self::$jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
+		$db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
 		return $projectTeamIds;
 	}
 
