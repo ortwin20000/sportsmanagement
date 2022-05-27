@@ -851,11 +851,11 @@ class sportsmanagementViewResults extends sportsmanagementView
 		$part_results_left  = explode(";", $game->team1_result_split);
 		$part_results_right = explode(";", $game->team2_result_split);
 
-		if ($config['show_part_results'])
+		if ($config['show_part_results'] && $game->team1_result != null && $game->team2_result != null)
 		{
 			for ($i = 0; $i < count($part_results_left); $i++)
 			{
-				if (isset($part_results_left[$i]))
+				if (isset($part_results_left[$i]) && $part_results_left[$i] != "")
 				{
 					$resultS     = $part_results_left[$i] . '&nbsp;' . $config['seperator'] . '&nbsp;' . $part_results_right[$i];
 					$whichPeriod = $i + 1;
@@ -1231,7 +1231,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				}
 				else
 				{
-					echo '$(\'cb' . $i . '\').checked=true;';
+					echo "document.getElementById('cb" . $i . "').checked=true;";
 				}
 
 				echo '"';
@@ -1256,7 +1256,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 				}
 				else
 				{
-					echo "document.getElementById('cb" . $i . "').checked=true;";
+					echo '$(\'cb' . $i . '\').checked=true;';
 				}
 
 				echo '"';
