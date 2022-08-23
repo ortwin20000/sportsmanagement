@@ -1493,5 +1493,81 @@ class sportsmanagementHelperHtml
 			return HTMLHelper::image($img, $alt, $attributes);
 		}
 	}
+	
+	/**
+	 * return thumb up/down image url if team won/loss
+	 *
+	 * @param   object  $game
+	 * @param   int     $projectteam_id
+	 * @param   array attributes
+	 *
+	 * @return string image html code
+	 */
+	public static function getCertifiedImg($game)
+	{
+		$params         = ComponentHelper::getParams('com_sportsmanagement');
+		$usefontawesome = $params->get('use_fontawesome');
 
+		if ($game->certified == 0)
+		{
+			if (version_compare(JVERSION, '4.0.0', 'ge'))
+			{
+				$icon       = 'fa-thumbs-down';
+				$alt        = "Nicht Beglaubigt";
+				$title      = $alt;
+				$icon_color = '" style="color:red';
+			}
+			elseif ($usefontawesome)
+			{
+				$icon       = 'fa-thumbs-down';
+				$alt        = "Nicht Beglaubigt";
+				$title      = $alt;
+				$icon_color = 'lost';
+			}
+			else
+			{
+				$img   = 'media/com_sportsmanagement/jl_images/thumbs_down.png';
+				$alt   = "Nicht Beglaubigt";
+				$title = $alt;
+			}
+		}
+		else
+		{
+			if (version_compare(JVERSION, '4.0.0', 'ge'))
+			{
+				$icon       = 'fa-thumbs-up';
+				$alt        = "Beglaubigt";
+				$title      = $alt;
+				$icon_color = '" style="color:green';
+			}
+			elseif($usefontawesome)
+			{
+				$icon       = 'fa-thumbs-up';
+				$alt        = "Beglaubigt";
+				$title      = $alt;
+				$icon_color = 'won';
+			}
+			else
+			{
+				$img   = 'media/com_sportsmanagement/jl_images/thumbs_up.png';
+				$alt   = "Beglaubigt";
+				$title = $alt;
+			}
+		}
+
+		// Default title attribute, if not specified in passed attributes
+		$attributes = array('title' => $title);
+
+		if (version_compare(JVERSION, '4.0.0', 'ge') || $usefontawesome)
+		{
+			return '<span class="fa-stack fa-xs ' . $icon_color . '">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa ' . $icon . ' fa-stack-1x fa-inverse" title="' . implode("|", $attributes) . '"></i>
+                    </span>';
+		}
+		else
+		{
+			return HTMLHelper::image($img, $alt, $attributes);
+		}
+	}
 }
