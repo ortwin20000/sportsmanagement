@@ -1213,14 +1213,16 @@ try
 		return $result;
 	}
 
+	
 	/**
-	 *
-	 * @param   string  $data
-	 * @param   string  $file
-	 *
-	 * @return object
+	 * sportsmanagementHelper::getExtendedStatistic()
+	 * 
+	 * @param string $data
+	 * @param string $file
+	 * @param string $format
+	 * @return
 	 */
-	static function getExtendedStatistic($data = '', $file, $format = 'ini')
+	static function getExtendedStatistic($data = '', $file = '', $format = 'ini')
 	{
 		$app          = Factory::getApplication();
 		$templatepath = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'statistics';
@@ -1231,15 +1233,17 @@ try
 		return $extended;
 	}
 
+	
 	/**
-	 * support for extensions which can overload extended data
-	 *
-	 * @param   string  $data
-	 * @param   string  $file
-	 *
-	 * @return object
+	 * sportsmanagementHelper::getExtended()
+	 * 
+	 * @param string $data
+	 * @param string $file
+	 * @param string $format
+	 * @param bool $frontend
+	 * @return
 	 */
-	static function getExtended($data = '', $file, $format = 'ini', $frontend = false)
+	static function getExtended($data = '', $file = '', $format = 'ini', $frontend = false)
 	{
 		$app     = Factory::getApplication();
 		$xmlfile = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'extended' . DIRECTORY_SEPARATOR . $file . '.xml';
@@ -1291,16 +1295,16 @@ try
 		}
 	}
 
+
 	/**
 	 * sportsmanagementHelper::getExtendedUser()
-	 *
-	 * @param   string  $data
-	 * @param   mixed   $file
-	 * @param   string  $format
-	 *
+	 * 
+	 * @param string $data
+	 * @param string $file
+	 * @param string $format
 	 * @return
 	 */
-	static function getExtendedUser($data = '', $file, $format = 'ini')
+	static function getExtendedUser($data = '', $file = '', $format = 'ini')
 	{
 		$app     = Factory::getApplication();
 		$xmlfile = JPATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'extendeduser' . DIRECTORY_SEPARATOR . $file . '.xml';
