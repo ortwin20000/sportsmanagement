@@ -36,7 +36,7 @@ use Joomla\CMS\Uri\Uri;
 </script>
 
 <?php
-$nbcols        = 6;
+$nbcols        = 7;
 $nbcols_header = 0;
 $dates         = sportsmanagementViewResults::sortByDate($this->matches);
 
@@ -700,7 +700,9 @@ if ($this->config['show_comments_count'])
 							<?php
 						}
 						?>
-
+						<td width="" class="" id="">
+							<?php echo sportsmanagementHelperHtml::getCertifiedImg($game); ?>
+						</td>
 						<?php
 						if ($this->config['show_attendance_column'])
 						{
