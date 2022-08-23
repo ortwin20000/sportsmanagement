@@ -897,6 +897,11 @@ class sportsmanagementModelResults extends JSMModelList
 				}
 			}
 
+			if (isset($post['certified' . $pks[$x]]))
+			{
+				$object->certified = $post['certified' . $pks[$x]];
+			}
+			
 			if ($post['match_number' . $pks[$x]])
 			{
 				$object->match_number = $post['match_number' . $pks[$x]];

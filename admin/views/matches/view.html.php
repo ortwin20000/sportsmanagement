@@ -19,6 +19,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
 
 /**
  * sportsmanagementViewMatches
@@ -318,6 +319,21 @@ class sportsmanagementViewMatches extends sportsmanagementView
 			ToolbarHelper::divider();
 			ToolbarHelper::publish('matches.count_result_yes', 'COM_SPORTSMANAGEMENT_ADMIN_MATCH_F_AD_INCL', true);
 			ToolbarHelper::unpublish('matches.count_result_no', 'COM_SPORTSMANAGEMENT_ADMIN_MATCH_F_AD_INCL', true);
+			
+			$db     = Factory::getDBO();
+			$query  = $db->getQuery(true);
+			$query->select('id, title');
+			$query->from('#__usergroups');
+			$query->where('title="Beglaubigte"');
+			$db->setQuery($query);
+			$rows	= $db->loadRow();
+			$myGroups = Access::getGroupsByUser(Factory::getUser()->get('id'), false);
+			if (in_array($rows[0], $myGroups))
+			{
+				ToolbarHelper::publish('matches.certified_result_yes', 'Beglaubigt', true);
+				ToolbarHelper::unpublish('matches.certified_result_no', 'Nicht beglaubigt', true);
+			}
+			
 			ToolbarHelper::divider();
 			ToolbarHelper::publish('matches.publish', 'JTOOLBAR_PUBLISH', true);
 			ToolbarHelper::unpublish('matches.unpublish', 'JTOOLBAR_UNPUBLISH', true);

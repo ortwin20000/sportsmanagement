@@ -843,6 +843,37 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 	}
 
 	/**
+	 * sportsmanagementModelMatch::certified_result()
+	 *
+	 * @param   integer  $certified_result
+	 *
+	 * @return void
+	 */
+	function certified_result($certified_result = 0)
+	{
+		$pks    = $this->jsmjinput->getVar('cid', null, 'post', 'array');
+		$post   = $this->jsmjinput->post->getArray(array());
+		$result = true;
+		for ($x = 0; $x < count($pks); $x++)
+		{
+			$object               = new stdClass;
+			$object->id           = $pks[$x];
+			$object->certified = $certified_result;
+			try
+			{
+				$result_update = $this->jsmdb->updateObject('#__sportsmanagement_match', $object, 'id', true);
+				sprintf(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_SAVED'), $pks[$x]);
+				$this->jsmapp->enqueueMessage(sprintf(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_SAVED'), $pks[$x]), 'Notice');
+			}
+			catch (Exception $e)
+			{
+				$this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_($e->getMessage()), 'Error');
+				$result = false;
+			}
+		}
+	}
+
+	/**
 	 * sportsmanagementModelMatch::getProjectRoundCodes()
 	 *
 	 * @param   mixed  $project_id
@@ -4579,6 +4610,38 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Method to update checked project match
+	 *
+	 * @access public
+	 * @return boolean    True on success
+	 */
+	function certified()
+	{
+		$pks  = $this->jsmapp->input->getVar('cid', null, 'post', 'array');
+		$object               = new stdClass;
+		$object->id           = $pks[0];
+		$object->certified = 1;
+		$result = $this->jsmdb->updateObject('#__sportsmanagement_match', $object, 'id', true);
+		return $result;
+	}
+	
+	/**
+	 * Method to update checked project match
+	 *
+	 * @access public
+	 * @return boolean    True on success
+	 */
+	function uncertified()
+	{
+		$pks  = $this->jsmapp->input->getVar('cid', null, 'post', 'array');
+		$object               = new stdClass;
+		$object->id           = $pks[0];
+		$object->certified = 0;
+		$result = $this->jsmdb->updateObject('#__sportsmanagement_match', $object, 'id', true);
+		return $result;
 	}
 }
 
