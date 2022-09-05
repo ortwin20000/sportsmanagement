@@ -45,11 +45,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		$option = $jinput->getCmd('option');
 		$model  = $this->getModel();
 		$params = ComponentHelper::getParams($option);
-//		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/jquery.datetimepicker.css');
-//		$this->document->addScript(Uri::root() . 'administrator/components/com_sportsmanagement/assets/js/jquery.datetimepicker.js');
-//		$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/datetimepicker.css');
-//		$this->document->addScript(Uri::root() . 'administrator/components/com_sportsmanagement/assets/js/datetimepicker.js');
-		
+
 		$view = $jinput->get('view');
 		$_db  = sportsmanagementHelper::getDBConnection(); // The method is contextual so we must have a DBO
 
@@ -331,9 +327,9 @@ class sportsmanagementViewMatches extends sportsmanagementView
 			if (in_array($rows[0], $myGroups))
 			{
 				ToolbarHelper::publish('matches.certified_result_yes', 'Beglaubigt', true);
+				ToolbarHelper::custom('matches.certified_result_penalty', 'warning.png', 'warning.png', 'Straf-Beglaubigt', false);
 				ToolbarHelper::unpublish('matches.certified_result_no', 'Nicht beglaubigt', true);
 			}
-			
 			ToolbarHelper::divider();
 			ToolbarHelper::publish('matches.publish', 'JTOOLBAR_PUBLISH', true);
 			ToolbarHelper::unpublish('matches.unpublish', 'JTOOLBAR_UNPUBLISH', true);

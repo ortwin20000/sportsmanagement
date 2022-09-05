@@ -801,9 +801,12 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 						<td class="center">
                         <div class="btn-group">
 							<?php echo HTMLHelper::_('jgrid.state', array(
-								1 => array('uncertified', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', false, 'publish', 'unpublish'),
-								0 => array('certified', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', false, 'unpublish', 'unpublish')),
-								$row->certified, $i, 'matches.', $canChange, true, 'cb'); ?>
+									2 => array('uncertified', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', false, 'warning', 'penalty'),
+									1 => array('uncertified', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', false, 'publish', 'publish'),
+									0 => array('certified', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', false, 'unpublish', 'unpublish')),
+									$row->certified, $i, 'matches.', true, true, 'cb');
+									HTMLHelper::_('actionsdropdown.' . ((int) $row->certified === 2 ? 'un' : '') . 'penalty', 'cb' . $i, 'matches');
+									echo HTMLHelper::_('actionsdropdown.render', $this->escape($row->id)); ?>
 						</div>
                     </td>
 					<?php } ?>

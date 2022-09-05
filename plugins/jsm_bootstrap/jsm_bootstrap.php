@@ -78,7 +78,7 @@ class PlgSystemjsm_bootstrap extends CMSPlugin
      * @param  mixed $params
      * @return void
      */
-    public function __construct(&$subject, $params)
+	public function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
 
@@ -86,6 +86,14 @@ class PlgSystemjsm_bootstrap extends CMSPlugin
         $this->loadLanguage();
         $this->config = $params;
         $this->subject = $subject;
+    }
+
+	private function getAssetPath($relative)
+    {
+        $path = __DIR__ . '/' . $relative;
+        $hash = md5_file($path);
+
+        return JURI::base(true) . '/plugins/system/jsm_bootstrap/' . $relative . '?' . $hash;
     }
 
     /**
@@ -142,7 +150,8 @@ class PlgSystemjsm_bootstrap extends CMSPlugin
                     unset($document->_scripts[$key]);
                 }
             }
-                Factory::getDocument()->addScript('http://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js');
+            Factory::getDocument()->addScript($this->getAssetPath('js/ajax.jquery.min.js'));  
+			//Factory::getDocument()->addScript('https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js');
         }          
     }
 
@@ -315,14 +324,14 @@ if ($this->params->def('load_buttons', 0)) {
             if ($this->params->def('load_bootstrap_modal', 1)) {
                 if (!$app->isClient('administrator')) {
                     //CBootstrap::load();
-                    Factory::getDocument()->addScript('https://netdna.bootstrapcdn.com/twitter-bootstrap/2.0.4/js/bootstrap-modal.js');
+                    Factory::getDocument()->addScript($this->getAssetPath('js/bootstrap-modal.js'));
                 }
             }
           
             if ($this->params->def('load_bootstrap_tab', 1)) {
                 if (!$app->isClient('administrator')) {
                     //CBootstrap::load();
-                    Factory::getDocument()->addScript('https://netdna.bootstrapcdn.com/twitter-bootstrap/2.0.4/js/bootstrap-tab.js');
+                    Factory::getDocument()->addScript($this->getAssetPath('js/bootstrap-tab.js'));
                 }
             }
       
@@ -424,5 +433,3 @@ if ($this->params->def('load_buttons', 0)) {
     }
 
 }
-
-?>

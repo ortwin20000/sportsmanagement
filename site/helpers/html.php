@@ -1506,53 +1506,78 @@ class sportsmanagementHelperHtml
 	public static function getCertifiedImg($game)
 	{
 		$params         = ComponentHelper::getParams('com_sportsmanagement');
-		$usefontawesome = $params->get('use_fontawesome');
+		$usefontawesome = true; //$params->get('use_fontawesome');
 
-		if ($game->certified == 0)
+		switch ($game->certified)
 		{
-			if (version_compare(JVERSION, '4.0.0', 'ge'))
-			{
-				$icon       = 'fa-thumbs-down';
-				$alt        = "Nicht Beglaubigt";
-				$title      = $alt;
-				$icon_color = '" style="color:red';
-			}
-			elseif ($usefontawesome)
-			{
-				$icon       = 'fa-thumbs-down';
-				$alt        = "Nicht Beglaubigt";
-				$title      = $alt;
-				$icon_color = 'lost';
-			}
-			else
-			{
-				$img   = 'media/com_sportsmanagement/jl_images/thumbs_down.png';
-				$alt   = "Nicht Beglaubigt";
-				$title = $alt;
-			}
-		}
-		else
-		{
-			if (version_compare(JVERSION, '4.0.0', 'ge'))
-			{
-				$icon       = 'fa-thumbs-up';
-				$alt        = "Beglaubigt";
-				$title      = $alt;
-				$icon_color = '" style="color:green';
-			}
-			elseif($usefontawesome)
-			{
-				$icon       = 'fa-thumbs-up';
-				$alt        = "Beglaubigt";
-				$title      = $alt;
-				$icon_color = 'won';
-			}
-			else
-			{
-				$img   = 'media/com_sportsmanagement/jl_images/thumbs_up.png';
-				$alt   = "Beglaubigt";
-				$title = $alt;
-			}
+			case 0:
+				if (version_compare(JVERSION, '4.0.0', 'ge'))
+				{
+					$icon       = 'fa-thumbs-down';
+					$alt        = "In Arbeit";
+					$title      = $alt;
+					$icon_color = '" style="color:grey';
+				}
+				elseif ($usefontawesome)
+				{
+					$icon       = 'fa-hourglass fa-spin';
+					$alt        = "In Arbeit";
+					$title      = $alt;
+					$icon_color = '';
+				}
+				else
+				{
+					$img   = 'media/com_sportsmanagement/jl_images/hourglass.png';
+					$alt   = "In Arbeit";
+					$title = $alt;
+				}	
+				break;
+
+			case 1:
+				if (version_compare(JVERSION, '4.0.0', 'ge'))
+				{
+					$icon       = 'fa-thumbs-up';
+					$alt        = "Beglaubigt";
+					$title      = $alt;
+					$icon_color = '" style="color:green';
+				}
+				elseif($usefontawesome)
+				{
+					$icon       = 'fa-thumbs-up';
+					$alt        = "Beglaubigt";
+					$title      = $alt;
+					$icon_color = 'text-success';
+				}
+				else
+				{
+					$img   = 'media/com_sportsmanagement/jl_images/thumbs_up.png';
+					$alt   = "Beglaubigt";
+					$title = $alt;
+				}
+				break;
+
+			case 2:
+				if (version_compare(JVERSION, '4.0.0', 'ge'))
+				{
+					$icon       = 'fa-warning';
+					$alt        = "Straf-Beglaubigt";
+					$title      = $alt;
+					$icon_color = '" style="color:yellow';
+				}
+				elseif($usefontawesome)
+				{
+					$icon       = 'fa-warning';
+					$alt        = "Straf-Beglaubigt";
+					$title      = $alt;
+					$icon_color = 'text-warning';
+				}
+				else
+				{
+					$img   = 'media/com_sportsmanagement/jl_images/warning.png';
+					$alt   = "Straf-Beglaubigt";
+					$title = $alt;
+				}
+				break;				
 		}
 
 		// Default title attribute, if not specified in passed attributes

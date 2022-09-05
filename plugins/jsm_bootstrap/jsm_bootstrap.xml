@@ -22,6 +22,7 @@
 		<filename>update-server.xml</filename>	
         <folder>language</folder>
         <folder>css</folder>
+		<folder>js</folder>
     </files>
     
    <languages>
