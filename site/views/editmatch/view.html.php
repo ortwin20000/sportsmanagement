@@ -123,7 +123,7 @@ class sportsmanagementViewEditMatch extends sportsmanagementView
 	{
 		// Projekt schiedsrichter
 		$allreferees = array();
-
+$default_name_format = 0;
 		// $allreferees = $model->getRefereeRoster(0,$this->item->id);
 		$allreferees      = sportsmanagementModelMatch::getRefereeRoster(0, $this->match->id);
 		$inroster         = array();
@@ -471,7 +471,7 @@ class sportsmanagementViewEditMatch extends sportsmanagementView
 		$app                 = Factory::getApplication();
 		$option              = Factory::getApplication()->input->getCmd('option');
 		$document            = Factory::getDocument();
-		$default_name_format = '';
+		$default_name_format = 0;
 
 		$tid            = Factory::getApplication()->input->getVar('team', '0');
 		$this->tid      = $tid;
