@@ -60,7 +60,7 @@ class FilterASCIIHex
 		$i   = 0;
 		do
 		{
-			$hex .= sprintf("%02x", ord($str{$i}));
+			$hex .= sprintf("%02x", ord($str[$i]));
 			$i++;
 		} while ($i < strlen($str));
 
