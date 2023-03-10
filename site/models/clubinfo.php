@@ -6,7 +6,7 @@
  * @subpackage clubinfo
  * @file       clubinfo.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -187,9 +187,9 @@ class sportsmanagementModelClubInfo extends BaseDatabaseModel
 
 				$pt                  = $v->new_club_id;
 				$list[$id]           = $v;
-				$list[$id]->treename = $indent . $txt;
-				$list[$id]->children = !empty($children[$id]) ? count($children[$id]) : 0;
-				$list[$id]->section  = ($v->new_club_id == 0);
+				//$list[$id]->treename = $indent . $txt;
+				//$list[$id]->children = !empty($children[$id]) ? count($children[$id]) : 0;
+				//$list[$id]->section  = ($v->new_club_id == 0);
 
 				$list = self::fbTreeRecurse($id, $indent . $spacer, $list, $children, $maxlevel, $level + 1, $type);
 			}

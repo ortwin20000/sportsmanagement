@@ -6,7 +6,7 @@
  * @subpackage editmatch
  * @file       editmatch.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -16,6 +16,9 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Form\FormHelper;
 
 JLoader::import('components.com_sportsmanagement.helpers.imageselect', JPATH_SITE);
 JLoader::import('components.com_sportsmanagement.models.project', JPATH_SITE);
@@ -38,7 +41,6 @@ class sportsmanagementModelEditMatch extends AdminModel
 	const MATCH_ROSTER_SUBSTITUTE_OUT = 2;
 	const MATCH_ROSTER_RESERVE = 3;
 
-	// Interfaces
 	static $projectid = 0;
 	static $divisionid = 0;
 	static $roundid = 0;
@@ -47,6 +49,7 @@ class sportsmanagementModelEditMatch extends AdminModel
 	static $order = 0;
 	static $cfg_which_database = 0;
 	static $oldlayout = '';
+    
 	var $latitude = null;
 	var $longitude = null;
 
@@ -105,8 +108,6 @@ class sportsmanagementModelEditMatch extends AdminModel
 
 		$positions         = sportsmanagementModelMatch::getProjectPositionsOptions(0, 3, $data['project_id']);
 		$data['positions'] = $positions;
-
-		//$result = sportsmanagementModelMatch::updateReferees($data);
 		$mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
 		$result = $mdlMatch->updateReferees($data);
 
@@ -124,7 +125,6 @@ class sportsmanagementModelEditMatch extends AdminModel
 	{
 		$app                    = Factory::getApplication();
 		$data['staffpositions'] = sportsmanagementModelMatch::getProjectPositionsOptions(0, 2, $data['project_id']);
-		//$result                 = sportsmanagementModelMatch::updateStaff($data);
 		$mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
 		$result                 = $mdlMatch->updateStaff($data);
 
@@ -142,7 +142,6 @@ class sportsmanagementModelEditMatch extends AdminModel
 	{
 		$app               = Factory::getApplication();
 		$data['positions'] = sportsmanagementModelMatch::getProjectPositionsOptions(0, 1, $data['project_id']);
-		//$result            = sportsmanagementModelMatch::updateRoster($data);
 		$mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
 		$result            = $mdlMatch->updateRoster($data);
 
@@ -162,7 +161,21 @@ class sportsmanagementModelEditMatch extends AdminModel
 
 		foreach ($data['request'] as $key => $value)
 		{
-			$data[$key] = $value;
+			switch ( $key )
+			{
+				case 'preview':
+				$html          = $data['request']->get('preview', '', 'raw');
+			$data['preview'] = $html;	
+					break;
+					case 'summary':
+					$html          = $data['request']->get('summary', '', 'raw');
+			$data['summary'] = $html;
+					break;
+				default:
+				$data[$key] = $value;	
+					break;
+			}
+			
 		}
 
 		/**

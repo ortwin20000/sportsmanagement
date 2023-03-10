@@ -6,7 +6,7 @@
  * @subpackage libraries
  * @file       model.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -210,6 +210,18 @@ if ( $config->get('debug') )
 		{
 			$html          = $postData->get('notes', '', 'raw');
 			$data['notes'] = $html;
+		}
+        
+        if (array_key_exists('preview', $data))
+		{
+			$html          = $postData->get('preview', '', 'raw');
+			$data['preview'] = $html;
+		}
+        
+        if (array_key_exists('summary', $data))
+		{
+			$html          = $postData->get('summary', '', 'raw');
+			$data['summary'] = $html;
 		}
 
 		if (isset($post['extended']) && is_array($post['extended']))
@@ -1081,6 +1093,10 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					sportsmanagementHelper::saveExtraFields($post, $data['id']);
 					$this->jsmapp->setUserState("$this->jsmoption.club_id", $data['id']);
 					break;
+                    /** liga */
+				case 'league':
+					sportsmanagementHelper::saveExtraFields($post, $data['id']);
+					break;
 				/** projekt */
 				case 'project':
 					sportsmanagementHelper::saveExtraFields($post, $data['id']);
@@ -1207,10 +1223,7 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 
 		if ($cfg_which_media_tool == 'media')
 		{
-			/**
-			 *
-			 * welche joomla version ?
-			 */
+			/** welche joomla version ? */
 			if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
 			{
 				$joomladirectory = 'local-0:/';
@@ -1281,7 +1294,13 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				break;
 			case 'jlextfederation':
 				$form->setFieldAttribute('assocflag', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('assocflag', 'default', 'images/com_sportsmanagement/database/flags_associations/placeholder_flags.png' );
+                
 				$form->setFieldAttribute('picture', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('picture', 'default', 'images/com_sportsmanagement/database/associations/placeholder_wappen_50.png' );
+                
+                $form->setFieldAttribute('flag_maps', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('flag_maps', 'default', 'images/com_sportsmanagement/database/flag_maps/placeholder_wappen_50.png' );
 
 				$this->jsmquery->clear();
 				$this->jsmquery->select('*');
@@ -1304,6 +1323,9 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				$form->setFieldAttribute('picture', 'default', ComponentHelper::getParams($this->jsmoption)->get('ph_flags', ''));
 				$form->setFieldAttribute('picture', 'directory', $joomladirectory . 'com_sportsmanagement/database/flags');
 				$form->setFieldAttribute('picture', 'type', $cfg_which_media_tool);
+                
+                $form->setFieldAttribute('flag_maps', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('flag_maps', 'default', 'images/com_sportsmanagement/database/flag_maps/placeholder_wappen_50.png' );
 
 				$this->jsmquery->clear();
 				$this->jsmquery->select('*');
@@ -1335,10 +1357,13 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				break;
 			case 'jlextassociation':
 				$form->setFieldAttribute('assocflag', 'type', $cfg_which_media_tool);
-                $form->setFieldAttribute('assocflag', 'default', ComponentHelper::getParams($this->jsmoption)->get('ph_flags', ''));
+                $form->setFieldAttribute('assocflag', 'default', 'images/com_sportsmanagement/database/flags_associations/placeholder_flags.png' );
                 
 				$form->setFieldAttribute('picture', 'type', $cfg_which_media_tool);
-                $form->setFieldAttribute('picture', 'default', ComponentHelper::getParams($this->jsmoption)->get('ph_logo_big', ''));
+                $form->setFieldAttribute('picture', 'default', 'images/com_sportsmanagement/database/associations/placeholder_wappen_50.png' );
+                
+                $form->setFieldAttribute('flag_maps', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('flag_maps', 'default', 'images/com_sportsmanagement/database/flag_maps/placeholder_wappen_50.png' );
 
 				$this->jsmquery->clear();
 				$this->jsmquery->select('*');
@@ -1357,6 +1382,8 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					}
 				}
 				break;
+                
+                
 			case 'eventtype':
 				$form->setFieldAttribute('icon', 'default', ComponentHelper::getParams($this->jsmoption)->get('ph_icon', ''));
 				$form->setFieldAttribute('icon', 'directory', $joomladirectory . 'com_sportsmanagement/database/events');
@@ -1387,12 +1414,6 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				$form->setFieldAttribute('picture', 'type', $cfg_which_media_tool);
 				break;
 			case 'project':
-				// if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
-				// {
-				// 	$form->setFieldAttribute('use_legs', 'type', 'radio');
-				// 	$form->setFieldAttribute('use_legs', 'class', 'switcher');
-				// }
-
 				$sports_type_id = $form->getValue('sports_type_id');
 				$this->jsmquery->clear();
 				$this->jsmquery->select('name');
@@ -1401,18 +1422,6 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				$this->jsmdb->setQuery($this->jsmquery);
 				$result = $this->jsmdb->loadResult();
 
-				/*
-				switch ($result)
-				{
-			 case 'COM_SPORTSMANAGEMENT_ST_TENNIS';
-			 break;
-			 default:
-			 $form->setFieldAttribute('use_tie_break', 'type', 'hidden');
-			 $form->setFieldAttribute('tennis_single_matches', 'type', 'hidden');
-			 $form->setFieldAttribute('tennis_double_matches', 'type', 'hidden');
-			 break;
-				}
-				*/
 				switch (ComponentHelper::getParams($this->jsmoption)->get('which_article_component'))
 				{
 					case 'com_content':

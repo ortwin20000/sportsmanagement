@@ -6,7 +6,7 @@
  * @subpackage match
  * @file       match.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  * https://hotexamples.com/de/examples/-/Google_Service_Calendar_EventDateTime/-/php-google_service_calendar_eventdatetime-class-examples.html
  */
@@ -2621,7 +2621,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 *
 	 * @return boolean
 	 */
-	function savesubstitution($data)
+	public static function savesubstitution($data)
 	{
 		$app    = Factory::getApplication();
 		$option = Factory::getApplication()->input->getCmd('option');
@@ -2778,7 +2778,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 *
 	 * @return boolean
 	 */
-	function removeSubstitution($substitution_id)
+	public static function removeSubstitution($substitution_id)
 	{
 		$app   = Factory::getApplication();
 		$db    = sportsmanagementHelper::getDBConnection();
@@ -2813,7 +2813,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 *
 	 * @return
 	 */
-	function deleteevent($event_id)
+	public static function deleteevent($event_id)
 	{
 		$db = Factory::getDbo();
 
@@ -2857,7 +2857,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 *
 	 * @return
 	 */
-	function deletecommentary($event_id)
+	public static function deletecommentary($event_id)
 	{
 		$db = Factory::getDbo();
 
@@ -2904,7 +2904,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 *
 	 * @return
 	 */
-	function savecomment($data)
+	public static function savecomment($data)
 	{
 		$date = Factory::getDate();
 		$user = Factory::getUser();
@@ -2974,7 +2974,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	 * @param mixed $data
 	 * @return
 	 */
-	function saveevent($data)
+	public static function saveevent($data)
 	{
 		$date = Factory::getDate();
 		$user = Factory::getUser();
@@ -2986,7 +2986,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 			if (empty($data['event_time']))
 			{
 				Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_TIME')), Log::ERROR, 'jsmerror');
-				$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_TIME'));
+				//$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_TIME'));
 				return false;
 			}
 		}
@@ -2994,7 +2994,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 		if (empty($data['event_sum']))
 		{
 			Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_EVENT_SUM')), Log::ERROR, 'jsmerror');
-			$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_EVENT_SUM'));
+			//$this->setError(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_NO_EVENT_SUM'));
 			return false;
 		}
 
@@ -3003,7 +3003,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 			if ((int) $data['event_time'] > (int) $data['projecttime'])
 			{
 				Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime'])), Log::ERROR, 'jsmerror');
-				$this->setError(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime']));
+				//$this->setError(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime']));
 				return false;
 			}
 		}
@@ -3024,15 +3024,11 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 		$db->setQuery($query);
 		$match_event_id = $db->loadResult();
         
-        $this->setError($match_event_id);
-
 		if ($match_event_id)
 		{
 			return false;
 		}    
         }
-
-		
 
 		$temp                 = new stdClass;
 		$temp->match_id       = $data['match_id'];

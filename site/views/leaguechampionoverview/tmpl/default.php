@@ -6,7 +6,7 @@
  * @subpackage leaguechampionoverview
  * @file       default.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -67,6 +67,7 @@ echo $this->loadTemplate('jsm_notes');
   
 <?php  
 $output = array();
+$gesamtspiele = 0;
 foreach ($this->leaguechampions as $this->season => $this->team)
 {  
 $routeparameter                       = array();
@@ -100,7 +101,7 @@ $output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] 
 $output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '<div class="col-sm-2">' : ''   ;  
 $output[$this->season][] = Text::_('COM_SPORTSMANAGEMENT_CLUBPLAN_MATCHES').':'.$this->team->project_count_matches;  
 $output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '</div>' : ''   ;    
-
+$gesamtspiele += $this->team->project_count_matches;
 }
 else
 {
@@ -125,11 +126,14 @@ $output[$this->season][] =  $this->config['show_leaguechampionoverview_season'] 
 $output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '<div class="col-sm-2">' : ''   ;  
 $output[$this->season][] = Text::_('COM_SPORTSMANAGEMENT_CLUBPLAN_MATCHES').':'.$this->team->project_count_matches;  
 $output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '</div>' : ''   ;    
-
+$gesamtspiele += $this->team->project_count_matches;
 }  
 
 }  
 
+$output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '<div class="col-sm-10"></div><div class="col-sm-2">' : ''   ;  
+$output[$this->season][] = Text::_('COM_SPORTSMANAGEMENT_CLUBPLAN_MATCHES').':'.$gesamtspiele;  
+$output[$this->season][] = !$this->config['show_leaguechampionoverview_season'] ? '</div>' : ''   ;       
 
 //echo 'output<pre>'.print_r($output,true).'</pre>';
 

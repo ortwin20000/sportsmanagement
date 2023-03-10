@@ -6,7 +6,7 @@
  * @subpackage teams
  * @file       view.html.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -47,7 +47,7 @@ class sportsmanagementViewTeams extends sportsmanagementView
 			case 'assignteams':
 			case 'assignteams_3':
 			case 'assignteams_4':
-			$this->season_id  = $this->jinput->get('season_id');
+			$this->season_id  = $this->Jinput->get('season_id');
 			$this->assign     = true;
 			break;
 		}

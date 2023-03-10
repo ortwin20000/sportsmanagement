@@ -6,7 +6,7 @@
  * @subpackage models
  * @file       projectteams.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -437,7 +437,7 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 	 *
 	 * @return
 	 */
-	function getCountryTeams()
+	function getCountryTeams($season_id = 0)
 	{
 		self::$_project_id    = $this->jsmapp->getUserState("$this->jsmoption.pid", '0');
 		$this->_season_id     = $this->jsmapp->getUserState("$this->jsmoption.season_id", '0');

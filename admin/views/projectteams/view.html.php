@@ -6,7 +6,7 @@
  * @subpackage projectteams
  * @file       view.html.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -158,7 +158,13 @@ $post = Factory::getApplication()->input->post->getArray(array());
 			$lists['project_teamslist_name'] = '<select name="project_teamslist_name[]" id="project_teamslist_name" style="width:250px; height:300px;" class="inputbox" multiple="true" size="10"></select>';
 		}
 
-		if ( $ress1 = $this->model->getTeams($this->state->get('filter.search_nation')) )
+		$filter_search_nation = $this->state->get('filter.search_nation');
+		if ( !$filter_search_nation )
+		{
+		$filter_search_nation = $this->project->country;	
+		}
+		
+		if ( $ress1 = $this->model->getTeams($filter_search_nation) )
 		{
 			if ($ress = $this->model->getProjectTeams($this->project_id, false))
 			{

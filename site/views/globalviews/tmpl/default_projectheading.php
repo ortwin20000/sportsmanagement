@@ -1,5 +1,4 @@
 <?php
-
 /**
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
  * @version    1.0.05
@@ -7,11 +6,10 @@
  * @subpackage globalviews
  * @file       default_projectheading.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -37,6 +35,7 @@ $document = Factory::getDocument();
 <?php
 
 $nbcols = 2;
+$ausgabe = '';
 
 if (!empty($this->overallconfig))
 {
@@ -66,6 +65,37 @@ if (!empty($this->overallconfig))
 		<div class="<?php echo $this->divclassrow; ?>" id="projectheading" itemscope="itemscope" itemtype="http://schema.org/SportsOrganization">
 			<table class="table">
 				<?php
+                if ($this->overallconfig['show_project_extrafield'])
+				{
+                $this->extrafields = sportsmanagementHelper::getUserExtraFields($this->project->league_id, 'frontend', 0,Factory::getApplication()->input->get('view'));
+                $title = $this->project->league_name;
+                foreach ($this->extrafields as $field ) if ( $field->fvalue )
+	{
+		$value      = $field->fvalue;
+		$field_type = $field->field_type;
+                   $ausgabe .= '<tr>';          
+$ausgabe .= '<td>'.Text::_($field->name).'</td>';
+switch ($field_type)
+					{
+						case 'link':
+							$ausgabe .= '<td>'. HTMLHelper::_('link', $field->fvalue, $title, array("target" => "_blank")).'</td>';
+							break;
+						default:
+							$ausgabe .= '<td>'. Text::_($field->fvalue).'</td>';
+							break;
+					}          
+        
+$ausgabe .= '</tr>';       
+                   
+                   
+                   
+                   
+                    
+                }
+                echo $ausgabe;
+                }
+                
+                
 				if ($this->overallconfig['show_project_country'])
 				{
 				?>

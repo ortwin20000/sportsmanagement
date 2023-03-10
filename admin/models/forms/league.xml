@@ -66,7 +66,7 @@
 			label="COM_SPORTSMANAGEMENT_ADMIN_LEAGUE_COUNTRY"
 			description="COM_SPORTSMANAGEMENT_ADMIN_LEAGUE_COUNTRY_DESC"
 			class="form-control form-control-inline"
-      required="true">
+      required="false">
 		<option value="">COM_SPORTSMANAGEMENT_GLOBAL_SELECT_COUNTRY</option>
 	</field>	
 	
@@ -301,5 +301,13 @@ directory="images/com_sportsmanagement/database/leagues"/>
 				width="450" 
 				filter="JComponentHelper::filterText"/>			
 	</fieldset>	
+	
+	<fieldset 
+        name="extra_fields"
+        label="COM_SPORTSMANAGEMENT_TABS_EXTRA_FIELDS"
+        description="COM_SPORTSMANAGEMENT_TABS_EXTRA_FIELDS_DESC"
+    >
+  
+    </fieldset>
 	
 </form>

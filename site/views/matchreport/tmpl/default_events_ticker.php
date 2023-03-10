@@ -8,7 +8,7 @@
  * @subpackage matchreport
  * @file       default_events_ticker.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,7 +28,7 @@ if ($this->config['show_timeline'] && !$this->config['show_timeline_under_result
 
 <h2><?php echo Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS'); ?></h2>
 
-<table class="table" border="0" id="">
+<table class="table" border="0" id="default_events_ticker">
 
     <thead>
     <tr class="sectiontableheader">

@@ -6,7 +6,7 @@
  * @subpackage leaguechampionoverview
  * @file       view.html.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@arcor.de)
- * @copyright  Copyright: © 2013 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -88,7 +88,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $object->ptid = $this->champion->_ptid;
         $object->teamid = $this->champion->_teamid;
 		$object->project_id = $project->slug;
-        $object->project_count_matches = $mdlProject::getProjectCountMatches($project->id);
+        $object->project_count_matches = $mdlProject::getProjectCountMatches($project->id,true,$project->league_id,$project->season_id);
         
         if ( $this->champion->club_id )
         {
@@ -149,7 +149,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $object->ptid = 0;
         $object->teamid = 0;
 		$object->project_id = $this->project_id->project_slug;  
-        $object->project_count_matches = $mdlProject::getProjectCountMatches($this->project_id->id);
+        $object->project_count_matches = $mdlProject::getProjectCountMatches($this->project_id->id,true,$this->project_id->league_id,$this->project_id->season_id);
         $this->leaguechampions[$this->project_id->seasonname] = $object;
         }  
 
@@ -162,6 +162,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
       
 
         $this->teamstotal = array();
+		$total = array();
 
 		foreach ((array) $this->teamseason as $rows => $value)
 		{
