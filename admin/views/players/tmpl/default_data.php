@@ -237,35 +237,46 @@ echo sportsmanagementHelper::getBootstrapModalImage('select'.$this->item->id, ''
 						?>
 
 <div class="input-group date" id="birthday<?php echo $this->item->id; ?>" data-target-input="nearest"  >
-                    <input type="text" 
-                    name="birthday<?php echo $this->item->id; ?>"
-style="width: 120px; <?php echo $append; ?>" 
-                    data-toggle="datetimepicker"
-                    class="form-control datetimepicker-input " data-target="#birthday<?php echo $this->item->id; ?>" value="<?php echo $date1; ?>"  />
-<!--
-                    <div class="input-group-append" data-target="#datepicker<?php echo $row->id; ?>" data-toggle="datetimepicker">
-                       <div class="input-group-text" style="position:relative"><i class="fa fa-calendar"></i></div>
-                    </div>
-					 -->
-</div>  
+<?php
 
+						/**
+						 * das wurde beim kalender geändert
+						 * $attribs = array(
+						 * 'onChange' => "alert('it works')",
+						 * "showTime" => 'false',
+						 * "todayBtn" => 'true',
+						 * "weekNumbers" => 'false',
+						 * "fillTable" => 'true',
+						 * "singleHeader" => 'false',
+						 * );
+						 * echo HTMLHelper::_('calendar', Factory::getDate()->format('Y-m-d'), 'date', 'date', '%Y-%m-%d', $attribs); ?>
+						 */
 
-<script type="text/javascript">
-            jQuery(function ($) {
-                $('#birthday<?php echo $this->item->id; ?>').datetimepicker(
-                {
-                    format: 'DD-MM-YYYY'
-                }
-                );
-		$("#birthday<?php echo $this->item->id; ?>").on("change.datetimepicker", ({date, oldDate}) => {
-              console.log("New date", date);
-              console.log("Old date", oldDate);
-			  document.getElementById('cb<?php echo $this->count_i; ?>').checked=true
-              //alert("Changed date")
-      })    
-            });
-</script>                            
-                        
+/*
+						$attribs = array(
+							'onChange' => "document.getElementById('cb" . $this->count_i . "').checked=true",
+						);
+				*/
+$attribs['class'] = 'input-small';
+$attribs['size'] = '10';
+$attribs['maxlength'] = '10';
+$attribs['onChange'] = "document.getElementById('cb" . $this->count_i . "').checked=true";				
+						$date1   = sportsmanagementHelper::convertDate($this->item->birthday, 1);
+						$append  = '';
+						if (($date1 == '00-00-0000') || ($date1 == ''))
+						{
+							$append = ' style="background-color:#FFCCCC;" ';
+							$date1  = '';
+						}
+						echo HTMLHelper::calendar(
+							$date1,
+							'birthday' . $this->item->id,
+							'birthday' . $this->item->id,
+							'%d-%m-%Y',
+							$attribs
+						);
+						?>
+                                           
                     </td>
                     <?php if (ComponentHelper::getParams($this->option)->get('backend_show_players_knvbnr')){ ?>
                     <td class="center">

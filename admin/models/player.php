@@ -156,6 +156,18 @@ class sportsmanagementModelplayer extends JSMModelAdmin
 				$tblPerson->deathday_timestamp = sportsmanagementHelper::getTimestamp($tblPerson->deathday);
 			}
 
+			if ($post['referee_valid' . $pks[$x]] != '0000-00-00' && $post['referee_valid' . $pks[$x]] != '')
+			{
+				$tblPerson->referee_valid           = sportsmanagementHelper::convertDate($post['referee_valid' . $pks[$x]], 0);
+				$tblPerson->referee_valid_timestamp = sportsmanagementHelper::getTimestamp($tblPerson->referee_valid);
+			}
+
+			if ($post['coach_valid' . $pks[$x]] != '0000-00-00' && $post['coach_valid' . $pks[$x]] != '')
+			{
+				$tblPerson->coach_valid           = sportsmanagementHelper::convertDate($post['coach_valid' . $pks[$x]], 0);
+				$tblPerson->coach_valid_timestamp = sportsmanagementHelper::getTimestamp($tblPerson->coach_valid);
+			}
+
 			$tblPerson->country     = $post['country' . $pks[$x]];
 			$tblPerson->position_id = $post['position' . $pks[$x]];
 			$tblPerson->agegroup_id = $post['agegroup' . $pks[$x]];

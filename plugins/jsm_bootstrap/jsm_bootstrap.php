@@ -93,7 +93,7 @@ class PlgSystemjsm_bootstrap extends CMSPlugin
         $path = __DIR__ . '/' . $relative;
         $hash = md5_file($path);
 
-        return JURI::base(true) . '/plugins/system/jsm_bootstrap/' . $relative . '?' . $hash;
+        return JURI::root() . '/plugins/system/jsm_bootstrap/' . $relative . '?' . $hash;
     }
 
     /**
