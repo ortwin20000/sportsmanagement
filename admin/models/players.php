@@ -61,6 +61,7 @@ class sportsmanagementModelplayers extends JSMModelList
 		parent::setDbo($this->jsmdb);
 	}
 
+    
 	/**
 	 * sportsmanagementModelplayers::getListQuery()
 	 *

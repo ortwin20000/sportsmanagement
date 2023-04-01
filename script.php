@@ -94,7 +94,8 @@ use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\PluginHelper;
-
+use Joomla\CMS\Updater\Update;
+use Joomla\CMS\Updater\Updater;
 
 $maxImportTime = 960;
 
@@ -132,8 +133,8 @@ class com_sportsmanagementInstallerScript
 	 * The release value would ideally be extracted from <version> in the manifest file,
 	 * but at preflight, the manifest file exists only in the uploaded temp folder.
 	 */
-	private $release = '4.11.00';
-    private $old_release = '4.10.00';
+	private $release = '4.12.00';
+    private $old_release = '4.11.00';
 
 	// $language_update = '';
 
@@ -1057,24 +1058,13 @@ $result = Factory::getDbo()->updateObject('#__extensions', $object, 'extension_i
 
 
 
-	//    /**
-	//     * com_sportsmanagementInstallerScript::installJoomlaExtensions()
-	//     *
-	//     * @param mixed $adapter
-	//     * @return void
-	//     */
-	//    public function installJoomlaExtensions( $adapter)
-	//  {
-	//  $mainframe = Factory::getApplication();
-	//  $src = $adapter->getParent()->getPath('source');
-	//  $manifest = $adapter->getParent()->manifest;
-	//  $db = Factory::getDBO();
-	//
-	//  Folder::copy(JPATH_ROOT.'/administrator/components/com_sportsmanagement/libraries/joomla/', JPATH_ROOT.'/', '', true);
-	//
-	//  }
 
-
+/**
+ * com_sportsmanagementInstallerScript::installPackages()
+ * 
+ * @param mixed $adapter
+ * @return void
+ */
 public function installPackages( $adapter)
 	{
 		$mainframe = Factory::getApplication();
@@ -1085,15 +1075,22 @@ public function installPackages( $adapter)
 
 	if (version_compare(substr(JVERSION, 0, 5), '4.0.0', 'ge'))
 		{
-//$path = $src . DIRECTORY_SEPARATOR . 'pkg' . DIRECTORY_SEPARATOR .'jcomments' . DIRECTORY_SEPARATOR . 'pkg_jcomments_4.0.25.zip';
+/**
+ * https://github.com/exstreme/Jcomments-4/releases/download/v4.0.27/pkg_jcomments_4.0.27.zip 
+ *  
+*/
+$link = "https://raw.githubusercontent.com/exstreme/Jcomments-4/master/update-jcomments.xml";
 $path = $src . DIRECTORY_SEPARATOR . 'pkg' . DIRECTORY_SEPARATOR .'jcomments'. DIRECTORY_SEPARATOR.'components'. DIRECTORY_SEPARATOR ;
-	
-//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $src, 'error');
-//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $path, 'error');
-	
+
+
 $installer = new Installer;
-$result = $installer->install($path);	
-	
+$result = $installer->install($path);
+
+
+/**
+$update = new Update();	
+$result = $installer->install($link);
+*/	
 echo '<p>' . Text::_('Packages : ') . 'JComments 4.0' . ' installiert!</p>';	
 	}
 }

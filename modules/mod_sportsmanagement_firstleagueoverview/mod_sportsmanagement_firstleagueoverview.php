@@ -47,6 +47,8 @@ if (!class_exists('sportsmanagementHelper'))
 	BaseDatabaseModel::getInstance("sportsmanagementHelper", "sportsmanagementModel");
 }
 
+JLoader::import('components.com_sportsmanagement.helpers.route', JPATH_SITE);
+
 /** Include the functions only once */
 JLoader::register('modjsmfirstleagueoverview', __DIR__ . '/helper.php');
 
@@ -68,7 +70,7 @@ if (!defined('COM_SPORTSMANAGEMENT_GLOBAL_MONDAY'))
 	$base_dir     = JPATH_SITE;
 	$language_tag = $langtag->getTag();
 	$reload       = true;
-	$lang->load($extension, $base_dir, $language_tag, $reload);
+	$langtag->load($extension, $base_dir, $language_tag, $reload);
 }
 
 //$daysOfWeek = array(

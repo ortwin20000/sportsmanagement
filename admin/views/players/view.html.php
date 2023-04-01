@@ -47,6 +47,8 @@ class sportsmanagementViewplayers extends sportsmanagementView
 		$this->persontype = 0;
 		$this->whichview = $this->jinput->get('whichview');
 
+// Factory::getApplication()->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' task <pre>'.print_r(Factory::getApplication()->input->post->getArray(),true).'</pre>'  ), '');
+
 		switch ($this->getLayout())
 		{
 			case 'assignpersons':
@@ -56,6 +58,15 @@ class sportsmanagementViewplayers extends sportsmanagementView
 			$this->team_id    = $this->jinput->get('team_id');
 			$this->persontype = $this->jinput->get('persontype');
 			$this->assign     = true;
+			break;
+		}
+        
+        switch ($this->getLayout())
+		{
+			case 'players_upload':
+			case 'players_upload_3':
+			case 'players_upload_4':
+			$this->setLayout('players_upload');
 			break;
 		}
 

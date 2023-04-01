@@ -18,47 +18,35 @@ use Joomla\CMS\HTML\HTMLHelper;
 if ($params->get("show_slider"))
 {
 	$ausland = array();
-
+	$auslandfed = array();
 	$zaehler = 0;
-
 	foreach ($list as $row)
 	{
 		$ausland[$row->country] = JSMCountries::getCountryName($row->country);
+		$auslandfed[$row->country] = $row->federation;
 		$zaehler++;
 	}
 
 	$zaehler = 0;
-	asort($ausland);
-	?>
-    <div class="panel-group" id="<?php echo $module->module; ?>-<?php echo $module->id . '-' . $module->id; ?>">
-		<?php
-		foreach ($ausland as $key => $value)
-		{
-			if (empty($zaehler))
-			{
-				$collapse = 'in';
-				$zaehler++;
-			}
-			else
-			{
-				$collapse = '';
-			}
+	$zaehlerfed = 0;
+	asort($ausland);	
 
-			?>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse"
-                           data-parent="#<?php echo $module->module; ?>-<?php echo $module->id . '-' . $module->id; ?>"
-                           href="#<?php echo $key; ?>"><?php echo JSMCountries::getCountryFlag($key) . ' ' . $value; ?></a>
-                    </h4>
-                </div>
-                <div id="<?php echo $key; ?>" class="panel-collapse collapse <?php echo $collapse; ?>">
-                    <div class="panel-body">
-						<?php
-						foreach ($list as $row)
+
+//echo '<pre>'.print_r($ausland,true).'</pre>';	
+//echo '<pre>'.print_r($list,true).'</pre>';	
+//echo '<pre>'.print_r($auslandfed,true).'</pre>';
+//echo '<pre>'.print_r($countryfederation,true).'</pre>';
+	
+echo HTMLHelper::_('bootstrap.startTabSet', 'defaulttabsfederation', array('active' => 'show_table_0')); // Start tab set
+foreach ($federation as $keyfed => $valuefed) if ( $keyfed != 0 )
+{
+echo HTMLHelper::_('bootstrap.addTab', 'defaulttabsfederation', 'show_table_'.$zaehler, Text::_($valuefed->name));
+foreach ($countryfederation as $key => $value) if ( $value->federation == $keyfed  )
+{
+//echo $value->alpha3;
+foreach ($list as $row)
 						{
-							if ($row->country == $key)
+							if ($row->country == $value->alpha3)
 							{
 								$createroute = array("option"             => "com_sportsmanagement",
 								                     "view"               => "ranking",
@@ -75,7 +63,7 @@ if ($params->get("show_slider"))
 								$query = sportsmanagementHelperRoute::buildQuery($createroute);
 								$link  = Route::_('index.php?' . $query, false);
 								?>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                     <a href="<?PHP echo $link; ?>"
                                        class="<?PHP echo $params->get('button_class'); ?>  btn-block" role="button">
 <span>
@@ -92,17 +80,19 @@ echo JSMCountries::getCountryFlag($row->country);
 								<?php
 							}
 						}
-						?>
-                    </div>
-                </div>
-            </div>
-			<?php
-			$zaehler++;
-		}
-		?>
-    </div>
 
-	<?php
+
+
+}							
+echo HTMLHelper::_('bootstrap.endTab');
+$zaehler++;
+}
+?>
+
+
+
+
+<?php
 }
 else
 {

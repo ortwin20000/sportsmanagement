@@ -11,6 +11,8 @@
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+
 
 /**
  * sportsmanagementControllerplayer
@@ -35,5 +37,21 @@ class sportsmanagementControllerplayer extends JSMControllerForm
 	{
 		parent::__construct($config);
 	}
+    
+    
+    
+    /**
+     * sportsmanagementControllerplayer::import()
+     * 
+     * @return void
+     */
+    function import()
+    {
+    //      $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' '.$this->view_list), '');
+    $this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list.'&layout=players_upload', false));
+    
+        
+        
+    }
 
 }
