@@ -71,6 +71,43 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		return $form;
 	}
 
+
+
+/**
+ * sportsmanagementModeljlextindividualsport::addmatch()
+ * 
+ * @param mixed $post
+ * @return void
+ */
+function addmatch($post = array() )
+{
+$rowmatch = new stdClass;
+$rowmatch->match_date = $post['match_date'];
+$rowmatch->projectteam1_id = $post['projectteam1_id'];
+$rowmatch->projectteam2_id = $post['projectteam2_id'] ;
+$rowmatch->match_id = $post['match_id'];
+$rowmatch->teamplayer1_id = $post['teamplayer1_id'];
+$rowmatch->teamplayer2_id = $post['teamplayer2_id'];
+$rowmatch->published = $post['published'];
+$rowmatch->project_id = $post['project_id'];
+$rowmatch->round_id = $post['round_id'];
+
+try
+{
+$result_insert = $this->jsmdb->insertObject('#__sportsmanagement_match_single', $rowmatch);
+return true;
+}
+catch (Exception $e)
+{
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+return false;
+}    
+    
+    
+}
+
+
 	/**
 	 * sportsmanagementModeljlextindividualsport::saveshort()
 	 *
@@ -79,11 +116,18 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 	function saveshort()
 	{
 		$this->jsmquery->clear();
-		$pks      = Factory::getApplication()->input->getVar('cid', null, 'post', 'array');
+        $event_st_search = '';
+		$pks      = Factory::getApplication()->input->getVar('cid', null, 'post', 'array') ? Factory::getApplication()->input->getVar('cid', null, 'post', 'array') : array()   ;
 		$post     = Factory::getApplication()->input->post->getArray(array());
 		$match_id = $post['match_id'];
         $projectteam1_id = $post['projectteam1_id'];
         $projectteam2_id = $post['projectteam2_id'];
+
+if ( $this->joomlaconfig->get('debug') )
+{        
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($pks,true).'</pre>'), 'error');
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($post,true).'</pre>'), 'error');
+}
 
 		$result_tie_break = 0;
         $save_match = false;
@@ -103,6 +147,18 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$sports_type_id_name   = $this->jsmdb->loadObject();
         
         
+switch ($sports_type_id_name->name)
+{
+case 'COM_SPORTSMANAGEMENT_ST_SMALL_BORE_RIFLE_ASSOCIATION':
+$event_st_search = strtoupper($this->jsmoption) . '_SMALL_BORE_RIFLE_ASSOCIATION';        
+break;
+case 'COM_SPORTSMANAGEMENT_ST_TABLETENNIS':
+$event_st_search = strtoupper($this->jsmoption) . '_TABLETENNIS';        
+break;
+case 'COM_SPORTSMANAGEMENT_ST_TENNIS':
+$event_st_search = strtoupper($this->jsmoption) . '_TENNIS';
+break;
+}
 
         switch ($sports_type_id_name->name)
 		{
@@ -117,16 +173,13 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$event_type_id   = $this->jsmdb->loadResult();
         
         $ringetotal = 0;
-        
-//        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($pks,true).'</pre>'), 'error');
-//        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($post,true).'</pre>'), 'error');
+
         for ($x = 0; $x < count($pks); $x++)
 		{
 		$save_match = true;  
 		$rowmatch                          = new stdClass;
 		$rowmatch->id                      = $pks[$x];
         $rowmatch->teamplayer1_id       = $post['teamplayer1_id' . $pks[$x]];
-        
         $rowmatch->team1_result       = $post['team1_result' . $pks[$x]];
         $rowmatch->team2_result       = $post['team2_result' . $pks[$x]];
         
@@ -176,13 +229,6 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
         $result = $this->jsmdb->insertObject('#__sportsmanagement_match_event', $profile);    
             
         }
-
-
-
-
-
-        
-        
           
         }
         
@@ -206,11 +252,45 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		}
         }
 
-
-
-
         break;
-        case 'COM_SPORTSMANAGEMENT_ST_TENNIS':
+case 'COM_SPORTSMANAGEMENT_ST_TABLETENNIS':
+case 'COM_SPORTSMANAGEMENT_ST_TENNIS':
+
+
+for ($x = 0; $x < count($pks); $x++)
+		{
+		$save_match = true;  
+		$rowmatch                          = new stdClass;
+		$rowmatch->id                      = $pks[$x];
+        $rowmatch->teamplayer1_id = $post['teamplayer1_id'.$pks[$x]] ? $post['teamplayer1_id'.$pks[$x]] : 0  ;
+	$rowmatch->teamplayer2_id = $post['teamplayer2_id'.$pks[$x]] ? $post['teamplayer2_id'.$pks[$x]] : 0  ;
+        $rowmatch->team1_result = $post['team1_result'.$pks[$x]] ? $post['team1_result'.$pks[$x]] : 0;
+        $rowmatch->team2_result = $post['team2_result'.$pks[$x]] ? $post['team2_result'.$pks[$x]] : 0;
+        /**
+        if ( !$rowmatch->team1_result )
+        {
+            $rowmatch->team1_result = 0;
+        }
+        if ( !$rowmatch->team2_result )
+        {
+            $rowmatch->team2_result = 0;
+        }
+        */
+        $rowmatch->ringetotal       = $rowmatch->team1_result;
+        
+        $rowmatch->modified    = $this->jsmdate->toSql();
+		$rowmatch->modified_by = $this->jsmuser->get('id');
+        try
+		{
+		$result_update = $this->jsmdb->updateObject('#__sportsmanagement_match_single', $rowmatch, 'id', true);
+        $ringetotal += $rowmatch->ringetotal;
+		}
+		catch (Exception $e)
+		{
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+        $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+		}
+}
 
 		if ($use_tie_break->use_tie_break)
 		{
@@ -225,199 +305,249 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$this->jsmdb->setQuery($this->jsmquery);
 		$event_list = $this->jsmdb->loadObjectList('name');
 
+if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' eventlist <pre>'.print_r($event_list,true).'</pre>'), 'notice');
+}
+
 		$result = true;
 
 		for ($x = 0; $x < count($pks); $x++)
 		{
-			// änderungen im datum oder der uhrzeit
-			$tbl = $this->getTable();;
-			$tbl->load((int) $pks[$x]);
-
-			list($date, $time) = explode(" ", $tbl->match_date);
-			$this->_match_time_new = $post['match_time' . $pks[$x]] . ':00';
-			$this->_match_date_new = $post['match_date' . $pks[$x]];
-			$this->_match_time_old = $time;
-			$this->_match_date_old = sportsmanagementHelper::convertDate($date);
-
-			$post['match_date' . $pks[$x]] = sportsmanagementHelper::convertDate($post['match_date' . $pks[$x]], 0);
-			$post['match_date' . $pks[$x]] = $post['match_date' . $pks[$x]] . ' ' . $post['match_time' . $pks[$x]] . ':00';
-
-			$tblMatch                       = self::getTable();
+		  if ( array_key_exists($x, $pks) )
+          {
+			/** änderungen */
+            $tblMatch                       = new stdClass;
 			$tblMatch->id                   = $pks[$x];
-			$tblMatch->match_number         = $post['match_number' . $pks[$x]];
-			$tblMatch->match_date           = $post['match_date' . $pks[$x]];
-			$tblMatch->crowd                = $post['crowd' . $pks[$x]];
-			$tblMatch->round_id             = $post['round_id' . $pks[$x]];
-			$tblMatch->division_id          = $post['division_id' . $pks[$x]];
-			$tblMatch->projectteam1_id      = $post['projectteam1_id' . $pks[$x]];
-			$tblMatch->projectteam2_id      = $post['projectteam2_id' . $pks[$x]];
-			$tblMatch->teamplayer1_id       = $post['teamplayer1_id' . $pks[$x]];
-			$tblMatch->teamplayer2_id       = $post['teamplayer2_id' . $pks[$x]];
-			$tblMatch->double_team1_player1 = $post['double_team1_player1' . $pks[$x]];
-			$tblMatch->double_team1_player2 = $post['double_team1_player2' . $pks[$x]];
-			$tblMatch->double_team2_player1 = $post['double_team2_player1' . $pks[$x]];
-			$tblMatch->double_team2_player2 = $post['double_team2_player2' . $pks[$x]];
+			$tblMatch->match_number         = $post['match_number'.$pks[$x]];
+            $tblMatch->match_type         = $post['match_type' . $pks[$x]];
+			//$tblMatch->match_date           = $post['match_date' . $pks[$x]]. ':00';
+			$tblMatch->crowd                = $post['crowd'.$pks[$x]] ? $post['crowd'.$pks[$x]] : 0;
+			$tblMatch->round_id             = $post['rid'] ? $post['rid'] : 0;
+			$tblMatch->division_id          = $post['division_id'] ? $post['division_id'] : 0;
+			$tblMatch->projectteam1_id      = $post['projectteam1_id'] ? $post['projectteam1_id'] : 0;
+			$tblMatch->projectteam2_id      = $post['projectteam2_id'] ? $post['projectteam2_id'] : 0;
+			$tblMatch->teamplayer1_id       = $post['teamplayer1_id'.$pks[$x]] ? $post['teamplayer1_id'.$pks[$x]] : 0;
+			$tblMatch->teamplayer2_id       = $post['teamplayer2_id'.$pks[$x]] ? $post['teamplayer2_id'.$pks[$x]] : 0;
+			$tblMatch->double_team1_player1 = $post['double_team1_player1'.$pks[$x]] ? $post['double_team1_player1'.$pks[$x]] : 0;
+			$tblMatch->double_team1_player2 = $post['double_team1_player2'.$pks[$x]] ? $post['double_team1_player2'.$pks[$x]] : 0;
+			$tblMatch->double_team2_player1 = $post['double_team2_player1'.$pks[$x]] ? $post['double_team2_player1'.$pks[$x]] : 0;
+			$tblMatch->double_team2_player2 = $post['double_team2_player2'.$pks[$x]] ? $post['double_team2_player2'.$pks[$x]] : 0;
 
 			$tblMatch->team1_result = null;
 			$tblMatch->team2_result = null;
 
-			foreach ($post['team1_result_split' . $pks[$x]] as $key => $value)
+			foreach ( $post['team1_result_split'.$pks[$x]] as $key => $value )
 			{
-				if ($post['team1_result_split' . $pks[$x]][$key] != '' && $post['team2_result_split' . $pks[$x]][$key] != '')
+				if ( $post['team1_result_split'.$pks[$x]][$key] != '' && $post['team2_result_split'.$pks[$x]][$key] != '' )
 				{
-					if ($post['team1_result_split' . $pks[$x]][$key] > $post['team2_result_split' . $pks[$x]][$key])
+					if ( $post['team1_result_split'.$pks[$x]][$key] > $post['team2_result_split'.$pks[$x]][$key] )
 					{
 						$tblMatch->team1_result += 1;
 						$tblMatch->team2_result += 0;
 					}
 
-					if ($post['team1_result_split' . $pks[$x]][$key] < $post['team2_result_split' . $pks[$x]][$key])
+					if ( $post['team1_result_split'.$pks[$x]][$key] < $post['team2_result_split'.$pks[$x]][$key] )
 					{
 						$tblMatch->team1_result += 0;
 						$tblMatch->team2_result += 1;
 					}
 
-					if ($post['team1_result_split' . $pks[$x]][$key] == $post['team2_result_split' . $pks[$x]][$key])
+					if ( $post['team1_result_split'.$pks[$x]][$key] == $post['team2_result_split'.$pks[$x]][$key] )
 					{
 						$tblMatch->team1_result += 1;
 						$tblMatch->team2_result += 1;
 					}
+                    
+                    $tblMatch->ringetotal_teamplayer1_id += $post['team1_result_split'.$pks[$x]][$key];
+                    $tblMatch->ringetotal_teamplayer2_id += $post['team2_result_split'.$pks[$x]][$key];
+                        
 				}
 				else
 				{
-					//                        $tblMatch->team1_result	= NULL;
-					//                        $tblMatch->team2_result	= NULL;
+				    /** keine funktion */
 				}
 			}
 
 			$tblMatch->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
 			$tblMatch->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);
+         try
+         {   
+            $result = Factory::getDbo()->updateObject('#__sportsmanagement_match_single', $tblMatch, 'id', true);
+            }
+		catch (Exception $e)
+		{
+			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'error');
+			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'error');
+		
+		}
 
-			if (!$tblMatch->store())
-			{
-				$result = false;
-			}
-			else
-			{
-			}
-
-			// Ereignisse speichern heim
+			/** Ereignisse speichern heim */
 			if ($tblMatch->teamplayer1_id)
 			{
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_SINGLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_SINGLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_SINGLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_SINGLE_LOST']->id;
 				}
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
 
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->teamplayer1_id, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam1_id'], $tblMatch->teamplayer1_id, $event_id);
+                }
 			}
 
-			// Ereignisse speichern heim
+			/** Ereignisse speichern heim */
 			if ($tblMatch->double_team1_player1)
 			{
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_LOST']->id;
 				}
-
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->double_team1_player1, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam1_id'], $tblMatch->double_team1_player1, $event_id);
+                }
 			}
 
-			// Ereignisse speichern heim
+			/** Ereignisse speichern heim */
 			if ($tblMatch->double_team1_player2)
 			{
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_LOST']->id;
 				}
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
 
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->double_team1_player2, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam1_id'], $tblMatch->double_team1_player2, $event_id);
+                }
 			}
 
-			// Ereignisse speichern gast
+			/** Ereignisse speichern gast */
 			if ($tblMatch->teamplayer2_id)
 			{
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_SINGLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_SINGLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_SINGLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_SINGLE_LOST']->id;
 				}
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
 
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->teamplayer2_id, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam2_id'], $tblMatch->teamplayer2_id, $event_id);
-			}
+                }
+ 			}
 
-			// Ereignisse speichern gast
+			/** Ereignisse speichern gast */
 			if ($tblMatch->double_team2_player1)
 			{
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_LOST']->id;
 				}
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
 
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->double_team2_player1, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam2_id'], $tblMatch->double_team2_player1, $event_id);
+                }
 			}
 
-			// Ereignisse speichern gast
+			/** Ereignisse speichern gast */
 			if ($tblMatch->double_team2_player2)
 			{
 				if ($tblMatch->team1_result < $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_WON']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_WON']->id;
 				}
 
 				if ($tblMatch->team1_result > $tblMatch->team2_result)
 				{
-					// Ereignis_id
-					$event_id = $event_list['COM_SPORTSMANAGEMENT_TENNIS_E_DOUBLE_LOST']->id;
+					/** Ereignis_id */
+					$event_id = $event_list[$event_st_search.'_E_DOUBLE_LOST']->id;
 				}
+                
+                if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' event_id <pre>'.print_r($event_id,true).'</pre>'), 'notice');
+}
 
+if ( $event_id )
+{
 				self::deleteevents($post['match_id'], $tblMatch->double_team2_player2, $event_id);
 				self::insertevents($post['match_id'], $post['projectteam2_id'], $tblMatch->double_team2_player2, $event_id);
+                }
 			}
+            }
+            
 		}
 
-		// Alles ok
-		// jetzt die einzelergebnisse zum hauptspiel addieren
+		/** Alles ok
+		 jetzt die einzelergebnisse zum hauptspiel addieren */
 		$this->jsmquery->clear();
 		$this->jsmquery->select('mc.*');
 		$this->jsmquery->from('#__sportsmanagement_match_single AS mc');
@@ -426,6 +556,12 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 
 		$result = $this->jsmdb->loadObjectList();
 		$temp   = new stdClass;
+        $temp->team1_result = 0;
+        $temp->team2_result = 0;
+        $temp->team1_single_sets = 0;
+		$temp->team2_single_sets = 0;
+        $temp->team1_single_games = 0;
+        $temp->team2_single_games = 0;
 
 		foreach ($result as $row)
 		{
@@ -453,18 +589,23 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 			$team1_result_split = explode(";", $row->team1_result_split);
 			$team2_result_split = explode(";", $row->team2_result_split);
 
+if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' team1_result_split <pre>'.print_r($team1_result_split,true).'</pre>'), 'notice');
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' team2_result_split <pre>'.print_r($team2_result_split,true).'</pre>'), 'notice');
+}
 			foreach ($team1_result_split as $key => $value)
 			{
 				if ($use_tie_break->use_tie_break)
 				{
 					if ($key < $result_tie_break)
 					{
-						$temp->team1_single_games += $value;
+						$temp->team1_single_games += (int) $value;
 					}
 				}
 				else
 				{
-					$temp->team1_single_games += $value;
+					$temp->team1_single_games += (int) $value;
 				}
 			}
 
@@ -474,12 +615,12 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 				{
 					if ($key < $result_tie_break)
 					{
-						$temp->team2_single_games += $value;
+						$temp->team2_single_games += (int) $value;
 					}
 				}
 				else
 				{
-					$temp->team2_single_games += $value;
+					$temp->team2_single_games += (int) $value;
 				}
 			}
 
@@ -558,16 +699,16 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 		return Table::getInstance($type, $prefix, $config);
 	}
 
+	
 	/**
 	 * sportsmanagementModeljlextindividualsport::deleteevents()
-	 *
-	 * @param   mixed  $match_id
-	 * @param   mixed  $teamplayer1_id
-	 * @param   mixed  $event_id
-	 *
+	 * 
+	 * @param integer $match_id
+	 * @param integer $teamplayer1_id
+	 * @param integer $event_id
 	 * @return void
 	 */
-	function deleteevents($match_id, $teamplayer1_id, $event_id)
+	function deleteevents($match_id = 0, $teamplayer1_id = 0, $event_id = 0)
 	{
 
 //		// Create a new query object.
@@ -597,17 +738,17 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 
 	}
 
+	
 	/**
 	 * sportsmanagementModeljlextindividualsport::insertevents()
-	 *
-	 * @param   mixed  $match_id
-	 * @param   mixed  $projectteam1_id
-	 * @param   mixed  $teamplayer1_id
-	 * @param   mixed  $event_id
-	 *
+	 * 
+	 * @param integer $match_id
+	 * @param integer $projectteam1_id
+	 * @param integer $teamplayer1_id
+	 * @param integer $event_id
 	 * @return void
 	 */
-	function insertevents($match_id, $projectteam1_id, $teamplayer1_id, $event_id)
+	function insertevents($match_id = 0, $projectteam1_id = 0, $teamplayer1_id = 0, $event_id = 0)
 	{
 //		$app                   = Factory::getApplication();
 //		$db                    = sportsmanagementHelper::getDBConnection();

@@ -199,6 +199,22 @@ class sportsmanagementControllerAjax extends BaseController
 		echo json_encode((array) $model->getpersonlistoptions(Factory::getApplication()->input->getInt('person_art'), $jinput->getVar('required', 'false'), Factory::getApplication()->input->getInt('slug'), Factory::getApplication()->input->getInt('dbase')));
 		Factory::getApplication()->close();
 	}
+    
+    
+    
+    /**
+     * sportsmanagementControllerAjax::personlistoptionsprojectteam()
+     * 
+     * @return void
+     */
+    public function personlistoptionsprojectteam()
+	{
+		$app    = Factory::getApplication();
+		$jinput = $app->input;
+		$model  = $this->getModel('ajax');
+		echo json_encode((array) $model->getpersonlistoptions(Factory::getApplication()->input->getInt('person_art'), $jinput->getVar('required', 'false'), Factory::getApplication()->input->getInt('slug'), Factory::getApplication()->input->getInt('dbase')));
+		Factory::getApplication()->close();
+	}
 
 	/**
 	 * sportsmanagementControllerAjax::personpositionoptions()

@@ -51,7 +51,7 @@ if ($this->project->use_tie_break)
 
 <div id="verein_display">
     <h3><?php echo Text::_('COM_SPORTSMANAGEMENT_SINGLE'); ?></h3>
-    <table class="matchreport">
+    <table class="table table-striped ">
         <tr style="">
             <th>Nr</th>
             <th>Pos</th>

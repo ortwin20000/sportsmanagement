@@ -295,6 +295,12 @@ sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 				<?PHP
 			}
 			?>
+            <a class="btn btn-jsm-dash" href="index.php?option=com_sportsmanagement&view=update&task=update.save&file_name=jsm_install_jcomments.php">
+                <img src="components/com_sportsmanagement/assets/icons/jcomments_j4_256.png" width="50px"
+                     alt="<?php echo Text::_('JComments for Joomla 4') ?>"/><br/>
+                <span><?php echo Text::_('JComments for Joomla 4') ?></span>
+            </a>
+            
         </div>
         <hr>
         <div class="">

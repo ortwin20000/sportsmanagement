@@ -132,6 +132,7 @@ class JSMModelAdmin extends AdminModel
 		$this->jsmdate        = Factory::getDate();
 		$this->jsmmessage     = '';
 		$this->jsmmessagetype = 'notice';
+        $this->joomlaconfig = Factory::getConfig();
 
 		$this->project_id = $this->jsmjinput->getint('pid');
 
@@ -521,18 +522,10 @@ if ( $config->get('debug') )
 			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'error');
 		
 		}
-                            
-//							$table    = 'person';
-//							$row      = Table::getInstance($table, 'sportsmanagementTable');
-//							$row->load((int) $person_1);
-//							$person_double[] = $row->firstname . ' ' . $row->lastname;
-//                            
-//							$row->load((int) $person_2);
-//                            
-//							$person_double[]   = $row->firstname . ' ' . $row->lastname;
-                            
-							$data['lastname']  = implode(" - ", $person_double);
-							$data['firstname'] = '';
+        
+        /** vor- und nachname nicht setzen*/
+//							$data['lastname']  = implode(" - ", $person_double);
+//							$data['firstname'] = '';
 						}
 						break;
 				}

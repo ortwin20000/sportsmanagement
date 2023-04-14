@@ -39,8 +39,7 @@ filter="unset"
 			label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_L_NAME"
 			description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_L_NAME_DESC"
 			class="inputbox"
-			size="90"
-			required="true"/>		
+			size="90"/>		
 		<field
 			name="nickname"
 			type="text"
@@ -210,10 +209,80 @@ landesverband
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="injury_detail" showon="injury:1" type="editor" label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_TYPE" description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_TYPE_DESC" width="450" filter="safehtml"/>
-		<field name="injury_date_start" showon="injury:1" type="calendar" label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_START" description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_START_DESC" class="inputbox" format="%d-%m-%Y"/>
-		<field name="injury_date_end" showon="injury:1" type="calendar" label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_END" description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_INJURY_END_DESC" class="inputbox" format="%d-%m-%Y"/>
-	</fieldset>
+      
+<field
+name="person_art"
+type="list"
+class="inputbox"
+default="1"
+size="1"
+label="COM_SPORTSMANAGEMENT_GLOBAL_PERSON_ART"
+description="COM_SPORTSMANAGEMENT_GLOBAL_PERSON_ART_DESC">
+<option	value="1">COM_SPORTSMANAGEMENT_PERSON_SINGLE</option>
+<option	value="2">COM_SPORTSMANAGEMENT_PERSON_DOUBLE</option>
+</field>	
+
+        <!--
+<field
+name="person_id1"
+type="dependsql"
+depends="person_art"
+task="personlistoptions" 
+class="inputbox"
+showon="person_art:2"
+default="0"
+size="1"
+label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_1"
+description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_1_DESC"
+>
+<option	value="0">COM_SPORTSMANAGEMENT_GLOBAL_SELECT_PERSON</option>
+</field>	
+	-->
+	<!--
+<field
+name="person_id2"
+type="dependsql"
+depends="person_art"
+task="personlistoptions"
+class="inputbox"
+showon="person_art:2"
+default="0"
+size="1"
+label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_2"
+description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_2_DESC"
+>
+<option	value="0">COM_SPORTSMANAGEMENT_GLOBAL_SELECT_PERSON</option>
+</field>
+	-->
+</fieldset>
+
+
+</fields>		
+  
+	<fieldset name="description"
+  label="COM_SPORTSMANAGEMENT_TABS_DESCRIPTION"
+  description="COM_SPORTSMANAGEMENT_TABS_DESCRIPTION_DESC">		
+			<field
+				name="notes"
+				type="editor"
+				label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_DESCRIPTION"
+				description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_DESCRIPTION_DESC"
+				width="450" 
+				filter="JComponentHelper::filterText"/>			
+	</fieldset>	
+  
+  <fieldset name="seasons" 
+  label="COM_SPORTSMANAGEMENT_TABS_SEASON"
+  description="COM_SPORTSMANAGEMENT_TABS_SEASON_DESC">		
+
+		<field
+			name="season_ids"
+			type="seasoncheckbox"
+			targettable="season_person_id"
+			targetid="person_id"
+			label="COM_SPORTSMANAGEMENT_GLOBAL_SEASONLIST"
+			description="COM_SPORTSMANAGEMENT_GLOBAL_SEASONLIST_DESC"
+			class="inputbox"/>	
 
 	<fieldset name="suspension" label="COM_SPORTSMANAGEMENT_TABS_SUSPENSION" description="COM_SPORTSMANAGEMENT_TABS_SUSPENSION_DESC">
 		<field name="suspension" type="extensionradiobutton" default="0" class="radio btn-group btn-group-yesno" label="COM_SPORTSMANAGEMENT_ADMIN_PERSON_SUSPENDED" description="COM_SPORTSMANAGEMENT_ADMIN_PERSON_SUSPENDED_DESC">
