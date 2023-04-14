@@ -54,7 +54,8 @@ class sportsmanagementViewResultsranking extends sportsmanagementView
 		$rankingmodel::$from = 0;
 		$rankingmodel::$to   = 0;
 		$rankingmodel->computeRanking($this->jinput->getInt('cfg_which_database', 0), 0, $project->sport_type_name);
-
+		$rankingmodel->computeRankingDivision($this->jinput->getInt('cfg_which_database', 0), 0, $project->sport_type_name);
+		
 		$mdlProjectteams = BaseDatabaseModel::getInstance("Projectteams", "sportsmanagementModel");
 
 		/** add the results model */
