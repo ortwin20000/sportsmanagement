@@ -758,7 +758,7 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 							}
 	
 							$append .= ' onchange="document.getElementById(\'cb' . $i . '\').checked=true" ';
-							echo HTMLHelper::_('select.genericlist', $this->lists['teams_' . $row->divhomeid], 'referee_id' . $row->id,
+							echo HTMLHelper::_('select.genericlist', $this->lists['referees'], 'referee_id' . $row->id,
 								'class="form-control form-control-inline" size="1"' . $append, 'value', 'text', $row->referee_id
 							);	
 						}

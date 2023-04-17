@@ -152,6 +152,8 @@ class sportsmanagementViewMatches extends sportsmanagementView
 				$row->divawayid = 0;
 			}
 
+			$this->lists['referees']        = array_merge($teams, $mdlProject->getProjectTeamsOptions($this->project_id, 0));
+
 			if ($projectteams = $mdlProject->getProjectTeamsOptions($this->project_id, $divhomeid))
 			{
 				$teams = array_merge($teams, $projectteams);
