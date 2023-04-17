@@ -70,7 +70,19 @@ if ($this->project->use_tie_break)
 			?>
 
 
-            <th>gsp.</th>
+           <!-- <th>gsp.</th> -->
+           <th>Start Player 1</th>
+           <th>Start Player 2</th>
+           <th>Normal Player 1 won</th>
+           <th>Normal Player 1 lost</th>
+           <th>Normal Player 2 won</th>
+           <th>Normal Player 2 lost</th>
+           
+           <th>Anormal Player 1 won</th>
+           <th>Anormal Player 1 lost</th>
+           <th>Anormal Player 2 won</th>
+           <th>Anormal Player 2 lost</th>
+           
         </tr>
 
 		<?PHP
@@ -223,7 +235,69 @@ if ($this->project->use_tie_break)
 				{
 					$complete_results['COM_SPORTSMANAGEMENT_SINGLE']['POINTS2'] += 1;
 				}
+                
+?>                
+<td>
+<?php
+echo $single->tt_startpoints_teamplayer1_id;
+?>
+</td>                
+<td>
+<?php
+echo $single->tt_startpoints_teamplayer2_id;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer1_id_normal_won;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer1_id_normal_lost;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer2_id_normal_won;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer2_id_normal_lost;
+?>
+</td>
 
+
+<td>
+<?php
+echo $single->tt_teamplayer1_id_anormal_won;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer1_id_anormal_lost;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer2_id_anormal_won;
+?>
+</td>
+<td>
+<?php
+echo $single->tt_teamplayer2_id_anormal_lost;
+?>
+</td>
+
+
+
+
+
+
+
+                
+<?php
 				echo '</tr>';
 			}
 		}
@@ -253,7 +327,7 @@ if ($this->project->use_tie_break)
 			?>
 
 
-            <th>gsp.</th>
+           <!-- <th>gsp.</th> -->
         </tr>
 
 		<?PHP

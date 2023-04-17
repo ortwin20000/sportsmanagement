@@ -74,6 +74,62 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 
 
 /**
+ * sportsmanagementModeljlextindividualsport::getmatchsingle_rowshome()
+ * 
+ * @param integer $project_id
+ * @param integer $projectteam_id
+ * @param integer $season_team_person_id
+ * @param string $match_type
+ * @param string $homeaway
+ * @return
+ */
+public static function getmatchsingle_rowshome($project_id = 0, $projectteam_id = 0, $season_team_person_id = 0, $match_type = 'SINGLE', $homeaway = 'HOME') 
+{
+$result = array();
+$app = Factory::getApplication();
+$db = sportsmanagementHelper::getDBConnection();
+$query = $db->getQuery(true);
+$query->clear();
+$query->select('ms.*');
+$query->from('#__sportsmanagement_match_single as ms');
+$query->join('INNER', '#__sportsmanagement_round AS r ON r.id = ms.round_id');
+$query->where('r.project_id = ' . $project_id);
+switch ( $homeaway )
+{
+case 'HOME':
+$query->where('ms.projectteam1_id = ' . $projectteam_id);    
+$query->where('ms.teamplayer1_id = ' . $season_team_person_id);    
+break;
+case 'AWAY':
+$query->where('ms.projectteam2_id = ' . $projectteam_id);    
+$query->where('ms.teamplayer2_id = ' . $season_team_person_id);    
+break;
+}
+
+$query->where('ms.match_type LIKE ' . $db->Quote('' . $match_type . '') );
+try
+{
+$db->setQuery($query);
+$result = $db->loadObjectList();
+}
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'error');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'error');
+$app->enqueueMessage(' query<pre>'.print_r($query->dump(),true).'</pre>', 'error');
+}    
+    
+return $result;    
+    
+}
+
+
+
+
+
+
+
+/**
  * sportsmanagementModeljlextindividualsport::addmatch()
  * 
  * @param mixed $post
@@ -260,22 +316,14 @@ case 'COM_SPORTSMANAGEMENT_ST_TENNIS':
 for ($x = 0; $x < count($pks); $x++)
 		{
 		$save_match = true;  
-		$rowmatch                          = new stdClass;
-		$rowmatch->id                      = $pks[$x];
-        $rowmatch->teamplayer1_id = $post['teamplayer1_id'.$pks[$x]] ? $post['teamplayer1_id'.$pks[$x]] : 0  ;
-	$rowmatch->teamplayer2_id = $post['teamplayer2_id'.$pks[$x]] ? $post['teamplayer2_id'.$pks[$x]] : 0  ;
-        $rowmatch->team1_result = $post['team1_result'.$pks[$x]] ? $post['team1_result'.$pks[$x]] : 0;
-        $rowmatch->team2_result = $post['team2_result'.$pks[$x]] ? $post['team2_result'.$pks[$x]] : 0;
-        /**
-        if ( !$rowmatch->team1_result )
-        {
-            $rowmatch->team1_result = 0;
-        }
-        if ( !$rowmatch->team2_result )
-        {
-            $rowmatch->team2_result = 0;
-        }
-        */
+        
+$rowmatch = new stdClass;
+$rowmatch->id = $pks[$x];
+$rowmatch->teamplayer1_id = $post['teamplayer1_id'.$pks[$x]] ? $post['teamplayer1_id'.$pks[$x]] : 0  ;
+$rowmatch->teamplayer2_id = $post['teamplayer2_id'.$pks[$x]] ? $post['teamplayer2_id'.$pks[$x]] : 0  ;
+$rowmatch->team1_result = $post['team1_result'.$pks[$x]] ? $post['team1_result'.$pks[$x]] : 0;
+$rowmatch->team2_result = $post['team2_result'.$pks[$x]] ? $post['team2_result'.$pks[$x]] : 0;
+
         $rowmatch->ringetotal       = $rowmatch->team1_result;
         
         $rowmatch->modified    = $this->jsmdate->toSql();
@@ -312,6 +360,75 @@ if ( $this->joomlaconfig->get('debug') )
 
 		$result = true;
 
+/**
+ * jetzt die punkte nach den kriterien zuordnen
+ * 
+ * Ecarts de points	Points gagnés lors d'une victoire	Points perdus lors d'une défaite
+ * 
+                Normale	Anormale	Normale	Anormale
+entre 0 et 49	     6	6	         -6	     -6
+entre 50 et 99	     5	8	         -5	        -8
+entre 100 et 149	4	10	          -4	-10
+entre 150 et 199	3	12	          -3	-12
+entre 200 et 299	2	15	          -2	-15
+entre 300 et 399	1	19	          -1	-19
+au-dessus de 400	0	25	          0	-25
+ */            
+$range_points = array(); 
+$temp = new stdClass;
+$temp->von = 0;
+$temp->bis = 49;
+$temp->normale = 6;
+$temp->anormale = 6;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 50;
+$temp->bis = 99;
+$temp->normale = 5;
+$temp->anormale = 8;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 100;
+$temp->bis = 149;
+$temp->normale = 4;
+$temp->anormale = 10;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 150;
+$temp->bis = 199;
+$temp->normale = 3;
+$temp->anormale = 12;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 200;
+$temp->bis = 299;
+$temp->normale = 2;
+$temp->anormale = 15;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 300;
+$temp->bis = 399;
+$temp->normale = 1;
+$temp->anormale = 19;
+$range_points[] = $temp;
+ 
+$temp = new stdClass;
+$temp->von = 400;
+$temp->bis = 40000;
+$temp->normale = 0;
+$temp->anormale = 25;
+$range_points[] = $temp;
+if ( $this->joomlaconfig->get('debug') )
+{
+        $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . ' range_points <pre>'.print_r($range_points,true).'</pre>'), 'notice');
+}
+
+
 		for ($x = 0; $x < count($pks); $x++)
 		{
 		  if ( array_key_exists($x, $pks) )
@@ -320,7 +437,7 @@ if ( $this->joomlaconfig->get('debug') )
             $tblMatch                       = new stdClass;
 			$tblMatch->id                   = $pks[$x];
 			$tblMatch->match_number         = $post['match_number'.$pks[$x]];
-            $tblMatch->match_type         = $post['match_type' . $pks[$x]];
+            $tblMatch->match_type         = $post['match_type'.$pks[$x]];
 			//$tblMatch->match_date           = $post['match_date' . $pks[$x]]. ':00';
 			$tblMatch->crowd                = $post['crowd'.$pks[$x]] ? $post['crowd'.$pks[$x]] : 0;
 			$tblMatch->round_id             = $post['rid'] ? $post['rid'] : 0;
@@ -329,6 +446,21 @@ if ( $this->joomlaconfig->get('debug') )
 			$tblMatch->projectteam2_id      = $post['projectteam2_id'] ? $post['projectteam2_id'] : 0;
 			$tblMatch->teamplayer1_id       = $post['teamplayer1_id'.$pks[$x]] ? $post['teamplayer1_id'.$pks[$x]] : 0;
 			$tblMatch->teamplayer2_id       = $post['teamplayer2_id'.$pks[$x]] ? $post['teamplayer2_id'.$pks[$x]] : 0;
+            
+$this->jsmquery->clear();
+$this->jsmquery->select('tt_startpoints');
+$this->jsmquery->from('#__sportsmanagement_season_team_person_id');
+$this->jsmquery->where('id = ' . $tblMatch->teamplayer1_id );
+$this->jsmdb->setQuery($this->jsmquery);            
+$tblMatch->tt_startpoints_teamplayer1_id = $this->jsmdb->loadResult() ? $this->jsmdb->loadResult() : 0;
+
+$this->jsmquery->clear();
+$this->jsmquery->select('tt_startpoints');
+$this->jsmquery->from('#__sportsmanagement_season_team_person_id');
+$this->jsmquery->where('id = ' . $tblMatch->teamplayer2_id );
+$this->jsmdb->setQuery($this->jsmquery);            
+$tblMatch->tt_startpoints_teamplayer2_id = $this->jsmdb->loadResult() ? $this->jsmdb->loadResult() : 0;
+            
 			$tblMatch->double_team1_player1 = $post['double_team1_player1'.$pks[$x]] ? $post['double_team1_player1'.$pks[$x]] : 0;
 			$tblMatch->double_team1_player2 = $post['double_team1_player2'.$pks[$x]] ? $post['double_team1_player2'.$pks[$x]] : 0;
 			$tblMatch->double_team2_player1 = $post['double_team2_player1'.$pks[$x]] ? $post['double_team2_player1'.$pks[$x]] : 0;
@@ -369,8 +501,56 @@ if ( $this->joomlaconfig->get('debug') )
 				}
 			}
 
+
+$points_normale = 0;
+$points_anormale = 0;
+$differenc_points = 0;
+$differenc_points = $tblMatch->tt_startpoints_teamplayer1_id >= $tblMatch->tt_startpoints_teamplayer2_id ? $tblMatch->tt_startpoints_teamplayer1_id - $tblMatch->tt_startpoints_teamplayer2_id : $tblMatch->tt_startpoints_teamplayer2_id - $tblMatch->tt_startpoints_teamplayer1_id;
+
+foreach( $range_points as $range => $points )
+{
+if ( $differenc_points >= $points->von && $differenc_points <= $points->bis )
+{
+$points_normale = $points->normale;
+$points_anormale = $points->anormale;
+}     
+}
+
+if ( $tblMatch->team1_result > $tblMatch->team2_result )
+{
+$tblMatch->tt_teamplayer1_id_normal_won = $points_normale;
+$tblMatch->tt_teamplayer1_id_normal_lost = 0;
+$tblMatch->tt_teamplayer1_id_anormal_won = $points_anormale;
+$tblMatch->tt_teamplayer1_id_anormal_lost = 0;
+
+$tblMatch->tt_teamplayer2_id_normal_won = 0;
+$tblMatch->tt_teamplayer2_id_normal_lost = $points_normale * -1;
+$tblMatch->tt_teamplayer2_id_anormal_won = 0;
+$tblMatch->tt_teamplayer2_id_anormal_lost = $points_anormale * -1;
+}
+elseif ( $tblMatch->team1_result < $tblMatch->team2_result )
+{
+$tblMatch->tt_teamplayer1_id_normal_won = 0;
+$tblMatch->tt_teamplayer1_id_normal_lost = $points_normale * -1;
+$tblMatch->tt_teamplayer1_id_anormal_won = 0;
+$tblMatch->tt_teamplayer1_id_anormal_lost = $points_anormale * -1;
+
+$tblMatch->tt_teamplayer2_id_normal_won = $points_normale;
+$tblMatch->tt_teamplayer2_id_normal_lost = 0;
+$tblMatch->tt_teamplayer2_id_anormal_won = $points_anormale;
+$tblMatch->tt_teamplayer2_id_anormal_lost = 0;   
+    
+    
+}
+
+
+
+
 			$tblMatch->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
 			$tblMatch->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);
+            
+            
+            
          try
          {   
             $result = Factory::getDbo()->updateObject('#__sportsmanagement_match_single', $tblMatch, 'id', true);
