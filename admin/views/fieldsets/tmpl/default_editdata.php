@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Log\Log;
 
 switch ( $this->view )
 {
@@ -50,6 +51,23 @@ catch (Exception $e)
 $view = $this->jinput->getCmd('view', 'cpanel');
 
 
+switch ($view)
+{
+case 'club':
+case 'playground':
+case 'player':
+case 'events':
+case 'statistics':
+$links = 6;
+$rechts = 6;
+break;
+default:
+$links = 12;
+$rechts = 0;		
+break;
+}
+
+
 /**
  *
  * welche joomla version ?
@@ -70,40 +88,50 @@ if (version_compare(JSM_JVERSION, '4', 'eq'))
 			?>
             <!-- <div class="row"> -->
                 <!-- <div class="col-md-12"> -->
-					<?PHP
-					switch ($fieldset->name)
-					{
-						case 'details':
-							?>
-                            <div class="row">
-                                <div class="col-lg-6">
-									<?PHP
-									foreach ($this->form->getFieldset($fieldset->name) as $field)
-									{
-									  
-										?>
-                                        <div class="control-group">
-                                            <div class="control-label">
-												<?php echo $field->label; ?>
-                                            </div>
-                                            <div class="controls">
-												<?php echo $field->input; ?>
-
-												<?PHP
-												$suchmuster     = array("jform[", "]", "request[", "params[");
-												$ersetzen       = array('', '', '');
-												$var_onlinehelp = str_replace($suchmuster, $ersetzen, $field->name);
-												switch ($var_onlinehelp)
-												{
-													case 'ids':
-														break;
-													default:
-														switch ($field->type)
-                                            {
-                                            case 'extensionsubtitle':
-                                            case 'Hidden':
-                                            break;
-                                            default:
+	    
+<?PHP
+			
+if ( Factory::getConfig()->get('debug') )
+{  
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' fieldset name -> ' . $fieldset->name), Log::NOTICE, 'jsmerror');
+}				
+			
+switch ($fieldset->name)
+{
+case 'details':
+case 'request':
+case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_OPTIONS':
+case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_DIV_OPTIONS':
+case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_TEAMOPTIONS':
+case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_ADVANCED_OPTIONS':
+?>
+<div class="row">
+<div class="col-lg-<?php echo $links; ?>">
+<?PHP
+foreach ($this->form->getFieldset($fieldset->name) as $field)
+{
+?>
+<div class="control-group">
+<div class="control-label">
+<?php echo $field->label; ?>
+</div>
+<div class="controls">
+<?php echo $field->input; ?>
+<?PHP
+$suchmuster     = array("jform[", "]", "request[", "params[");
+$ersetzen       = array('', '', '');
+$var_onlinehelp = str_replace($suchmuster, $ersetzen, $field->name);
+switch ($var_onlinehelp)
+{
+case 'ids':
+break;
+default:
+switch ($field->type)
+{
+case 'extensionsubtitle':
+case 'Hidden':
+break;
+default:
 $link_onlinehelp = COM_SPORTSMANAGEMENT_HELP_SERVER . 'SM-Backend-Felder:' . $this->jinput->getVar("view") . '-' . $this->form->getName() . '-' . $var_onlinehelp;                                                
 $cmd = "Joomla.popupWindow('$link_onlinehelp', '" . Text::_('COM_SPORTSMANAGEMENT_HELP_LINK', true) . "',". COM_SPORTSMANAGEMENT_MODAL_POPUP_WIDTH." ,". COM_SPORTSMANAGEMENT_MODAL_POPUP_HEIGHT.", 1)";
 ?>
@@ -117,56 +145,52 @@ Text::_('COM_SPORTSMANAGEMENT_HELP_LINK') . '"'
 ?>                      
 </button>
 <?PHP
-                                            break;
-                                            }
-											
-														if ($field->name == 'jform[country]')
-														{
-															echo JSMCountries::getCountryFlag($field->value);
-														}
-
-														if ($field->name == 'jform[standard_playground]')
-														{
-															$picture = sportsmanagementHelper::getPicturePlayground($field->value);
-															?>
-                                                            <a href="<?php echo Uri::root() . $picture; ?>"
-                                                               title="<?php echo 'Playground'; ?>" class="modal">
-                                                                <img src="<?php echo Uri::root() . $picture; ?>"
-                                                                     alt="<?php echo 'Playground'; ?>" width="50"/>
-                                                            </a>
-															<?PHP
-														}
-
-														if ($field->name == 'jform[website]')
-														{
-															if ($field->value)
-															{
-																echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
-															}
-														}
-														if ($field->name == 'jform[twitter]')
-														{
-															if ($field->value)
-															{
-																echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
-															}
-														}
-														if ($field->name == 'jform[facebook]')
-														{
-															if ($field->value)
-															{
-																echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
-															}
-														}
-														break;
-												}
-												?>
-                                            </div>
-                                        </div>
-										<?php
-
-									}
-									?>
+break;
+}
+if ($field->name == 'jform[country]')
+{
+echo JSMCountries::getCountryFlag($field->value);
+}
+if ($field->name == 'jform[standard_playground]')
+{
+$picture = sportsmanagementHelper::getPicturePlayground($field->value);
+?>
+<a href="<?php echo Uri::root() . $picture; ?>"
+title="<?php echo 'Playground'; ?>" class="modal">
+<img src="<?php echo Uri::root() . $picture; ?>"
+alt="<?php echo 'Playground'; ?>" width="50"/>
+</a>
+<?PHP
+}
+if ($field->name == 'jform[website]')
+{
+if ($field->value)
+{
+echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
+}
+}
+if ($field->name == 'jform[twitter]')
+{
+if ($field->value)
+{
+echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
+}
+}
+if ($field->name == 'jform[facebook]')
+{
+if ($field->value)
+{
+echo '<img style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=s&url=' . $field->value . '">';
+}
+}
+break;
+}
+?>
+</div>
+</div>
+<?php
+}
+?>
                                 </div>
 				    <?php
 					switch ($view)
@@ -181,7 +205,7 @@ Text::_('COM_SPORTSMANAGEMENT_HELP_LINK') . '"'
 					}
 					
 					?>
-                                <div class="col-lg-6">
+                                <div class="col-lg-<?php echo $rechts; ?>">
                                     <div class="control-group">
                                         <style type="text/css">.map_canvas {
                                                 width: 100%;

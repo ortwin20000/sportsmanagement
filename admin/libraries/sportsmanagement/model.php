@@ -164,6 +164,12 @@ class JSMModelAdmin extends AdminModel
 		if ($this->jsmapp->isClient('site'))
 		{
 		}
+		
+if ( Factory::getConfig()->get('debug') )
+{  
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout ' . $this->jsmjinput->getVar('layout')), Log::NOTICE, 'jsmerror');
+}		
+		
 	}
     
     
@@ -1032,9 +1038,20 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 					{
 						$message       = '';
 						$delete_season = array();
+if ( $config->get('debug') )
+{
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' post season_person_club_id<pre>'.print_r($post['season_person_club_id'],true).'</pre>'), '');
+$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' post season_person_position_id<pre>'.print_r($post['season_person_position_id'],true).'</pre>'), '');
+}	
+						
 
 						foreach ($data['season_ids'] as $key => $value)
 						{
+							
+$club_id = $post['season_person_club_id'][$key] ? $post['season_person_club_id'][$key] : 0;						
+$position_id = $post['season_person_position_id'][$key] ? $post['season_person_position_id'][$key] : 0;												
+	
+	
 							$this->jsmquery->clear();
 							$this->jsmquery->select('spi.id,s.name');
 							$this->jsmquery->from('#__sportsmanagement_season_person_id as spi');
@@ -1042,14 +1059,14 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 							$this->jsmquery->where('spi.person_id =' . $data['id']);
 							$this->jsmquery->where('spi.season_id =' . $value);
 							$this->jsmdb->setQuery($this->jsmquery);
-							$res             = $this->jsmdb->loadObject();
+							$res = $this->jsmdb->loadObject();
 							$delete_season[] = $value;
 
 							if (!$res)
 							{
 								$this->jsmquery->clear();
-								$columns = array('person_id', 'season_id', 'modified', 'modified_by');
-								$values = array($data['id'], $value, $this->jsmdb->Quote('' . $data['modified'] . ''), $data['modified_by']);
+								$columns = array('person_id', 'season_id','position_id','club_id', 'modified', 'modified_by');
+								$values = array($data['id'], $value,$position_id,$club_id, $this->jsmdb->Quote('' . $data['modified'] . ''), $data['modified_by']);
 								$this->jsmquery
 									->insert($this->jsmdb->quoteName('#__sportsmanagement_season_person_id'))
 									->columns($this->jsmdb->quoteName($columns))
@@ -1069,6 +1086,15 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 							else
 							{
 								$message .= 'Saisonzuordnung : ' . $res->name . ' schon vorhanden.<br>';
+                                
+                                $rowupdate = new stdClass;
+                                $rowupdate->id = $res->id;
+                                $rowupdate->club_id = $club_id;
+				$rowupdate->position_id = $position_id;
+                                $result_update = $this->jsmdb->updateObject('#__sportsmanagement_season_person_id', $rowupdate, 'id', true);
+                                
+                                
+                                
 							}
 						}
 
@@ -1878,6 +1904,11 @@ class JSMModelList extends ListModel
 		 * mit der kategorie: jsmerror
 		 */
 		Log::addLogger(array('logger' => 'messagequeue'), Log::ALL, array('jsmerror'));
+		
+if ( Factory::getConfig()->get('debug') )
+{  
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout ' . $this->jsmjinput->getVar('layout')), Log::NOTICE, 'jsmerror');
+}		
 
 	}
     

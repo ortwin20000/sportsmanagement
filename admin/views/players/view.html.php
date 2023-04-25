@@ -46,14 +46,27 @@ class sportsmanagementViewplayers extends sportsmanagementView
 		$this->team_id    = 0;
 		$this->persontype = 0;
 		$this->whichview = $this->jinput->get('whichview');
+		$this->assignclub = $this->jinput->get('assignclub');
 
-// Factory::getApplication()->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' task <pre>'.print_r(Factory::getApplication()->input->post->getArray(),true).'</pre>'  ), '');
+if ( Factory::getConfig()->get('debug') )
+{  
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' assign' . $this->assign), Log::NOTICE, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' season_id' . $this->season_id), Log::NOTICE, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' team_id' . $this->team_id), Log::NOTICE, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' persontype' . $this->persontype), Log::NOTICE, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' whichview' . $this->whichview), Log::NOTICE, 'jsmerror');
+Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout' . $this->getLayout()), Log::NOTICE, 'jsmerror');
+}		
+
 
 		switch ($this->getLayout())
 		{
 			case 'assignpersons':
 			case 'assignpersons_3':
 			case 'assignpersons_4':
+			case 'assignpersonsclub':
+			case 'assignpersonsclub_3':
+			case 'assignpersonsclub_4':
 			$this->season_id  = $this->jinput->get('season_id');
 			$this->team_id    = $this->jinput->get('team_id');
 			$this->persontype = $this->jinput->get('persontype');
