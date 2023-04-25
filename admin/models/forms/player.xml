@@ -67,6 +67,12 @@ filter="unset"
 	<option	value="3">COM_SPORTSMANAGEMENT_ADMIN_PERSON_DIVERS</option>
 </field> 	  
 	  
+		<field name="referee_type" type="text" label="COM_SPORTSMANAGEMENT_F_REFEREES" class="inputbox"/>
+		<field name="referee_valid" type="calendar" format="%d-%m-%Y" class="inputbox" label="Gültig bis"/>
+
+		<field name="coach_type" type="text" label="COM_SPORTSMANAGEMENT_F_COACH" class="inputbox"/>
+		<field name="coach_valid" type="calendar" format="%d-%m-%Y" class="inputbox" label="Gültig bis"/>
+
 	  <field
 			name="jl_users"
 			type="user"
