@@ -110,7 +110,7 @@ img.car {
     
     $html[] = HTMLHelper::_(
 				'select.genericlist', $options, $this->name,
-				'style="width:225px;" class="'.$this->fieldname.'" size="1"' . $append, 'value', 'text', $this->value 
+				'style="width:225px;" class="'.$this->fieldname.' form-select " size="1"' . $append, 'value', 'text', $this->value 
 			);
     
     
@@ -137,7 +137,7 @@ img.car {
 		$query = $db->getQuery(true);
 
 		$query->select('id AS value, name AS text');
-		$query->from('#__sportsmanagement_playground');
+		$query->from('#__sportsmanagement_agegroup');
 		$query->order('name');
 		$db->setQuery($query);
 		$options = $db->loadObjectList();

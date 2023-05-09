@@ -861,7 +861,8 @@ if ( $config->get('debug') )
 			{
 			$data['start_date'] = sportsmanagementHelper::convertDate($data['start_date'], 0);
 			}
-				
+
+$data['start_date'] = !$data['start_date'] ? '0000-00-00' : $data['start_date'];				
 				
 				$data['sports_type_id']     = $data['request']['sports_type_id'];
 				$data['agegroup_id']        = $data['request']['agegroup_id'];
@@ -1047,10 +1048,17 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' post season_pers
 
 						foreach ($data['season_ids'] as $key => $value)
 						{
-							
+						  
+if ( ComponentHelper::getParams('com_sportsmanagement')->get('assign_clup_position_to_player', 0) )
+{	
 $club_id = $post['season_person_club_id'][$key] ? $post['season_person_club_id'][$key] : 0;						
 $position_id = $post['season_person_position_id'][$key] ? $post['season_person_position_id'][$key] : 0;												
-	
+}
+else
+{
+$club_id = 0;
+$position_id = 0;    
+}	
 	
 							$this->jsmquery->clear();
 							$this->jsmquery->select('spi.id,s.name');

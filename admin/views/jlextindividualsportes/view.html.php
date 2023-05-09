@@ -91,6 +91,8 @@ function _displayGenerate($tpl)
        
        $this->show_matches = array();
        
+       $this->match_generated = array();
+       
        
        
        $mdlProject = BaseDatabaseModel::getInstance('Project', 'sportsmanagementModel');
@@ -138,6 +140,367 @@ echo 'awayplayers<pre>'.print_r($count_awayplayers,true).'</pre>';
        
        }
 /**       
+Not exactly. Because for example in classement par equipes home team may have 3 or 4 players and the same for the away team.
+So one time this is 3 against 3, or 4 against 3 or 3 against 4 or 4 against 4 ...
+
+C against Y
+B against X
+A against Y or Z (Z if there is a 4th player in away team)
+C or D against W (D if there is a 4th player in home team)
+A against X
+B against W
+C against X or Z  (Z if there is a 4th player in away team)
+B or D against Y  (D if there is a 4th player in home team)
+A against W
+Double against Double
+
+But there is a possibility to have a player missing in a team (team of 2) so if this is the case the 3 matches are loose.
+*/
+
+/**
+ * 3 against 3
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Y';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Y';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'W';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'X';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'Y';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['1']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['1']['33'][] = $temp;
+/**
+ * 4 against 3
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Y';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Y';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'D';
+$temp->position_away = 'W';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'X';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'D';
+$temp->position_away = 'Y';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['1']['43'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['1']['43'][] = $temp;
+/**
+ * 3 against 4
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Y';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Z';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'W';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Z';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'Y';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['1']['34'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['1']['34'][] = $temp;
+/**
+ * 4 against 4
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Y';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Z';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'D';
+$temp->position_away = 'W';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'Z';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'D';
+$temp->position_away = 'Y';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['1']['44'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['1']['44'][] = $temp;
+
+
+/**
+About Espoirs (2 vs 2 or 2 vs 3 or 3 vs 2 or 3 vs 3) :
+
+A or C against W  (C if there is a 3rd player in home team)
+B or C against X  (C if there is a 3rd player in home team)
+Double (A and B) against Double (W and X)
+A against X or Y  (Y if there is a 3rd player in away team)
+B against W or Y (Y if there is a 3rd player in away team)
+*/
+
+/**
+ * 2 against 2
+*/
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['2']['22'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['2']['22'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['2']['22'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['2']['22'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['2']['22'][] = $temp;
+/**
+ * 2 against 3
+*/
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['2']['23'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['2']['23'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['2']['23'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Y';
+$this->match_generated['2']['23'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'Y';
+$this->match_generated['2']['23'][] = $temp;
+/**
+ * 3 against 2
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'W';
+$this->match_generated['2']['32'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'X';
+$this->match_generated['2']['32'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['2']['32'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['2']['32'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['2']['32'][] = $temp;
+/**
+ * 3 against 3
+*/
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'W';
+$this->match_generated['2']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'C';
+$temp->position_away = 'X';
+$this->match_generated['2']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['2']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'Y';
+$this->match_generated['2']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'Y';
+$this->match_generated['2']['33'][] = $temp;
+
+
+/**
+We also have another competition named "Coupe" (cup)
+This is like a davis cup and the match card is like that (the third player if he's present can only play the double) :
+A  against W
+B  against X
+Double (A B or C) against Double (W X or Y)
+A against X
+B against W       
+*/      
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'W';
+$this->match_generated['3']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'X';
+$this->match_generated['3']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'Double';
+$temp->position_away = 'Double';
+$this->match_generated['3']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'A';
+$temp->position_away = 'X';
+$this->match_generated['3']['33'][] = $temp;
+$temp = new stdClass;
+$temp->position_home = 'B';
+$temp->position_away = 'W';
+$this->match_generated['3']['33'][] = $temp;
+
+$player_counts = 0;
+switch ( $this->project->match_generated )
+{
+    case 1:
+    case 2:
+    $player_counts = sizeof($count_homeplayers).sizeof($count_awayplayers);
+    break;
+    case 3:
+    $player_counts = 33;
+    break;
+}
+
+
+if ( Factory::getConfig()->get('debug') )
+{ 
+echo __LINE__.' project->match_generated<pre>'.print_r($this->project->match_generated,true).'</pre>';
+echo __LINE__.' sizeof<pre>'.print_r($player_counts,true).'</pre>';    
+echo __LINE__.' match_generated selektion<pre>'.print_r($this->match_generated[$this->project->match_generated][$player_counts],true).'</pre>';
+
+//echo 'match_generated<pre>'.print_r($this->match_generated,true).'</pre>';
+//$this->project->match_generated;
+}
+
+
+foreach ( $this->match_generated[$this->project->match_generated][$player_counts]  as $key => $value )
+{
+$temp = new stdClass;
+$temp->teamplayer1_id = $this->homeplayers_position[$value->position_home];
+$temp->teamplayer2_id = $this->awayplayers_position[$value->position_away];
+$temp->teamplayer1_position = $value->position_home;
+$temp->teamplayer2_position = $value->position_away;
+$this->show_matches[] = $temp;
+}
+
+ 
+/**       
 When we are in the screen to enter the individual match is it possible to :
 - automaticly generate all individual match for the game ? Exemple for Espoirs :
   A or C against W (depending if the team is composed of 2 or 3 players)
@@ -158,175 +521,176 @@ B or D against Y (depending if the team is composed of 3 or 4 players)
 A against W
 Double against Double       
        
-*/       
-       switch ( $this->generate_matches )
-       {
-       case 0:
-       /** fehler nicht sgenerieren */
-       break; 
-       case 5:
-       /** 4 spieler 1 doppel */
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['C'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'C';
-       $temp->teamplayer2_position = 'Y';
-
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Z'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'Z';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['D'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'D';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['C'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Z'];
-       $temp->teamplayer1_position = 'C';
-       $temp->teamplayer2_position = 'Z';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['D'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'D';
-       $temp->teamplayer2_position = 'Y';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
-       $temp->teamplayer1_position = 'Double';
-       $temp->teamplayer2_position = 'Double';
-       $this->show_matches[] = $temp;
-       break;
-       case 4:
-       /** 3 spieler 1 doppel */
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['C'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'C';
-       $temp->teamplayer2_position = 'Y';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'Y';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['C'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'C';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['C'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'C';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'Y';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-        $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
-       $temp->teamplayer1_position = 'Double';
-       $temp->teamplayer2_position = 'Double';
-       $this->show_matches[] = $temp;
+*/
        
-       break;
-       case 3:
-       /** 2 spieler 1 doppel */
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['W'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'W';
-       $this->show_matches[] = $temp;
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
-       $temp->teamplayer1_position = 'Double';
-       $temp->teamplayer2_position = 'Double';
-       $this->show_matches[] = $temp;
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['A'];
-       $temp->teamplayer2_id = $this->awayplayers_position['X'];
-       $temp->teamplayer1_position = 'A';
-       $temp->teamplayer2_position = 'X';
-       $this->show_matches[] = $temp;
-       $temp = new stdClass;
-       $temp->teamplayer1_id = $this->homeplayers_position['B'];
-       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
-       $temp->teamplayer1_position = 'B';
-       $temp->teamplayer2_position = 'Y';
-       $this->show_matches[] = $temp;
-       
-       break;
-       }
+//       switch ( $this->generate_matches )
+//       {
+//       case 0:
+//       /** fehler nicht sgenerieren */
+//       break; 
+//       case 5:
+//       /** 4 spieler 1 doppel */
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['C'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'C';
+//       $temp->teamplayer2_position = 'Y';
+//
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Z'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'Z';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['D'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'D';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['C'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Z'];
+//       $temp->teamplayer1_position = 'C';
+//       $temp->teamplayer2_position = 'Z';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['D'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'D';
+//       $temp->teamplayer2_position = 'Y';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
+//       $temp->teamplayer1_position = 'Double';
+//       $temp->teamplayer2_position = 'Double';
+//       $this->show_matches[] = $temp;
+//       break;
+//       case 4:
+//       /** 3 spieler 1 doppel */
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['C'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'C';
+//       $temp->teamplayer2_position = 'Y';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'Y';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['C'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'C';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['C'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'C';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'Y';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//        $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
+//       $temp->teamplayer1_position = 'Double';
+//       $temp->teamplayer2_position = 'Double';
+//       $this->show_matches[] = $temp;
+//       
+//       break;
+//       case 3:
+//       /** 2 spieler 1 doppel */
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['W'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'W';
+//       $this->show_matches[] = $temp;
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['Double'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Double'];
+//       $temp->teamplayer1_position = 'Double';
+//       $temp->teamplayer2_position = 'Double';
+//       $this->show_matches[] = $temp;
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['A'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['X'];
+//       $temp->teamplayer1_position = 'A';
+//       $temp->teamplayer2_position = 'X';
+//       $this->show_matches[] = $temp;
+//       $temp = new stdClass;
+//       $temp->teamplayer1_id = $this->homeplayers_position['B'];
+//       $temp->teamplayer2_id = $this->awayplayers_position['Y'];
+//       $temp->teamplayer1_position = 'B';
+//       $temp->teamplayer2_position = 'Y';
+//       $this->show_matches[] = $temp;
+//       
+//       break;
+//       }
        
        
        

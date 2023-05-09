@@ -18,6 +18,9 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
 
+$wa = $this->document->getWebAssetManager();
+$wa->useScript('showon');
+
 switch ( $this->view )
 {
 case 'projectteam':
@@ -84,7 +87,17 @@ if (version_compare(JSM_JVERSION, '4', 'eq'))
 
 		foreach ($fieldsets as $fieldset)
 		{
-			echo HTMLHelper::_('uitab.addTab', 'myTab', $fieldset->name, Text::_($fieldset->label, true));
+$help_link = '';
+$link_onlinehelp = COM_SPORTSMANAGEMENT_HELP_SERVER . 'SM-Backend-Felder:' . $this->jinput->getVar("view") . '-' . $fieldset->name ;                                                
+$cmd = "Joomla.popupWindow('$link_onlinehelp', '" . Text::_('COM_SPORTSMANAGEMENT_HELP_LINK', true) . "',". COM_SPORTSMANAGEMENT_MODAL_POPUP_WIDTH." ,". COM_SPORTSMANAGEMENT_MODAL_POPUP_HEIGHT.", 1)";
+$help_link = '  <button onclick="'.$cmd.'">';
+$help_link .= HTMLHelper::_(
+'image', 'media/com_sportsmanagement/jl_images/help.png',
+Text::_('COM_SPORTSMANAGEMENT_HELP_LINK'), 'title= "' .
+Text::_('COM_SPORTSMANAGEMENT_HELP_LINK') . '"'
+);
+$help_link .= '</button>';
+			echo HTMLHelper::_('uitab.addTab', 'myTab', $fieldset->name, Text::_($fieldset->label, true).$help_link   );
 			?>
             <!-- <div class="row"> -->
                 <!-- <div class="col-md-12"> -->
@@ -99,7 +112,17 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' fieldset name -> ' . $fieldset-
 switch ($fieldset->name)
 {
 case 'details':
-case 'request':
+//case 'request':
+case 'description':
+
+case 'seasons':
+case 'seasonsteams':
+
+//case 'save_injury':
+//case 'save_suspension':
+//case 'save_away':
+
+
 case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_OPTIONS':
 case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_DIV_OPTIONS':
 case 'COM_SPORTSMANAGEMENT_FES_PARAMS_GROUP_TEAMOPTIONS':
