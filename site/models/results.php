@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Feed\FeedFactory;
 use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
@@ -103,12 +104,11 @@ class sportsmanagementModelResults extends JSMModelList
 	 */
 	public function getStart()
 	{
-		// $limitstart = $this->getUserStateFromRequest($this->context.'.limitstart', 'limitstart');
 		$this->setState('list.start', self::$limitstart);
 
 		$store = $this->getStoreId('getstart');
 
-		// Try to load the data from internal storage.
+		/** Try to load the data from internal storage. */
 		if (isset($this->cache[$store]))
 		{
 			return $this->cache[$store];
@@ -123,7 +123,7 @@ class sportsmanagementModelResults extends JSMModelList
 			$start = max(0, (int) (ceil($total / $limit) - 1) * $limit);
 		}
 
-		// Add the total to the internal cache.
+		/** Add the total to the internal cache. */
 		$this->cache[$store] = $start;
 
 		return $this->cache[$store];
@@ -423,7 +423,7 @@ if (version_compare(JVERSION, '4.0.0', 'ge'))
 			{
 				try
 				{
-					$feed = new \FeedFactory;
+					$feed = new FeedFactory;
 
 					// $feeds = new stdclass();
 					$rssDoc = $feed->getFeed($rssId);
