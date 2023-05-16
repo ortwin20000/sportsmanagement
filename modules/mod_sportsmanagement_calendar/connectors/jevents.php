@@ -95,7 +95,7 @@ class JEventsConnector extends JSMCalendar
 		return true;
 	}
 
-	private function _raiseError($message)
+	private static function _raiseError($message)
 	{
 		echo $message;
 	}
