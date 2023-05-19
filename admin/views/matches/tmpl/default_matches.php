@@ -191,7 +191,7 @@ $myGroups = Access::getGroupsByUser(Factory::getUser()->get('id'), false);
 				$canChange  = $this->user->authorise('core.edit.state', 'com_sportsmanagement.match.' . $row->id) && $canCheckin;
 
 				list($date, $time) = explode(" ", $row->match_date);
-				$time = strftime("%H:%M", strtotime($time));
+				$time = date('H:i', strtotime($time));
 
 				if ($date == '0000-00-00')
 				{
