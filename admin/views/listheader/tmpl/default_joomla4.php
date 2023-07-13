@@ -42,10 +42,16 @@ $project_id = $app->getUserState("$option.pid", '0');
 ?>
 
 <div class="row">
+<!--
 <div id="j-sidebar-container" class="col-md-2">
 <?php echo $this->sidebar; ?>
 </div>
-<div class="col-md-10">
+-->
+<?php
+require(JPATH_COMPONENT_ADMINISTRATOR . '/views/listheader/tmpl/default_4_start_menu.php');   
+?>
+
+<div class="col-md-12">
 <div id="j-main-container" class="j-main-container">
 <?php
 

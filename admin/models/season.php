@@ -164,6 +164,7 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 					$profile->project_id  = $project_id;
 					$profile->person_id   = $new_id;
 					$profile->published   = 1;
+			    
 					$profile->modified    = $this->jsmdate->toSql();
 					$profile->modified_by = $this->jsmuser->get('id');
 
@@ -193,13 +194,17 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
              $persontype = 1;   
              }
              
-				$this->jsmquery->clear();
-				$columns = array('person_id', 'season_id', 'team_id', 'published', 'persontype', 'modified', 'modified_by');
-				$values  = array($value, $season_id, $teams, '1', $persontype, $this->jsmdb->Quote('' . $this->jsmdate->toSql() . ''), $this->jsmuser->get('id'));
-				$this->jsmquery
-					->insert($this->jsmdb->quoteName('#__sportsmanagement_season_team_person_id'))
-					->columns($this->jsmdb->quoteName($columns))
-					->values(implode(',', $values));
+$this->jsmquery->clear();
+				/**
+$columns = array('person_id', 'season_id', 'team_id', 'published', 'persontype', 'modified', 'modified_by', 'weltfussballlink'  );
+$values  = array($value, $season_id, $teams, '1', $persontype, $this->jsmdb->Quote('' . $this->jsmdate->toSql() . ''), $this->jsmuser->get('id'), $this->jsmdb->Quote('' . 'kein' . '') );
+				*/
+$columns = array('person_id', 'season_id', 'team_id', 'published', 'persontype', 'modified', 'modified_by'  );
+$values  = array($value, $season_id, $teams, '1', $persontype, $this->jsmdb->Quote('' . $this->jsmdate->toSql() . ''), $this->jsmuser->get('id') );				
+$this->jsmquery
+	->insert($this->jsmdb->quoteName('#__sportsmanagement_season_team_person_id'))
+	->columns($this->jsmdb->quoteName($columns))
+	->values(implode(',', $values));
 				try
 				{
 					$this->jsmdb->setQuery($this->jsmquery);
@@ -209,6 +214,7 @@ $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUN
 				{
 $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'error');
 $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'error');
+$this->jsmapp->enqueueMessage('<pre>'.print_r($this->jsmquery->dump(),true).'</pre>', 'error');					
 				}
 			}
 		}
