@@ -21,11 +21,11 @@ function jlmlnewAjax() {
 
 function jlml_loadMatch(usedteam, matchid, moduleid, nr, origin) {
 	var classadd = 'modJLML' + moduleid + '_row' + nr;
-	var myFx = new Fx.Morph(classadd);
-	myFx.start({'opacity': 0});
+	//var myFx = new Fx.Morph(classadd);
+	//myFx.start({'opacity': 0});
 	jQuery(classadd).addClass('ajaxloading');
-	var myFx = new Fx.Morph(classadd);
-	myFx.start({'opacity': 1});
+	//var myFx = new Fx.Morph(classadd);
+	//myFx.start({'opacity': 1});
 	var ajax = jlmlnewAjax();
 	ajax.open("POST", location.href, true);
 	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -44,8 +44,8 @@ function jlml_loadMatch(usedteam, matchid, moduleid, nr, origin) {
 
 			//alert(justMatch);
 
-			var myFx = new Fx.Morph(classadd);
-			myFx.start({'opacity': 1});
+			//var myFx = new Fx.Morph(classadd);
+			//myFx.start({'opacity': 1});
 			//jQuery(classadd).innerHTML=justMatch;
 			document.getElementById(classadd).innerHTML = justMatch;
 
@@ -54,7 +54,7 @@ function jlml_loadMatch(usedteam, matchid, moduleid, nr, origin) {
 	};
 	return false;
 }
-
+/**
 var JLMLToolTip = new Class({
 	initialize: function (options) {
 		this.options = Object.extend({
@@ -157,12 +157,15 @@ var JLMLToolTip = new Class({
 		this.message = new Element('span').inject(new Element('div', {'class': this.options.ToolTipClass + '-text'}).inject(this.wrapper));
 	}
 });
-
+*/
+	
 function addJLMLtips(els, suffix) {
+	/**
 	$$(els).each(function (el) {
 		var tipsource = el.id + '_' + suffix;
 		if ($(tipsource)) {
 			new JLMLToolTip({tipper: el, sticky: true, message: $(tipsource).innerHTML});
 		}
 	});
+	*/
 }

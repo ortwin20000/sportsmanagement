@@ -169,6 +169,8 @@ $this->dragable_group = 'data-dragable-group="none"';
 			$canCheckin = $this->user->authorise('core.manage', 'com_checkin') || $this->item->checked_out == $this->user->get('id') || $this->item->checked_out == 0;
 			$checked    = HTMLHelper::_('jgrid.checkedout', $this->count_i, $this->user->get('id'), $this->item->checked_out_time, 'clubs.', $canCheckin);
 			$canChange  = $this->user->authorise('core.edit.state', 'com_sportsmanagement.club.' . $this->item->id) && $canCheckin;
+
+			$onChange = ' document.getElementById(\'cb' . $this->count_i . '\').checked=true" style="background-color:#bbffff';
 			?>
             <tr class="row<?php echo $this->count_i % 2; ?>" <?php echo $this->dragable_group; ?>>
                 <td class="center">
@@ -227,7 +229,7 @@ $this->dragable_group = 'data-dragable-group="none"';
                             type="text" size="40" class="form-control form-control-inline"
                             name="club_name<?php echo $this->item->id; ?>"
                             value="<?php echo $this->item->name; ?>"
-                            onchange=""/>
+                            onchange="<?php echo $onChange; ?>"/>
 			</div>
 			
 			<div class="small">
@@ -301,18 +303,18 @@ HTMLHelper::_('bootstrap.endSlide');
                     <input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
                                                       name="unique_id<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->unique_id; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
 
                     <br/>
                     <input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
                                                       name="new_club_id<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->new_club_id; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
 			<br/>
 			<input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
                                                       name="founded_year<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->founded_year; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
 			<br/>
 					<?php echo $this->escape($this->item->state); ?>
                 </td>
@@ -336,17 +338,17 @@ echo sportsmanagementHelper::getBootstrapModalImage('select'.$this->item->id, ''
                     <input<?php echo $inputappend; ?> type="text" size="10" class="form-control form-control-inline"
                                                       name="zipcode<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->zipcode; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
                     <br/>
                     <input<?php echo $inputappend; ?> type="text" size="30" class="form-control form-control-inline"
                                                       name="location<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->location; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
                     <br/>
                     <input<?php echo $inputappend; ?> type="text" size="30" class="form-control form-control-inline"
                                                       name="address<?php echo $this->item->id; ?>"
                                                       value="<?php echo $this->item->address; ?>"
-                                                      onchange=""/>
+                                                      onchange="<?php echo $onChange; ?>"/>
                 </td>
 
                 <td class="">

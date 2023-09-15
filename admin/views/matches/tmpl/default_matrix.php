@@ -68,7 +68,7 @@ $teams = array();
 
 <div class="clr"></div>
 <form method="post" name="matrixForm" id="matrixForm">
-
+<div class="table-responsive">
     <!--<fieldset class="adminform">-->
     <legend>
 		<?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_MATRIX_TITLE'); ?>
@@ -86,7 +86,7 @@ $teams = array();
 	// warum <= 20 blödsinn
 	// kann man anders regeln
 	// if (count($teams) <= 200) {
-	$matrix = "<table width=\"100%\" class=\"adminlist table-striped\">";
+	$matrix = "<table width=\"100%\" class=\"table table-striped\">";
 
 	$k = 0;
 
@@ -163,7 +163,7 @@ $teams = array();
 					}
 				}
 
-				$text = sprintf("<td width=\"20\" align=\"center\" title=\"%s - %s\" bgcolor=\"%s\"><input type=\"radio\" name=\"match_%s\" %s %s></td>\n", $trow->text, $tcol->text, $color, $trow->value . $tcol->value, $onClick, $checked);
+				$text = sprintf("<td width=\"20\" align=\"center\" title=\"%s - %s\" bgcolor=\"%s\"><input type=\"radio\" name=\"match_%s\" %s %s><br>".$trow->text."<br>".$tcol->text."</td>\n", $trow->text, $tcol->text, $color, $trow->value . $tcol->value, $onClick, $checked);
 			}
 
 			$matrix .= $text;
@@ -187,4 +187,5 @@ $teams = array();
     <input type='hidden' name='published' value='1'/>
     <input type='hidden' name='task' value='match.addmatch'/>
 	<?php echo HTMLHelper::_('form.token') . "\n"; ?>
+</div>
 </form>

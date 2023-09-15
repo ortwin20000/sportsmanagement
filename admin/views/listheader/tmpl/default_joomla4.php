@@ -73,7 +73,10 @@ case 'jlextassociations':
 case 'jlextfederations':
 case 'leagues':
 case 'playgrounds':
-		
+	case 'predictiongames':
+	case 'predictionmembers':
+	case 'predictiongroups':
+	case 'predictiontemplates':
 case 'players':
 case 'positions':
 case 'projectreferees':

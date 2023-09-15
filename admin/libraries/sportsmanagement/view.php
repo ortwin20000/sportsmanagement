@@ -310,7 +310,10 @@ if (preg_match("/ordering/i", $this->sortColumn)) {
             case 'playgrounds':
             case 'rosterpositions':
 
-//            case 'extrafields':
+            case 'predictiongames':
+			case 'predictiontemplates':
+			case 'predictiongroups':
+			case 'predictionmembers':
 //            case 'statistics':
             case 'clubnames':
 
@@ -561,7 +564,7 @@ break;
 			}
 			else
 			{
-				$this->sidebar = JHtmlSidebar::render();
+				//$this->sidebar = JHtmlSidebar::render();
 			}
 		}
 	/*	

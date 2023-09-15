@@ -269,7 +269,7 @@ if (!empty($this->rows))
         foreach ( $this->projectpositions as $positions => $position ) if( $position->persontype == 1 )
 {
         ?>
-        <table class="<?php echo $this->config['table_class']; ?> table-sm nowrap " id="tableplayer<?php echo $position->id;?>" width="100%">
+        <table class="<?php echo $this->config['table_class']; ?> table-sm text-nowrap " id="tableplayer<?php echo $position->id;?>" width="100%">
 			<?php
 			/**
 			 *
@@ -292,7 +292,7 @@ if (!empty($this->rows))
 				?>
                 <thead>
                 <tr class="sectiontableheader rosterheader" id="rosterheader">
-                    <th class="" width="" colspan="">
+                    <th class="" width="5%" colspan="">
 						<?php echo '&nbsp;' . Text::_($row->position); ?>
                     </th>
 					<?php
@@ -300,7 +300,7 @@ if (!empty($this->rows))
 					for ($i = 1, $n = $positionHeaderSpan; $i < $n; $i++)
 			{
 				?>
-				<th class="" width="">
+				<th class="" width="5%">
 				</th>
 				<?php
 				}
@@ -308,7 +308,7 @@ if (!empty($this->rows))
 					if ($this->config['show_birthday'])
 					{
 						?>
-                        <th class="" width="" id="show_birthday">
+                        <th class="" width="10%" id="show_birthday">
 							<?php
 							switch ($this->config['show_birthday'])
 							{
@@ -517,7 +517,11 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 								$value = $pnr;
 							}
 							?>
-                            <td class="" width=""><?php echo $value; ?></td><?php
+                            <td class="" width="">
+                            <?php //echo $value; ?>
+                            <img src="components/com_sportsmanagement/assets/images/shirt_php8.php?text=<? echo $pnr; ?>&font_size=4&R=FF&G=FF&B=00">  
+                            </td>
+                            <?php
 						}
 
 						$playerName = sportsmanagementHelper::formatName(
