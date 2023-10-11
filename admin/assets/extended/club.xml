@@ -55,6 +55,102 @@
         label="COM_SPORTSMANAGEMENT_SUBLOCALITY_LONG_NAME_LABEL"
         description="COM_SPORTSMANAGEMENT_SUBLOCALITY_LONG_NAME_DESC">
     </field>
+
+
+<field   name="COM_SPORTSMANAGEMENT_OSM_LEISURE" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_LEISURE_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_LEISURE_DESC">
+    </field>
+<field   name="COM_SPORTSMANAGEMENT_OSM_HOUSE_NUMBER" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_HOUSE_NUMBER_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_HOUSE_NUMBER_DESC">
+    </field>
+    <field   name="COM_SPORTSMANAGEMENT_OSM_ROAD" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_ROAD_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_ROAD_DESC">
+    </field>
+    <field   name="COM_SPORTSMANAGEMENT_OSM_VILLAGE" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_VILLAGE_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_VILLAGE_DESC">
+    </field>
+    <field   name="COM_SPORTSMANAGEMENT_OSM_MUNICIPALITY" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_MUNICIPALITY_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_MUNICIPALITY_DESC">
+    </field>
+    <field   name="COM_SPORTSMANAGEMENT_OSM_COUNTY" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_COUNTY_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_COUNTY_DESC">
+    </field>
+    <field   name="COM_SPORTSMANAGEMENT_OSM_STATE" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_STATE_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_STATE_DESC">
+    </field>
+
+     <field   name="COM_SPORTSMANAGEMENT_OSM_INDUSTRIAL" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_INDUSTRIAL_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_INDUSTRIAL_DESC">
+    </field>
+     <field   name="COM_SPORTSMANAGEMENT_OSM_BUILDING" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_BUILDING_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_BUILDING_DESC">
+    </field>
+
+    <field   name="COM_SPORTSMANAGEMENT_OSM_QUARTER" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_QUARTER_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_QUARTER_DESC">
+    </field>
+     <field   name="COM_SPORTSMANAGEMENT_OSM_SUBURB" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_SUBURB_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_SUBURB_DESC">
+    </field>
+
+    <field   name="COM_SPORTSMANAGEMENT_OSM_CITY_DISTRICT" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_CITY_DISTRICT_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_CITY_DISTRICT_DESC">
+    </field>
+     <field   name="COM_SPORTSMANAGEMENT_OSM_CITY" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_CITY_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_CITY_DESC">
+    </field>
+ <field   name="COM_SPORTSMANAGEMENT_OSM_TOWN" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_TOWN_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_TOWN_DESC">
+    </field>
+
+ <field   name="COM_SPORTSMANAGEMENT_OSM_HAMLET" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_HAMLET_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_HAMLET_DESC">
+    </field>
+ <field   name="COM_SPORTSMANAGEMENT_OSM_NEIGHBOURHOOD" type="text" 
+        label="COM_SPORTSMANAGEMENT_OSM_NEIGHBOURHOOD_LABEL"
+        description="COM_SPORTSMANAGEMENT_OSM_NEIGHBOURHOOD_DESC">
+    </field>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
   </fieldset>
