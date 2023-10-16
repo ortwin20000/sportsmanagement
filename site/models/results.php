@@ -913,6 +913,11 @@ if (version_compare(JVERSION, '4.0.0', 'ge'))
 				}
 			}
 
+			if (isset($post['certified' . $pks[$x]]))
+			{
+				$object->certified = $post['certified' . $pks[$x]];
+			}
+			
 			if ($post['match_number' . $pks[$x]])
 			{
 				$object->match_number = $post['match_number' . $pks[$x]];

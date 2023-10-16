@@ -1276,7 +1276,7 @@ class JSMRanking
 
 		self::setDivisionId($division, $cfg_which_database);
 
-		$teams    = self::_collect(null, $cfg_which_database);
+		$teams    = self::_collect(null, $cfg_which_database, $sports_type_name);
 		$rankings = self::_buildRanking($teams, $cfg_which_database);
 
 		return $rankings;
@@ -1309,7 +1309,7 @@ class JSMRanking
 
 		self::setDivisionId($division, $cfg_which_database);
 
-		$teams    = self::_collect(null, $cfg_which_database);
+		$teams    = self::_collect(null, $cfg_which_database, $sports_type_name);
 		$rankings = self::_buildRanking($teams, $cfg_which_database);
 
 		return $rankings;
@@ -1697,6 +1697,21 @@ class JSMRanking
 	function _cmpLegs_diff($a, $b)
 	{
 		$res = -($a->diff_team_legs - $b->diff_team_legs);
+
+		return $res;
+	}
+
+		/**
+	 * Legs diff comparison
+	 *
+	 * @param   JSMRankingTeam a
+	 * @param   JSMRankingTeam b
+	 *
+	 * @return integer
+	 */
+	function _cmpBalls_diff($a, $b)
+	{
+		$res = -($a->diff_team_balls - $b->diff_team_balls);
 
 		return $res;
 	}

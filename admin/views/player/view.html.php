@@ -57,7 +57,7 @@ class sportsmanagementViewplayer extends sportsmanagementView
 
 		$isNew = $this->item->id == 0;
 
-		$fields = array('birthday', 'deathday', 'injury_date_start', 'injury_date_end', 'susp_date_start', 'susp_date_end', 'away_date_start', 'away_date_end');
+		$fields = array('birthday', 'deathday', 'injury_date_start', 'injury_date_end', 'susp_date_start', 'susp_date_end', 'away_date_start', 'away_date_end', 'referee_valid', 'coach_valid');
 		foreach ($fields as $field) {
 			if ($this->item->$field == '0000-00-00') {
 				$this->item->$field = '';

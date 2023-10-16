@@ -15,7 +15,15 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
-
+use Joomla\CMS\Access\Access;
+$db     = Factory::getDBO();
+$query  = $db->getQuery(true);
+$query->select('id, title');
+$query->from('#__usergroups');
+$query->where('title="Beglaubigte"');
+$db->setQuery($query);
+$rows	= $db->loadRow();
+$myGroups = Access::getGroupsByUser(Factory::getUser()->get('id'), false);
 ?>
 <style>
     fieldset input,
@@ -42,7 +50,7 @@ use Joomla\CMS\Uri\Uri;
 			<?php echo $this->pagination->getLimitBox(); ?>
         </div>
 		<?php
-		$colspan = ($this->projectws->allow_add_time) ? 20 : 19;
+		$colspan = ($this->projectws->allow_add_time) ? 21 : 20;
 		if ($this->templateConfig == null)
 		{
 			$this->templateConfig = array('show_number' => 1,
@@ -66,6 +74,7 @@ use Joomla\CMS\Uri\Uri;
 		if ($this->templateConfig['show_statistics'] == 0) $colspan--;
 		if ($this->templateConfig['show_ad_incl'] == 0) $colspan--;
 		if ($this->templateConfig['show_number'] == 0) $colspan--;		
+		if (in_array($rows[0], $myGroups) == false) $colspan--;
 		?>
         <table class="<?php echo $this->table_data_class; ?>">
             <thead>
@@ -149,7 +158,10 @@ use Joomla\CMS\Uri\Uri;
 				<?php if ($this->templateConfig['show_ad_incl'] == 1) { ?>
 					<th class="title"><?php echo Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_F_AD_INCL'); ?></th>
 				<?php } ?>
-                <th width="1%"><?php echo Text::_('JSTATUS'); ?></th>
+				<?php if (in_array($rows[0], $myGroups)) { ?>
+					<th width="1%"><?php echo "Beglaubigt"; ?></th>
+				<?php } ?>
+				<th width="1%"><?php echo Text::_('JSTATUS'); ?></th>
 				<?php if ($this->templateConfig['show_id'] == 1) { ?>
 					<th width="1%" class="title">
 						<?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ID', 'mc.id', $this->sortDirection, $this->sortColumn); ?>
@@ -746,7 +758,7 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 							}
 	
 							$append .= ' onchange="document.getElementById(\'cb' . $i . '\').checked=true" ';
-							echo HTMLHelper::_('select.genericlist', $this->lists['teams_' . $row->divhomeid], 'referee_id' . $row->id,
+							echo HTMLHelper::_('select.genericlist', $this->lists['referees'], 'referee_id' . $row->id,
 								'class="form-control form-control-inline" size="1"' . $append, 'value', 'text', $row->referee_id
 							);	
 						}
@@ -784,7 +796,20 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 							?>
 						</td>
 					<?php } ?>
-
+					<?php
+					if (in_array($rows[0], $myGroups)) { ?>
+						<td class="center">
+                        <div class="btn-group">
+							<?php echo HTMLHelper::_('jgrid.state', array(
+									2 => array('uncertified', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', false, 'warning', 'penalty'),
+									1 => array('uncertified', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', false, 'publish', 'publish'),
+									0 => array('certified', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', false, 'unpublish', 'unpublish')),
+									$row->certified, $i, 'matches.', true, true, 'cb');
+									HTMLHelper::_('actionsdropdown.' . ((int) $row->certified === 2 ? 'un' : '') . 'penalty', 'cb' . $i, 'matches');
+									echo HTMLHelper::_('actionsdropdown.render', $this->escape($row->id)); ?>
+						</div>
+                    </td>
+					<?php } ?>
                     <td class="center">
                         <div class="btn-group">
 							<?php echo HTMLHelper::_('jgrid.published', $row->published, $i, 'matches.', $canChange, 'cb'); ?>

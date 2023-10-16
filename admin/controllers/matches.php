@@ -384,6 +384,61 @@ class sportsmanagementControllermatches extends JSMControllerAdmin
 	}
 
 	/**
+	 * sportsmanagementControllermatches::certified_result_yes()
+	 *
+	 * @return void
+	 */
+	function certified_result_yes()
+	{
+		$model = $this->getModel();
+		$model->certified_result(1);
+		$this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+	
+	/**
+	 * sportsmanagementControllermatches::certified_result_penalty()
+	 *
+	 * @return void
+	 */
+	function certified_result_penalty()
+	{
+		$model = $this->getModel();
+		$model->certified_result(2);
+		$this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+
+	/**
+	 * sportsmanagementControllermatches::certified_result_no()
+	 *
+	 * @return void
+	 */
+	function certified_result_no()
+	{
+		$model = $this->getModel();
+		$model->certified_result(0);
+		$this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+	
+	/**
+	 * Method to update checked matches
+	 *
+	 * @access public
+	 * @return boolean    True on success
+	 */
+	function certified()
+	{
+		$model = $this->getModel();
+		$model->certified();
+		$this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+	function uncertified()
+	{
+		$model = $this->getModel();
+		$model->uncertified();
+		$this->setRedirect(Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
+	}
+
+	/**
 	 * Method to update checked matches
 	 *
 	 * @access public

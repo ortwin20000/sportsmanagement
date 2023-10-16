@@ -571,6 +571,221 @@ try
 	}
 		
 	/**
+	 * sportsmanagementModelRanking::computeRankingDivision()
+	 * 
+	 * @param integer $cfg_which_database
+	 * @param integer $s
+	 * @param string $sports_type_name
+	 * @return
+	 */
+	public static function computeRankingDivision($cfg_which_database = 0, $s = 0,$sports_type_name='')
+	{
+		$app   = Factory::getApplication();
+		$input = $app->input;
+
+		$project = sportsmanagementModelProject::getProject($cfg_which_database, __METHOD__);
+
+		if ($project)
+		{
+			sportsmanagementModelRounds::$_project_id = $project->id;
+
+			$firstRound = sportsmanagementModelRounds::getFirstRound($project->id, $cfg_which_database);
+			$lastRound  = sportsmanagementModelRounds::getLastRound($project->id, $cfg_which_database);
+
+			/** Url if no sef link comes along (ranking form) */
+			$routeparameter                       = array();
+			$routeparameter['cfg_which_database'] = $cfg_which_database;
+			$routeparameter['s']                  = $s;
+			$routeparameter['p']                  = self::$projectid;
+			$url                                  = sportsmanagementHelperRoute::getSportsmanagementRoute('ranking', $routeparameter);
+
+			$tableconfig = sportsmanagementModelProject::getTemplateConfig("ranking", $cfg_which_database, __METHOD__);
+
+			self::$round = (self::$round == 0 || self::$round == '') ? sportsmanagementModelProject::getCurrentRound(__METHOD__ . ' ' . self::$viewName, $cfg_which_database) : self::$round;
+
+			self::$rounds = sportsmanagementModelProject::getRounds($cfg_which_database);
+
+			if (self::$part == 1)
+			{
+				self::$from = $firstRound['id'];
+                if ( !array_key_exists(intval(count(self::$rounds) / 2) - 1, self::$rounds) ) {
+                    self::$to = 0;
+                }
+                else
+                {
+				self::$to = self::$rounds[intval(count(self::$rounds) / 2) ]->id;
+                }
+			}
+			elseif (self::$part == 2)
+			{
+			 if ( !array_key_exists(intval(count(self::$rounds) / 2), self::$rounds) ) {
+                    self::$from = 0;
+                }
+                else
+                {
+                self::$from = self::$rounds[intval(count(self::$rounds) / 2) -1]->id;    
+                }
+				
+				self::$to   = $lastRound['id'];
+			}
+			else
+			{
+				self::$from = $input->getInt('from', $firstRound['id']);
+				self::$to   = $input->getInt('to', self::$round, $lastRound['id']);
+			}
+
+			if (self::$part > 0)
+			{
+				$url .= '&amp;part=' . self::$part;
+			}
+			elseif (self::$from != 1 || self::$to != self::$round)
+			{
+				$url .= '&amp;from=' . self::$from . '&amp;to=' . self::$to;
+			}
+
+			self::$type = $input->getInt('type', 0);
+
+			if (self::$type > 0)
+			{
+				$url .= '&amp;type=' . self::$type;
+			}
+
+			self::$divLevel = 0;
+
+			/** For sub division ranking tables */
+			if ($project->project_type == 'DIVISIONS_LEAGUE')
+			{
+				$selDivision    = $input->getInt('division', 0);
+				self::$divLevel = 2;
+
+				if ($selDivision > 0)
+				{
+					$url       .= '&amp;division=' . $selDivision;
+					$divisions = array($selDivision);
+				}
+				else
+				{
+					/** Check if division level view is allowed. if not, replace with default */
+					if ((self::$divLevel == 0 && $tableconfig['show_project_table'] == 0)
+						|| (self::$divLevel == 1 && $tableconfig['show_level1_table'] == 0)
+						|| (self::$divLevel == 2 && $tableconfig['show_level2_table'] == 0)
+					)
+					{
+						self::$divLevel = $tableconfig['default_division_view'];
+					}
+
+					$url .= '&amp;divLevel=' . self::$divLevel;
+
+					if (self::$divLevel)
+					{
+						$divisions = sportsmanagementModelProject::getDivisionsId(self::$divLevel, $cfg_which_database);
+					}
+					else
+					{
+						$divisions = array(0);
+					}
+				}
+			}
+			else
+			{
+				$divisions = array(0); // Project
+			}
+
+			$selectedvalue = 0;
+
+			$last = $input->getInt('last', 0);
+
+			if ($last > 0)
+			{
+				$url .= '&amp;last=' . $last;
+			}
+
+			if ($input->getInt('sef', 0) == 1)
+			{
+				$app->redirect(Route::_($url));
+			}
+
+			/** create ranking object */
+			$ranking = JSMRanking::getInstance($project, $cfg_which_database);
+			$ranking->setProjectId(self::$projectid, $cfg_which_database);
+
+			foreach ($divisions as $division)
+			{
+				/** Away rank */
+				if (self::$type == 2)
+				{
+					self::$currentRanking[$division] = $ranking->getRankingAway(self::$from, self::$to, $division, $cfg_which_database,$sports_type_name);
+				}
+				/** Home rank */
+				elseif (self::$type == 1)
+				{
+					self::$currentRanking[$division] = $ranking->getRankingHome(self::$from, self::$to, $division, $cfg_which_database,$sports_type_name);
+				}
+				/** Total rank */
+				else
+				{
+					self::$currentRanking[$division] = $ranking->getRanking(self::$from, self::$to, $division, $cfg_which_database,$sports_type_name);
+					self::$homeRank[$division]       = $ranking->getRankingHome(self::$from, self::$to, $division, $cfg_which_database,$sports_type_name);
+					self::$awayRank[$division]       = $ranking->getRankingAway(self::$from, self::$to, $division, $cfg_which_database,$sports_type_name);
+				}
+				
+				
+				if ( $division && !self::$currentRanking[$division] )
+				{
+					//echo 'gruppentabelle ist leer <br>';
+					//self::$currentRanking[$division] = self::getProjectTeamsDivision($division);
+				}
+
+				self::_sortRanking(self::$currentRanking[$division]);
+
+				if (empty(self::$from))
+				{
+					$from       = sportsmanagementModelRounds::getFirstRound(self::$projectid, sportsmanagementModelProject::$cfg_which_database);
+					self::$from = $from['id'];
+				}
+
+				if (empty(self::$to))
+				{
+					self::$to = sportsmanagementModelProject::getCurrentRound(null, sportsmanagementModelProject::$cfg_which_database);
+				}
+
+				/** Previous rank */
+				if ($tableconfig['last_ranking'])
+				{
+					if (self::$to == 1 || (self::$to == self::$from))
+					{
+						self::$previousRanking[$division] = &self::$currentRanking[$division];
+					}
+					else
+					{
+						/** Away rank */
+						if (self::$type == 2)
+						{
+							self::$previousRanking[$division] = $ranking->getRankingAway(self::$from, self::_getPreviousRoundId(self::$to, $cfg_which_database), $division, $cfg_which_database);
+						}
+						/** Home rank */
+						elseif (self::$type == 1)
+						{
+							self::$previousRanking[$division] = $ranking->getRankingHome(self::$from, self::_getPreviousRoundId(self::$to, $cfg_which_database), $division, $cfg_which_database);
+						}
+						/** Total rank */
+						else
+						{
+							self::$previousRanking[$division] = $ranking->getRanking(self::$from, self::_getPreviousRoundId(self::$to, $cfg_which_database), $division, $cfg_which_database);
+						}
+
+						self::_sortRanking(self::$previousRanking[$division]);
+					}
+				}
+			}
+
+			self::$current_round = self::$round;
+		}
+
+		return;
+	}
+
+	/**
 	 * sportsmanagementModelRanking::_sortRanking()
 	 *
 	 * @param   mixed  $ranking
