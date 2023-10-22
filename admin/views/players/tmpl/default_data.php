@@ -18,6 +18,9 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Component\ComponentHelper;
 
+$lang = Factory::getApplication()->getLanguage();
+$currentLanguage = substr($lang->getTag(), 0, 2);
+
 $user            = Factory::getUser();
 $userId          = $user->get('id');
 $templatesToLoad = array('footer', 'listheader');
