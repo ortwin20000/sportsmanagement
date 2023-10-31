@@ -18,6 +18,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 // JLoader::import('components.com_sportsmanagement.libraries.util', JPATH_ADMINISTRATOR);
 FormHelper::loadFieldClass('list');
@@ -32,7 +33,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldGoogleApiKey extends \JFormFieldList
+class JFormFieldGoogleApiKey extendsListField
 {
 	protected $type = 'GoogleApiKey';
 

@@ -15,6 +15,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 jimport('joomla.filesystem.folder');
 FormHelper::loadFieldClass('list');
@@ -28,7 +29,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldLeagueLevel extends \JFormFieldList
+class JFormFieldLeagueLevel extendsListField
 {
 	/**
 	 * field type
