@@ -20,6 +20,7 @@ use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');
@@ -33,7 +34,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldProjects extends \JFormFieldList
+class JFormFieldProjects extendsListField
 {
 	protected $type = 'projects';
 

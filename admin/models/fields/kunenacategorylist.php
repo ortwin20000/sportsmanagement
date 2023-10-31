@@ -19,6 +19,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * FormFieldKunenaCategoryList
@@ -29,7 +30,7 @@ use Joomla\CMS\HTML\HTMLHelper;
  * @version   2014
  * @access    public
  */
-class JFormFieldKunenaCategoryList extends \JFormFieldList
+class JFormFieldKunenaCategoryList extendsListField
 {
 	protected $type = 'KunenaCategoryList';
 

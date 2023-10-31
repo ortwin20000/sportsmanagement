@@ -17,6 +17,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Field\ListField;
 FormHelper::loadFieldClass('list');
 
 /**
@@ -28,7 +29,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldcountrylist extends \JFormFieldList
+class JFormFieldcountrylist extendsListField
 {
 	/**
 	 * field type

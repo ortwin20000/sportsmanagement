@@ -19,6 +19,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 JLoader::import('joomla.html.html');
 JLoader::import('joomla.form.formfield');
@@ -34,7 +35,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldGoogletimezones extends \JFormFieldList
+class JFormFieldGoogletimezones extendsListField
 {
 	protected $type = 'Googletimezones';
 

@@ -20,6 +20,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 jimport('joomla.filesystem.folder');
 FormHelper::loadFieldClass('list');
@@ -34,7 +35,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldsortorder extends \JFormFieldList
+class JFormFieldsortorder extendsListField
 {
 	/**
 	 * field type

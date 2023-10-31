@@ -17,6 +17,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 JLoader::import('components.com_sportsmanagement.helpers.countries', JPATH_SITE);
 jimport('joomla.filesystem.folder');
@@ -32,7 +33,7 @@ FormHelper::loadFieldClass('list');
  * @version   2013
  * @access    public
  */
-class JFormFieldCountry extends \JFormFieldList
+class JFormFieldCountry extendsListField
 {
 	/**
 	 * field type
