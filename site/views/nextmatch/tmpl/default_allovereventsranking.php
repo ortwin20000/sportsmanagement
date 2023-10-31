@@ -27,7 +27,7 @@ use Joomla\CMS\Factory;
 
 	
   
-echo JHtml::_('bootstrap.startTabSet', 'myTab2', array('active' => 'name1')); 
+echo HTMLHelper::_('bootstrap.startTabSet', 'myTab2', array('active' => 'name1')); 
 $active = 1;
 foreach ( $this->overallevents as $overallevents => $value )
 		{
@@ -56,7 +56,7 @@ foreach ( $this->overallevents as $overallevents => $value )
 		$type     = 4;
 		$imgTitle = Text::_($value->name);
 		$icon     = sportsmanagementHelper::getPictureThumb($value->icon, $imgTitle, $width, $height, $type);
-echo JHtml::_('bootstrap.addTab', 'myTab2', 'name'.$active,  $icon.' '.Text::_($value->name) );  
+echo HTMLHelper::_('bootstrap.addTab', 'myTab2', 'name'.$active,  $icon.' '.Text::_($value->name) );  
 ?>
 <table class="table table-striped">
 						<?php
@@ -106,11 +106,11 @@ echo JHtml::_('bootstrap.addTab', 'myTab2', 'name'.$active,  $icon.' '.Text::_($
   <?php
   
   
-echo JHtml::_('bootstrap.endTab');  
+echo HTMLHelper::_('bootstrap.endTab');  
   
 $active++;  
 } 
-echo JHtml::_('bootstrap.endTabSet');  
+echo HTMLHelper::_('bootstrap.endTabSet');  
 ?>  
 	
 	

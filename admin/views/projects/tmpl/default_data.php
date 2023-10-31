@@ -235,11 +235,11 @@ $pcture_link = 'index.php?option=com_sportsmanagement&view=imagelist&tmpl=compon
 						
 if (version_compare( substr(JVERSION, 0, 3), '5.0', 'ge'))
 {
-JHtml::_('formbehavior.chosen', '.test1');
+	HTMLHelper::_('formbehavior.chosen', '.test1');
 }
 else
 {
-JHtml::_('formbehavior2.select2', '.test1');
+	HTMLHelper::_('formbehavior2.select2', '.test1');
 }
 
 						
@@ -283,11 +283,11 @@ echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/asset
 					$append      = ' style="background-color:#bbffff"';
 if (version_compare( substr(JVERSION, 0, 3), '5.0', 'ge'))
 {
-JHtml::_('formbehavior.chosen', '.test2');
+	HTMLHelper::_('formbehavior.chosen', '.test2');
 }
 else
 {
-JHtml::_('formbehavior2.select2', '.test2');
+	HTMLHelper::_('formbehavior2.select2', '.test2');
 }
 					
 

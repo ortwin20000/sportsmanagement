@@ -583,8 +583,8 @@ $this->chances[1] = '';
 	
 	
 <?php	
-echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'name'))	;
-echo JHtml::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_SPORTSMANAGEMENT_STATS_MATCHES_OVERALL') );
+echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'name'))	;
+echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_SPORTSMANAGEMENT_STATS_MATCHES_OVERALL') );
 	?>
       <table class="table table-striped" id="history-1">
 						<tr>
@@ -616,9 +616,9 @@ echo JHtml::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_SPORTSMANAGEMENT
 						?>
 			</table>
       <?php
-echo JHtml::_('bootstrap.endTab');
+echo HTMLHelper::_('bootstrap.endTab');
 	
-echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', $this->teams[0]->name . " " . Text::_("COM_SPORTSMANAGEMENT_NEXTMATCH_VS") . " " . $this->teams[1]->name);
+echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'desc', $this->teams[0]->name . " " . Text::_("COM_SPORTSMANAGEMENT_NEXTMATCH_VS") . " " . $this->teams[1]->name);
 	?>
       <table class="table table-striped" id="history-2">
 						<tr>
@@ -651,9 +651,9 @@ echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', $this->teams[0]->name . " " .
 			</table>
                           <?php
       
-echo JHtml::_('bootstrap.endTab');
+echo HTMLHelper::_('bootstrap.endTab');
 	
-echo JHtml::_('bootstrap.addTab', 'myTab', 'price', $this->teams[1]->name . " " . Text::_("COM_SPORTSMANAGEMENT_NEXTMATCH_VS") . " " . $this->teams[0]->name);
+echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'price', $this->teams[1]->name . " " . Text::_("COM_SPORTSMANAGEMENT_NEXTMATCH_VS") . " " . $this->teams[0]->name);
 	?>
       <table class="table table-striped" id="history-3">
 						<tr>
@@ -685,9 +685,9 @@ echo JHtml::_('bootstrap.addTab', 'myTab', 'price', $this->teams[1]->name . " " 
 						?>
 			</table>
       <?php
-echo JHtml::_('bootstrap.endTab');	
+echo HTMLHelper::_('bootstrap.endTab');	
 	
-echo JHtml::_('bootstrap.endTabSet');	
+echo HTMLHelper::_('bootstrap.endTabSet');	
 ?>	
 	
 </div>
