@@ -27,7 +27,7 @@ else
 {
 	include_once JPATH_LIBRARIES . '/joomla/form/fields/radio.php';
 
-	class JSMFormField extends JFormFieldRadio
+	class JSMFormField extends RadioField
 	{
 
 	}
