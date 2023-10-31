@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 // Welche version
 if (version_compare(JVERSION, '3.0.0', 'ge'))
@@ -117,7 +118,7 @@ class JFormFieldMultiDependSQL extends JFormField
 		if ($depends)
 		{
 			$doc = Factory::getDocument();
-			$doc->addScript(JURI::base() . 'components/com_sportsmanagement/assets/js/depend.js');
+			$doc->addScript(Uri::base() . 'components/com_sportsmanagement/assets/js/depend.js');
 		}
 
 		// Render the HTML SELECT list.

@@ -15,7 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
-
+use Joomla\CMS\Uri\Uri;
 
 ?>
 <div class="col-md-12 quickicons-for-site_quickicon module-wrapper" style="grid-row-end: span 30;">
@@ -26,7 +26,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_MENU') ?>"
 					href="index.php?option=com_sportsmanagement">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/transparent_schrift_48.png">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/transparent_schrift_48.png">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_MENU') ?>             
@@ -37,7 +37,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_EXTENSIONS') ?>"
 					href="index.php?option=com_sportsmanagement&view=extensions">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_EXTENSIONS') ?>             
@@ -49,7 +49,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_SPECIAL_EXTENSIONS') ?>"
 					href="index.php?option=com_sportsmanagement&view=specialextensions">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_SPECIAL_EXTENSIONS') ?>             
@@ -61,7 +61,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PROJECTS') ?>"
 					href="index.php?option=com_sportsmanagement&view=projects">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/projekte.png" style="background:white;">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/projekte.png" style="background:white;">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PROJECTS') ?>             
@@ -72,7 +72,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PREDICTIONS') ?>"
 					href="index.php?option=com_sportsmanagement&view=predictiongames">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/tippspiele.png" style="background:white;">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/tippspiele.png" style="background:white;">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PREDICTIONS') ?>             
@@ -83,7 +83,7 @@ use Joomla\CMS\Log\Log;
 					<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_CURRENT_SEASONS') ?>"
 					href="index.php?option=com_sportsmanagement&view=currentseasons">
 						<div class="quickicon-icon">
-							<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/aktuellesaison.png" style="background:white;">
+							<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/aktuellesaison.png" style="background:white;">
 						</div>
 						<div class="quickicon-name d-flex align-items-end">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_CURRENT_SEASONS') ?>             
@@ -95,7 +95,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_GOOGLE_CALENDAR') ?>"
 				   href="index.php?option=com_sportsmanagement&view=jsmgcalendars">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/google-calendar-48-icon.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/google-calendar-48-icon.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('COM_SPORTSMANAGEMENT_SUBMENU_GOOGLE_CALENDAR') ?>             

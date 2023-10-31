@@ -25,6 +25,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.plugin.plugin');
 
@@ -60,7 +61,7 @@ class plgSystemJCEMediabox extends CMSPlugin
         $path = __DIR__ . '/' . $relative;
         $hash = md5_file($path);
 
-        return JURI::base(true) . '/plugins/system/jcemediabox/' . $relative . '?' . $hash;
+        return Uri::base(true) . '/plugins/system/jcemediabox/' . $relative . '?' . $hash;
     }
 
     /**
@@ -151,7 +152,7 @@ class plgSystemJCEMediabox extends CMSPlugin
         }
 
         $config = array(
-            'base' => JURI::base(true) . '/',
+            'base' => Uri::base(true) . '/',
             'theme' => $theme,
             //'mediafallback' => (int) $params->get('mediafallback', 0),
             //'mediaselector' => $params->get('mediaselector', 'audio,video'),

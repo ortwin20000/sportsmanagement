@@ -53,7 +53,7 @@ class sportsmanagementControllerPredictionUsers extends BaseController
 	 */
 	function cancel($key = null)
 	{
-		$uri = JUri::getInstance(); 
+		$uri = Uri::getInstance(); 
 		$current_uri = $uri->toString();
 		Factory::getApplication()->redirect(str_ireplace('&layout=edit', '', $current_uri));
 		//Factory::getApplication()->redirect(str_ireplace('&layout=edit', '', Factory::getURI()->toString()));
@@ -112,7 +112,7 @@ class sportsmanagementControllerPredictionUsers extends BaseController
 		{
 			$msg  .= Text::_('COM_SPORTSMANAGEMENT_PRED_USERS_CONTROLLER_ERROR_1');
 			
-			$uri = JUri::getInstance(); 
+			$uri = Uri::getInstance(); 
 			$link = $uri->toString();
 		}
 		else
@@ -120,7 +120,7 @@ class sportsmanagementControllerPredictionUsers extends BaseController
 			if ((!$isMember) && (!$allowedAdmin))
 			{
 				$msg  .= Text::_('COM_SPORTSMANAGEMENT_PRED_USERS_CONTROLLER_ERROR_2');
-				$uri = JUri::getInstance(); 
+				$uri = Uri::getInstance(); 
 				$link = $uri->toString();
 			} 
 			else
@@ -128,13 +128,13 @@ class sportsmanagementControllerPredictionUsers extends BaseController
 				if (!$modelusers->savememberdata())
 				{
 					$msg  .= Text::_('COM_SPORTSMANAGEMENT_PRED_USERS_CONTROLLER_ERROR_3');
-					$uri = JUri::getInstance(); 
+					$uri = Uri::getInstance(); 
 					$link = $uri->toString();
 				}
 				else
 				{
 					$msg  .= Text::_('COM_SPORTSMANAGEMENT_PRED_USERS_CONTROLLER_MSG_1');
-					$uri = JUri::getInstance(); 
+					$uri = Uri::getInstance(); 
 					$link = $uri->toString();
 				}
 			}

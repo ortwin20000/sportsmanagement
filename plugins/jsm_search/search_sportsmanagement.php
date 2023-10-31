@@ -29,6 +29,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 if (! defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
@@ -69,7 +70,7 @@ else
     else
     {
         if (! defined('COM_SPORTSMANAGEMENT_PICTURE_SERVER')) {      
-            DEFINE('COM_SPORTSMANAGEMENT_PICTURE_SERVER', JURI::root());
+            DEFINE('COM_SPORTSMANAGEMENT_PICTURE_SERVER', Uri::root());
         }  
     }
 

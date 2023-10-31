@@ -50,7 +50,7 @@ class sportsmanagementControllerPredictionUsers extends FormController
 	function cancel($key = null)
 	{
 		
-		/*$uri = JUri::getInstance(); 
+		/*$uri = Uri::getInstance(); 
 		$current_uri = $uri->toString();
 		Factory::getApplication()->redirect(str_ireplace('&layout=edit', '', $current_uri)); */
 	

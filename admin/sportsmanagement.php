@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\Uri\Uri;
 
 /**  Access check. */
 if (!Factory::getUser()->authorise('core.manage', 'com_sportsmanagement'))
@@ -122,7 +123,7 @@ else
 	}
 	else
 	{
-		DEFINE('COM_SPORTSMANAGEMENT_PICTURE_SERVER', JURI::root());
+		DEFINE('COM_SPORTSMANAGEMENT_PICTURE_SERVER', Uri::root());
 	}
 }
 

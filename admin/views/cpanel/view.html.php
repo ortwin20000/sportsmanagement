@@ -23,6 +23,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\Registry\Registry;
+use Joomla\CMS\HTML\Helpers\Sidebar;
 
 /**
  * sportsmanagementViewcpanel
@@ -370,7 +371,7 @@ class sportsmanagementViewcpanel extends sportsmanagementView
 
 			if (version_compare(JVERSION, '3.0.0', 'ge'))
 			{
-				JHtmlSidebar::setAction('index.php?option=com_sportsmanagement');
+				Sidebar::setAction('index.php?option=com_sportsmanagement');
 			}
 
 			parent::addToolbar();

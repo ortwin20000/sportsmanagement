@@ -37,6 +37,8 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Component\Actionlogs\Administrator\Model\ActionlogModel;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\HTML\Helpers\Sidebar;
+
 //BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_actionlogs/models', 'ActionlogsModel');
 
 //HTMLHelper::_('behavior.keepalive');
@@ -1128,27 +1130,27 @@ try
 
 		if (version_compare(JVERSION, '3.0.0', 'ge'))
 		{
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_MENU'), 'index.php?option=com_sportsmanagement', $submenu == 'cpanel'
 			);
 
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PROJECTS'), 'index.php?option=com_sportsmanagement&view=projects', $submenu == 'projects'
 			);
 
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_PREDICTIONS'), 'index.php?option=com_sportsmanagement&view=predictions', $submenu == 'predictions'
 			);
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_CURRENT_SEASONS'), 'index.php?option=com_sportsmanagement&view=currentseasons', $submenu == 'currentseasons'
 			);
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_GOOGLE_CALENDAR'), 'index.php?option=com_sportsmanagement&view=jsmgcalendars', $submenu == 'googlecalendar'
 			);
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_EXTENSIONS'), 'index.php?option=com_sportsmanagement&view=extensions', $submenu == 'extensions'
 			);
-			JHtmlSidebar::addEntry(
+			Sidebar::addEntry(
 				Text::_('COM_SPORTSMANAGEMENT_SUBMENU_SPECIAL_EXTENSIONS'), 'index.php?option=com_sportsmanagement&view=specialextensions', $submenu == 'specialextensions'
 			);
 		}

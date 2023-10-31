@@ -11,6 +11,7 @@
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * display a colorpicker element
@@ -38,9 +39,9 @@ class JFormFieldColorpicker extends JFormField
 		// Add javascript
 		// $method = (stripos($node->_attributes['name'] , 'JL_EXT') !== false)? 'extended' : 'params';
 		$document = Factory::getDocument();
-		$document->addStylesheet(JURI::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/js_color_picker_v2.css');
-		$document->addScript(JURI::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/color_functions.js');
-		$document->addScript(JURI::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/js_color_picker_v2.js');
+		$document->addStylesheet(Uri::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/js_color_picker_v2.css');
+		$document->addScript(Uri::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/color_functions.js');
+		$document->addScript(Uri::base() . 'components/com_sportsmanagement/assets/js/js_color_picker_v2/js_color_picker_v2.js');
 		$output = "<input type=\"text\" style=\"background-color: " . $this->value . "\"
 					name=\"" . $this->name . "\" value=\"" . $this->value . "\">";
 		$output .= "<input type=\"button\" value=\"#\"

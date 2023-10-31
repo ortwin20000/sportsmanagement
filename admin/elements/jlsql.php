@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 
 // Welche version
 if (version_compare(JVERSION, '3.0.0', 'ge'))
@@ -68,7 +69,7 @@ class JFormFieldJLSQL extends JFormField
 				var combo = $('" . $control_name . $this->name . "');
 				var value = combo.options[combo.selectedIndex].value;
 				var postStr  = '';
-				var url = '" . JURI::base() . "' + 'index.php?option=com_sportsmanagement&view=" . $view . "&format=raw&" . $this->name . "='+value;
+				var url = '" . Uri::base() . "' + 'index.php?option=com_sportsmanagement&view=" . $view . "&format=raw&" . $this->name . "='+value;
 				var theAjax = new Ajax(url, {
 					method: 'post',
 					postBody : postStr

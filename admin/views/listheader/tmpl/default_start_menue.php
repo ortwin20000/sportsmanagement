@@ -15,7 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
-
+use Joomla\CMS\Uri\Uri;
 
 ?>
     <nav class="quick-icons px-3 pb-3" aria-label="Schnellstartlinks Sportspamangement">
@@ -24,7 +24,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PANEL_LINK') ?>"
 				   href="index.php?option=com_sportsmanagement">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/transparent_schrift_48.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/transparent_schrift_48.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PANEL_LABEL') ?>             
@@ -35,7 +35,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_EXTENSIONS_LINK') ?>"
 				   href="index.php?option=com_sportsmanagement&view=extensions">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/extensions.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_EXTENSIONS_LABEL') ?>             
@@ -46,7 +46,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PROJECTS_LINK') ?>"
 				   href="index.php?option=com_sportsmanagement&view=projects">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/projekte.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/projekte.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PROJECTS_LABEL') ?>             
@@ -57,7 +57,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PREDICTIONS_LINK') ?>"
 				   href="index.php?option=com_sportsmanagement&view=predictions">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/tippspiele.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/tippspiele.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_PREDICTIONS_LABEL') ?>             
@@ -68,7 +68,7 @@ use Joomla\CMS\Log\Log;
 				<a title="<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_CURRENT_SAISON_LINK') ?>"
 				   href="index.php?option=com_sportsmanagement&view=currentseasons">
 					<div class="quickicon-icon">
-						<img src="<?php echo JURI::base(false) ?>/components/com_sportsmanagement/assets/icons/aktuellesaison.png">
+						<img src="<?php echo Uri::base(false) ?>/components/com_sportsmanagement/assets/icons/aktuellesaison.png">
 					</div>
 					<div class="quickicon-name d-flex align-items-end">
 						<?php echo Text::_('MOD_SPORTSMANAGEMENT_QUICKICON_CURRENT_SAISON_LABEL') ?>             
