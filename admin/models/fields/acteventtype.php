@@ -32,7 +32,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldacteventtype extendsListField
+class JFormFieldacteventtype extends ListField
 {
 	protected $type = 'acteventtype';
 

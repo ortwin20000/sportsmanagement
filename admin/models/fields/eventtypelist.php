@@ -34,7 +34,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldeventtypelist extendsListField
+class JFormFieldeventtypelist extends ListField
 {
 	/**
 	 * field type

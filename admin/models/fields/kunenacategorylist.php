@@ -30,7 +30,7 @@ use Joomla\CMS\Form\Field\ListField;
  * @version   2014
  * @access    public
  */
-class JFormFieldKunenaCategoryList extendsListField
+class JFormFieldKunenaCategoryList extends ListField
 {
 	protected $type = 'KunenaCategoryList';
 

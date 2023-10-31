@@ -27,7 +27,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldagegrouplist extendsListField
+class JFormFieldagegrouplist extends ListField
 {
 	/**
 	 * field type

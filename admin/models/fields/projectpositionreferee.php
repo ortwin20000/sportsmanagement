@@ -31,7 +31,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldprojectpositionreferee extendsListField
+class JFormFieldprojectpositionreferee extends ListField
 {
 	/**
 	 * field type

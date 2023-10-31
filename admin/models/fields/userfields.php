@@ -27,7 +27,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFielduserfields extendsListField
+class JFormFielduserfields extends ListField
 {
 	protected $type = 'userfields';
 

@@ -32,7 +32,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldfinaltablerank extendsListField
+class JFormFieldfinaltablerank extends ListField
 {
 	/**
 	 * field type

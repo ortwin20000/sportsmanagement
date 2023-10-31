@@ -30,7 +30,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFielduserlist extendsListField
+class JFormFielduserlist extends ListField
 {
 	/**
 	 * field type

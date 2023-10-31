@@ -27,7 +27,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldactseason extendsListField
+class JFormFieldactseason extends ListField
 {
 	protected $type = 'actseason';
 

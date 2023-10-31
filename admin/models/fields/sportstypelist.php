@@ -45,7 +45,7 @@ if (!class_exists('sportsmanagementHelper'))
  * @version   2014
  * @access    public
  */
-class JFormFieldsportstypelist extendsListField
+class JFormFieldsportstypelist extends ListField
 {
 	/**
 	 * field type

@@ -31,7 +31,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldprojectrounds extendsListField
+class JFormFieldprojectrounds extends ListField
 {
 	/**
 	 * The form field type.

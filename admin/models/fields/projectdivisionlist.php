@@ -29,7 +29,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldprojectdivisionlist extendsListField
+class JFormFieldprojectdivisionlist extends ListField
 {
 	/**
 	 * field type

@@ -29,7 +29,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldcountrylist extendsListField
+class JFormFieldcountrylist extends ListField
 {
 	/**
 	 * field type

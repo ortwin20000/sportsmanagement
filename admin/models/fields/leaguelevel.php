@@ -29,7 +29,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldLeagueLevel extendsListField
+class JFormFieldLeagueLevel extends ListField
 {
 	/**
 	 * field type

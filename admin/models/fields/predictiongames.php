@@ -48,7 +48,7 @@ if (!class_exists('sportsmanagementHelper'))
  * @version   2014
  * @access    public
  */
-class JFormFieldPredictiongames extendsListField
+class JFormFieldPredictiongames extends ListField
 {
 	protected $type = 'predictiongames';
 

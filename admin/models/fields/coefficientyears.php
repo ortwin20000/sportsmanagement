@@ -28,7 +28,7 @@ FormHelper::loadFieldClass('list');
  * @version $Id$
  * @access public
  */
-class JFormFieldcoefficientyears extendsListField
+class JFormFieldcoefficientyears extends ListField
 {
 	protected $type = 'coefficientyears';
 

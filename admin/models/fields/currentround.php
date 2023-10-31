@@ -33,7 +33,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldCurrentround extendsListField
+class JFormFieldCurrentround extends ListField
 {
 	/**
 	 * field type
