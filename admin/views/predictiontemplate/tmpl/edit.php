@@ -17,11 +17,12 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\Helpers\Behavior;
 
 $templatesToLoad = array('footer', 'listheader');
 sportsmanagementHelper::addTemplatePaths($templatesToLoad, $this);
 
-JHtmlBehavior::formvalidation();
+Behavior::formvalidation();
 
 
 $i = 1;
