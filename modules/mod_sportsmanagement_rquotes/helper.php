@@ -19,6 +19,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Input\Cookie;
+use Joomla\CMS\Filesystem\Path;
 
 /**
  * modRquotesHelper
@@ -336,7 +337,7 @@ class modRquotesHelper
 		jimport('joomla.filesystem.file');
 
 		$path      = JPATH_BASE . "/modules/" . $module->module . "/" . $module->module . "/" . $filename;
-		$cleanpath = JPATH::clean($path);
+		$cleanpath = Path::clean($path);
 		$contents  = File::read($cleanpath);
 		$lines     = explode("\n", $contents);
 		$count     = count($lines);
@@ -365,7 +366,7 @@ class modRquotesHelper
 		$today     = date("d");
 		$num       = ($today - 1);
 		$path      = JPATH_BASE . "/modules/" . $module->module . "/" . $module->module . "/" . $filename;
-		$cleanpath = JPATH::clean($path);
+		$cleanpath = Path::clean($path);
 		$contents  = File::read($cleanpath);
 		$lines     = explode("\n", $contents);
 		$count     = count($lines);

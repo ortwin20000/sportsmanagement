@@ -19,6 +19,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Filesystem\Path;
 
 /**
  * JFormFieldRounds
@@ -49,7 +50,7 @@ class JFormFieldRounds extends FormField
 		$params = ComponentHelper::getParams('com_sportsmanagement');
 
 		$extension = "com_sportsmanagement";
-		$source    = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $extension);
+		$source    = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $extension);
 		$lang->load($extension, JPATH_ADMINISTRATOR, null, false, false)
 		|| $lang->load($extension, $source, null, false, false)
 		|| $lang->load($extension, JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
