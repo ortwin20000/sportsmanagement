@@ -15,7 +15,6 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Form\Field\ListField;
 FormHelper::loadFieldClass('list');
 
 /**
@@ -27,7 +26,7 @@ FormHelper::loadFieldClass('list');
  * @version   2014
  * @access    public
  */
-class JFormFieldagegrouplist extendsListField
+class JFormFieldagegrouplist extends \JFormFieldList
 {
 	/**
 	 * field type

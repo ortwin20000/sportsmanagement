@@ -16,7 +16,6 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Form\Field\ListField;
 
 jimport('joomla.filesystem.folder');
 JFormHelper::loadFieldClass('list');
@@ -31,7 +30,7 @@ JFormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldJLMenuItems extendsListField
+class JFormFieldJLMenuItems extends \JFormFieldList
 {
 	/**
 	 * field type

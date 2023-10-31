@@ -19,7 +19,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Form\Field\ListField;
 
 // Import the list field type
 jimport('joomla.form.helper');
@@ -28,7 +27,7 @@ FormHelper::loadFieldClass('list');
 /**
  * SportsManagement Form Field class for the SportsManagement component
  */
-class JFormFieldsportsmanagement extendsListField
+class JFormFieldsportsmanagement extends \JFormFieldList
 {
 	/**
 	 * The field type.

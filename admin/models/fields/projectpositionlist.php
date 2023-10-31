@@ -16,7 +16,6 @@ use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Form\Field\ListField;
 
 FormHelper::loadFieldClass('list');
 
@@ -29,7 +28,7 @@ FormHelper::loadFieldClass('list');
  * @version   $Id$
  * @access    public
  */
-class JFormFieldprojectpositionlist extendsListField
+class JFormFieldprojectpositionlist extends \JFormFieldList
 {
 	/**
 	 * field type

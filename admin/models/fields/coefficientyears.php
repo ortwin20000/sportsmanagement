@@ -14,7 +14,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Form\Field\ListField;
 
 jimport('joomla.filesystem.folder');
 FormHelper::loadFieldClass('list');
@@ -28,7 +27,7 @@ FormHelper::loadFieldClass('list');
  * @version $Id$
  * @access public
  */
-class JFormFieldcoefficientyears extendsListField
+class JFormFieldcoefficientyears extends \JFormFieldList
 {
 	protected $type = 'coefficientyears';
 
