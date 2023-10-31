@@ -19,6 +19,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewTreetonodes
@@ -91,24 +92,24 @@ class sportsmanagementViewTreetonodes extends sportsmanagementView
 
 		foreach ($createYesNo AS $key => $value)
 		{
-			$ynOptions[] = JHtmlSelect::option($key, $value);
+			$ynOptions[] = Select::option($key, $value);
 		}
 
 		foreach ($createLeftRight AS $key => $value)
 		{
-			$lrOptions[] = JHtmlSelect::option($key, $value);
+			$lrOptions[] = Select::option($key, $value);
 		}
 
-		$lists['addToRound'] = JHtmlSelect::radiolist($ynOptions, 'addToRound', 'class="inputbox"', 'value', 'text', 1);
+		$lists['addToRound'] = Select::radiolist($ynOptions, 'addToRound', 'class="inputbox"', 'value', 'text', 1);
 
 		// Build the html radio for auto publish new matches
-		$lists['autoPublish'] = JHtmlSelect::radiolist($ynOptions, 'autoPublish', 'class="inputbox"', 'value', 'text', 0);
+		$lists['autoPublish'] = Select::radiolist($ynOptions, 'autoPublish', 'class="inputbox"', 'value', 'text', 0);
 
 		// Build the html radio for Left or Right redepth
-		$lists['LRreDepth'] = JHtmlSelect::radiolist($lrOptions, 'LRreDepth', 'class="inputbox"', 'value', 'text', 0);
+		$lists['LRreDepth'] = Select::radiolist($lrOptions, 'LRreDepth', 'class="inputbox"', 'value', 'text', 0);
 
 		// Build the html radio for create new treeto
-		$lists['createNewTreeto'] = JHtmlSelect::radiolist($ynOptions, 'createNewTreeto', 'class="inputbox"', 'value', 'text', 1);
+		$lists['createNewTreeto'] = Select::radiolist($ynOptions, 'createNewTreeto', 'class="inputbox"', 'value', 'text', 1);
 
 		$this->lists     = $lists;
 		$this->style     = $style;

@@ -18,6 +18,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewTeams
@@ -75,7 +76,7 @@ class sportsmanagementViewTeams extends sportsmanagementView
 		}
 
 		$lists['nation']  = $nation;
-		$lists['nation2'] = JHtmlSelect::genericlist($nation, 'filter_search_nation', 'class="inputbox" style="width:140px; " onchange="this.form.submit();"', 'value', 'text', $this->state->get('filter.search_nation'));
+		$lists['nation2'] = Select::genericlist($nation, 'filter_search_nation', 'class="inputbox" style="width:140px; " onchange="this.form.submit();"', 'value', 'text', $this->state->get('filter.search_nation'));
 
 		$myoptions   = array();
 		$myoptions[] = HTMLHelper::_('select.option', '0', Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_AGEGROUP'));

@@ -16,6 +16,7 @@ use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\Helpers\Select;
 
 FormHelper::loadFieldClass('list');
 jimport('joomla.html.html');
@@ -67,22 +68,22 @@ class JFormFieldjsmcolorsranking extends FormField
 		$html = array();
 
 		// Build the html options for extratime
-		$select_ranking[] = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
+		$select_ranking[] = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
 
 		for ($a = 1; $a <= $rankingteams; $a++)
 		{
-			$select_ranking[] = JHtmlSelect::option($a, $a);
+			$select_ranking[] = Select::option($a, $a);
 		}
 
 		$select_Options = sportsmanagementHelper::getExtraSelectOptions($templatename, $templatefield, true);
 
 		if ($select_Options)
 		{
-			$select_text[] = JHtmlSelect::option('', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
+			$select_text[] = Select::option('', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
 
 			foreach ($select_Options as $row)
 			{
-				$select_text[] = JHtmlSelect::option($row->value, $row->text);
+				$select_text[] = Select::option($row->value, $row->text);
 			}
 		}
 

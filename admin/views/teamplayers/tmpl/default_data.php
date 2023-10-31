@@ -16,6 +16,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\HTML\Helpers\Select;
 
 $this->saveOrder = $this->sortColumn == 'ppl.ordering';
 if ($this->saveOrder && !empty($this->items))
@@ -230,7 +231,7 @@ echo HTMLHelper::link($link, $image);
 						$append = ' background-color:#FFCCCC;';
 					}
 
-					echo JHtmlSelect::genericlist(
+					echo Select::genericlist(
 						$this->lists['nation'],
 						'country' . $this->item->person_id,
 						$inputappend . ' class="form-control form-control-inline" style="width:140px; ' . $append . '" onchange="document.getElementById(\'cb' . $this->count_i . '\').checked=true"',

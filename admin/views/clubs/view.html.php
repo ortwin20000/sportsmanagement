@@ -18,6 +18,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewClubs
@@ -71,7 +72,7 @@ class sportsmanagementViewClubs extends sportsmanagementView
 		}
 
 		$lists['nation']  = $nation;
-		$lists['nation2'] = JHtmlSelect::genericlist(
+		$lists['nation2'] = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

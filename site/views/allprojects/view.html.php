@@ -14,6 +14,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\Select;
 
 if (!defined('JSM_PATH'))
 {
@@ -81,7 +82,7 @@ class sportsmanagementViewallprojects extends sportsmanagementView
 			$temp = array_merge($temp, $res);
 		}
 
-		$lists['nation2'] = JHtmlSelect::genericlist(
+		$lists['nation2'] = Select::genericlist(
 			$temp,
 			'filter_search_nation',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -100,7 +101,7 @@ class sportsmanagementViewallprojects extends sportsmanagementView
 			$temp = array_merge($temp, $res);
 		}
 
-		$lists['leagues'] = JHtmlSelect::genericlist(
+		$lists['leagues'] = Select::genericlist(
 			$temp,
 			'filter_search_leagues',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -119,7 +120,7 @@ class sportsmanagementViewallprojects extends sportsmanagementView
 			$temp = array_merge($temp, $res);
 		}
 
-		$lists['seasons'] = JHtmlSelect::genericlist(
+		$lists['seasons'] = Select::genericlist(
 			$temp,
 			'filter_search_seasons',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

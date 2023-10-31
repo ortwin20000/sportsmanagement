@@ -20,6 +20,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewplayers
@@ -108,7 +109,7 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout ' . $this->getLayout()),
 		}
 
 		$lists['nation']  = $nation;
-		$lists['nation2'] = JHtmlSelect::genericlist(
+		$lists['nation2'] = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -130,7 +131,7 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout ' . $this->getLayout()),
 		}
 
 		$lists['agegroup']  = $myoptions;
-		$lists['agegroup2'] = JHtmlSelect::genericlist(
+		$lists['agegroup2'] = Select::genericlist(
 			$myoptions,
 			'filter_search_agegroup',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -224,7 +225,7 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' layout ' . $this->getLayout()),
 		}
 
 		$lists['agegroup']  = $myoptions;
-		$lists['agegroup2'] = JHtmlSelect::genericlist(
+		$lists['agegroup2'] = Select::genericlist(
 			$myoptions,
 			'filter_search_agegroup',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

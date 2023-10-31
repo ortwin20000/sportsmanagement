@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewTreetos
@@ -40,7 +41,7 @@ class sportsmanagementViewTreetos extends sportsmanagementView
 		$division = $this->app->getUserStateFromRequest($this->option . 'tt_division', 'division', '', 'string');
 
 		/** Build the html options for divisions */
-		$divisions[]  = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_DIVISION'));
+		$divisions[]  = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_DIVISION'));
 		$mdlDivisions = BaseDatabaseModel::getInstance("divisions", "sportsmanagementModel");
 
 		if ($res = $mdlDivisions->getDivisions($this->project_id))

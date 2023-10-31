@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewjlextcountries
@@ -50,7 +51,7 @@ class sportsmanagementViewjlextcountries extends sportsmanagementView
 			$this->federation = $res;
 		}
 
-		$lists['federation'] = JHtmlSelect::genericlist(
+		$lists['federation'] = Select::genericlist(
 			$nation,
 			'filter_federation',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

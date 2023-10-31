@@ -19,6 +19,7 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewProjects
@@ -169,7 +170,7 @@ else
 		}
 
 		$lists['nation']       = $nation;
-		$lists['nation2']      = JHtmlSelect::genericlist(
+		$lists['nation2']      = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -219,7 +220,7 @@ else
 		}
 
 		$lists['agegroup']  = $myoptions;
-		$lists['agegroup2'] = JHtmlSelect::genericlist(
+		$lists['agegroup2'] = Select::genericlist(
 			$myoptions,
 			'filter_search_agegroup',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -257,7 +258,7 @@ if ($res){
 }
 		
 		
-		$lists['association2'] = JHtmlSelect::genericlist(
+		$lists['association2'] = Select::genericlist(
 			$nation,
 			'filter_search_association',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

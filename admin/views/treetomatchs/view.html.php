@@ -19,6 +19,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewTreetomatchs
@@ -85,15 +86,15 @@ class sportsmanagementViewTreetomatchs extends sportsmanagementView
 			{
 				if (empty($res1->info))
 				{
-					$node_matcheslist[] = JHtmlSelect::option($res->value, $res->text);
+					$node_matcheslist[] = Select::option($res->value, $res->text);
 				}
 				else
 				{
-					$node_matcheslist[] = JHtmlSelect::option($res->value, $res->text . ' (' . $res->info . ')');
+					$node_matcheslist[] = Select::option($res->value, $res->text . ' (' . $res->info . ')');
 				}
 			}
 
-			$lists['node_matches'] = JHtmlSelect::genericlist(
+			$lists['node_matches'] = Select::genericlist(
 				$node_matcheslist, 'node_matcheslist[]',
 				' style="width:350px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($ress)) . '"',
 				'value',
@@ -123,11 +124,11 @@ class sportsmanagementViewTreetomatchs extends sportsmanagementView
 
 					if ($used == 0 && !empty($res1->info))
 					{
-						$notusedmatches[] = JHtmlSelect::option($res1->value, $res1->text . ' (' . $res1->info . ')');
+						$notusedmatches[] = Select::option($res1->value, $res1->text . ' (' . $res1->info . ')');
 					}
 					elseif ($used == 0 && empty($res1->info))
 					{
-						$notusedmatches[] = JHtmlSelect::option($res1->value, $res1->text);
+						$notusedmatches[] = Select::option($res1->value, $res1->text);
 					}
 				}
 			}
@@ -137,11 +138,11 @@ class sportsmanagementViewTreetomatchs extends sportsmanagementView
 				{
 					if (empty($res1->info))
 					{
-						$notusedmatches[] = JHtmlSelect::option($res1->value, $res1->text);
+						$notusedmatches[] = Select::option($res1->value, $res1->text);
 					}
 					else
 					{
-						$notusedmatches[] = JHtmlSelect::option($res1->value, $res1->text . ' (' . $res1->info . ')');
+						$notusedmatches[] = Select::option($res1->value, $res1->text . ' (' . $res1->info . ')');
 					}
 				}
 			}
@@ -154,7 +155,7 @@ class sportsmanagementViewTreetomatchs extends sportsmanagementView
 		// Build the html select list for matches
 		if (count($notusedmatches) > 0)
 		{
-			$lists['matches'] = JHtmlSelect::genericlist(
+			$lists['matches'] = Select::genericlist(
 				$notusedmatches,
 				'matcheslist[]',
 				' style="width:350px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($notusedmatches)) . '"',

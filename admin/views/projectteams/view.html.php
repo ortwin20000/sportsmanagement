@@ -20,6 +20,7 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewprojectteams
@@ -131,24 +132,24 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 			{
 				if (empty($res1->info))
 				{
-					$project_teamslist[] = JHtmlSelect::option($res->season_team_id, $res->text);
+					$project_teamslist[] = Select::option($res->season_team_id, $res->text);
 				}
 				else
 				{
-					$project_teamslist[] = JHtmlSelect::option($res->season_team_id, $res->text . ' (' . $res->info . ')');
+					$project_teamslist[] = Select::option($res->season_team_id, $res->text . ' (' . $res->info . ')');
 				}
 				
 				$project_teamslist_name[] = $res->text;
 			}
 
-			$lists['project_teams'] = JHtmlSelect::genericlist(
+			$lists['project_teams'] = Select::genericlist(
 				$project_teamslist, 'project_teamslist[]',
 				' style="width:250px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($ress)) . '"',
 				'value',
 				'text'
 			);
 			
-			$lists['project_teamslist_name'] = JHtmlSelect::genericlist(
+			$lists['project_teamslist_name'] = Select::genericlist(
 				$project_teamslist_name, 'project_teamslist_name[]',
 				' id="project_teamslist_name" style="width:250px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($ress)) . '"',
 				'value',
@@ -187,11 +188,11 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 
 					if ($used == 0 && !empty($res1->info))
 					{
-						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text . ' (' . $res1->info . ')');
+						$notusedteams[] = Select::option($res1->value, $res1->text . ' (' . $res1->info . ')');
 					}
 					elseif ($used == 0 && empty($res1->info))
 					{
-						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text);
+						$notusedteams[] = Select::option($res1->value, $res1->text);
 					}
 				}
 			}
@@ -201,11 +202,11 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 				{
 					if (empty($res1->info))
 					{
-						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text);
+						$notusedteams[] = Select::option($res1->value, $res1->text);
 					}
 					else
 					{
-						$notusedteams[] = JHtmlSelect::option($res1->value, $res1->text . ' (' . $res1->info . ')');
+						$notusedteams[] = Select::option($res1->value, $res1->text . ' (' . $res1->info . ')');
 					}
 				}
 			}
@@ -218,7 +219,7 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 		/** build the html select list for teams */
 		if (count($notusedteams) > 0)
 		{
-			$lists['teams'] = JHtmlSelect::genericlist(
+			$lists['teams'] = Select::genericlist(
 				$notusedteams,
 				'teamslist[]',
 				' style="width:250px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($notusedteams)) . '"',
@@ -245,7 +246,7 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 		}
 
 		$lists['nation']   = $nation;
-		$lists['nationpt'] = JHtmlSelect::genericlist(
+		$lists['nationpt'] = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -253,7 +254,7 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 			'text',
 			$this->state->get('filter.search_nation')
 		);
-        $lists['countrylist'] = JHtmlSelect::genericlist(
+        $lists['countrylist'] = Select::genericlist(
 			$nation,
 			'edit_search_nation',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

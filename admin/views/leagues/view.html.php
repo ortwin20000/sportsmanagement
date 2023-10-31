@@ -17,6 +17,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewLeagues
@@ -50,7 +51,7 @@ class sportsmanagementViewLeagues extends sportsmanagementView
 		}
 
 		$lists['nation']  = $nation;
-		$lists['nation2'] = JHtmlSelect::genericlist(
+		$lists['nation2'] = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -84,7 +85,7 @@ class sportsmanagementViewLeagues extends sportsmanagementView
 			}
 		}
 
-		$lists['association2'] = JHtmlSelect::genericlist(
+		$lists['association2'] = Select::genericlist(
 			$nation,
 			'filter_search_association',
 			$inputappend . 'class="inputbox" style="width:140px; " onchange="this.form.submit();"',
@@ -105,7 +106,7 @@ class sportsmanagementViewLeagues extends sportsmanagementView
 		}
 
 		$lists['agegroup']  = $myoptions;
-		$lists['agegroup2'] = JHtmlSelect::genericlist(
+		$lists['agegroup2'] = Select::genericlist(
 			$myoptions,
 			'filter_search_agegroup',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

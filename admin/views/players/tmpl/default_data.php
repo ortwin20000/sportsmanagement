@@ -17,6 +17,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\Helpers\Select;
 
 $lang = Factory::getApplication()->getLanguage();
 $currentLanguage = substr($lang->getTag(), 0, 2);
@@ -324,7 +325,7 @@ style="width: 120px; <?php echo $append; ?>"
 						{
 							$append = ' background-color:#FFCCCC;';
 						}
-						echo JHtmlSelect::genericlist(
+						echo Select::genericlist(
 							$this->lists['nation'],
 							'country' . $this->item->id,
 							$inputappend . ' cbnummer="cb' . $this->count_i . '" class="form-control form-control-inline" style="width:140px; ' . $append . '" ',
@@ -342,7 +343,7 @@ style="width: 120px; <?php echo $append; ?>"
 							$append = ' background-color:#FFCCCC;';
 						}
 						
-						echo JHtmlSelect::genericlist(
+						echo Select::genericlist(
 							$this->lists['positions'],
 							'position' . $this->item->id,
 							$inputappend . ' cbnummer="cb' . $this->count_i . '" class="form-control form-control-inline" style="width:140px; ' . $append . ' " ',

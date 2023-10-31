@@ -19,6 +19,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewMatches
@@ -181,14 +182,14 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		}
 
 		/** Build the html options for extratime */
-		$match_result_type[]        = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_RT'));
-		$match_result_type[]        = JHtmlSelect::option('1', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_OT'));
-		$match_result_type[]        = JHtmlSelect::option('2', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_SO'));
+		$match_result_type[]        = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_RT'));
+		$match_result_type[]        = Select::option('1', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_OT'));
+		$match_result_type[]        = Select::option('2', Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCHES_SO'));
 		$this->lists['match_result_type'] = $match_result_type;
 		unset($match_result_type);
 
 		/** Build the html options for article */
-		$articles[] = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_ARTICLE'));
+		$articles[] = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_ARTICLE'));
 
 		if ($res = sportsmanagementHelper::getArticleList($this->projectws->category_id))
 		{
@@ -199,7 +200,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		unset($articles);
 
 		/** Build the html options for divisions */
-		$divisions[]  = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_DIVISION'));
+		$divisions[]  = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_DIVISION'));
 		$mdlDivisions = BaseDatabaseModel::getInstance('divisions', 'sportsmanagementModel');
 
 		if ($res = $mdlDivisions->getDivisions($this->project_id))
@@ -210,7 +211,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 		$this->lists['divisions'] = $divisions;
 		unset($divisions);
 
-		$playground[]  = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_PLAYGROUND'));
+		$playground[]  = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_PLAYGROUND'));
 		$mdlPlayground      = BaseDatabaseModel::getInstance("Playgrounds", "sportsmanagementModel");
 		$res = $mdlPlayground->getPlaygrounds(true);
 		$this->playgrounds = array_merge($playground, $res);
@@ -227,7 +228,7 @@ class sportsmanagementViewMatches extends sportsmanagementView
 
 				if ($select_Options)
 				{
-					$select[]           = JHtmlSelect::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
+					$select[]           = Select::option('0', Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT'));
 					$select             = array_merge($select, $select_Options);
 					$this->selectlist[$field] = $select;
 					unset($select);
@@ -278,10 +279,10 @@ class sportsmanagementViewMatches extends sportsmanagementView
 
 				foreach ($createTypes AS $key => $value)
 				{
-					$ctOptions[] = JHtmlSelect::option($key, $value);
+					$ctOptions[] = Select::option($key, $value);
 				}
 
-				$this->lists['createTypes'] = JHtmlSelect::genericlist($ctOptions, 'ct[]', 'class="inputbox" onchange="javascript:displayTypeView();"', 'value', 'text', 1, 'ct');
+				$this->lists['createTypes'] = Select::genericlist($ctOptions, 'ct[]', 'class="inputbox" onchange="javascript:displayTypeView();"', 'value', 'text', 1, 'ct');
 				unset($createTypes);
 
 				/** Build the html radio for adding into one round / all rounds */
@@ -290,13 +291,13 @@ class sportsmanagementViewMatches extends sportsmanagementView
 
 				foreach ($createYesNo AS $key => $value)
 				{
-					$ynOptions[] = JHtmlSelect::option($key, $value);
+					$ynOptions[] = Select::option($key, $value);
 				}
 
-				$this->lists['addToRound'] = JHtmlSelect::radiolist($ynOptions, 'addToRound', 'class="inputbox"', 'value', 'text', 0);
+				$this->lists['addToRound'] = Select::radiolist($ynOptions, 'addToRound', 'class="inputbox"', 'value', 'text', 0);
 
 				/** Build the html radio for auto publish new matches */
-				$this->lists['autoPublish'] = JHtmlSelect::radiolist($ynOptions, 'autoPublish', 'class="inputbox"', 'value', 'text', 0);
+				$this->lists['autoPublish'] = Select::radiolist($ynOptions, 'autoPublish', 'class="inputbox"', 'value', 'text', 0);
 				//$this->lists          = $lists;
 				$this->setLayout('massadd');
 				break;

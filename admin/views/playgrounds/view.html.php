@@ -17,6 +17,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\HTML\Helpers\Select;
 
 /**
  * sportsmanagementViewPlaygrounds
@@ -49,7 +50,7 @@ class sportsmanagementViewPlaygrounds extends sportsmanagementView
 		}
 
 		$lists['nation']  = $nation;
-		$lists['nation2'] = JHtmlSelect::genericlist(
+		$lists['nation2'] = Select::genericlist(
 			$nation,
 			'filter_search_nation',
 			'class="inputbox" style="width:140px; " onchange="this.form.submit();"',

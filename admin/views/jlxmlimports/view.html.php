@@ -21,6 +21,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\Helpers\Select;
 
 jimport('joomla.html.parameter.element.timezones');
 
@@ -244,7 +245,7 @@ class sportsmanagementViewJLXMLImports extends sportsmanagementView
 		$this->agegroup_id     = $data['project']->agegroup_id ? $data['project']->agegroup_id : $this->state->get('filter.search_agegroup');
 		$this->master_template = $data['project']->master_template ? $data['project']->master_template : 0;
 		$lists['agegroup']     = $myoptions;
-		$lists['agegroup2']    = JHtmlSelect::genericlist($myoptions, 'filter_search_agegroup', 'class="inputbox" style="width:140px; " onchange="this.form.submit();"', 'value', 'text', $this->agegroup_id);
+		$lists['agegroup2']    = Select::genericlist($myoptions, 'filter_search_agegroup', 'class="inputbox" style="width:140px; " onchange="this.form.submit();"', 'value', 'text', $this->agegroup_id);
 		unset($myoptions);
 
 		$this->lists = $lists;
