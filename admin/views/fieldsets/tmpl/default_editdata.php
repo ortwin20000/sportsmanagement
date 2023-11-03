@@ -18,7 +18,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
 
-if (version_compare(JSM_JVERSION, '4', 'eq'))
+if (version_compare(JVERSION, '4.0.0', 'ge'))
 {
 	$wa = $this->document->getWebAssetManager();
 	$wa->useScript('showon');
@@ -74,11 +74,8 @@ break;
 }
 
 
-/**
- *
- * welche joomla version ?
- */
-if (version_compare(JSM_JVERSION, '4', 'eq'))
+/** welche joomla version ? */
+if (version_compare(JVERSION, '4.0.0', 'ge'))
 {
 	/**
 	 * anfang joomla 4 ----------------------------------------------------------------------------------------------
@@ -320,7 +317,7 @@ break;
 	 * ende joomla 4 ----------------------------------------------------------------------------------------------
 	 */
 }
-elseif (version_compare(JSM_JVERSION, '3', 'eq'))
+elseif (version_compare(JVERSION, '3.0.0', 'ge'))
 {
 	/**
 	 * anfang joomla 3 ----------------------------------------------------------------------------------------------
