@@ -23,7 +23,7 @@ $paramscomponent = ComponentHelper::getParams('com_sportsmanagement');
 
 if ( version_compare(JVERSION, '4.0.0', 'ge') || $paramscomponent->get('use_jsmgrid'))
 {
-	$this->divclass = 'p-2 col';
+	$this->divclass = 'col-lg-';
 }
 elseif ($this->overallconfig['use_bootstrap_version'] && !$paramscomponent->get('use_jsmgrid'))
 {
@@ -45,11 +45,11 @@ if (!isset($this->club))
 else
 {
 	?>
-    <div class="<?php echo $this->divclassrow; ?>" itemscope="" itemtype="http://schema.org/SportsClub" id="default_clubinfo">
-        <div class="<?php echo $this->divclass; ?>3 center">
-		<span itemprop="priceRange"></span>
-			<?PHP ?>
-            <!-- SHOW LOGO - START -->
+
+
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+   <!-- SHOW LOGO - START -->
 			<?php
 			if ($this->config['show_club_logo'] && $this->club->logo_big != '')
 			{
@@ -84,35 +84,18 @@ else
 
 			}
 			?>
-            <br/>
-
-            <!-- SHOW LOGO - END -->
-            <!-- SHOW SMALL LOGO - START -->
-			<?php
-	/*
-			if (($this->config['show_club_shirt']) && ($this->club->logo_small != ''))
-			{
-				$club_trikot_title = str_replace("%CLUBNAME%", $this->club->name, Text::_("COM_SPORTSMANAGEMENT_CLUBINFO_TRIKOT_TITLE"));
-				$picture           = $this->club->logo_small;
-				echo sportsmanagementHelper::getPictureThumb($picture, $club_emblem_title, 20, 20, 3);
-			}
-	*/
-			if ($this->club->website)
-			{
-				if ($this->config['show_club_internetadress_picture'])
-				{
-					echo '<img itemprop="logo" style="" src="http://free.pagepeeker.com/v2/thumbs.php?size=m&url=' . $this->club->website . '">';
-				}
-			}
-			?>
-            <!-- SHOW SMALL LOGO - END -->
-        </div>
-
-		<?php
+            <br/>    
+  
+  </div>
+  
+  
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="">
+      
+     <?php
 		if ($this->config['show_club_info'])
 		{
 			?>
-            <div class="<?php echo $this->divclass; ?>9">
+            
 				<?php
 				if ($this->club->address || $this->club->zipcode || $this->club->location)
 				{
@@ -387,6 +370,26 @@ else
 					<?PHP
 				}
 
+
+			
+			
+			
+
+				?>
+				
+        
+		<?php 
+		}
+		?> 
+  
+  
+  
+  
+  
+  </div>
+   
+    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="">
+<?PHP
 if ($this->config['show_notes_club'])
 		{
 ?>
@@ -396,62 +399,38 @@ $this->notes = array();
 $this->notes[] = Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAM_DESCRIPTION');
 echo $this->loadTemplate('jsm_notes');
 ?>       
-    <div class="<?php echo $this->divclassrow; ?> table-responsive" id="playground_description">
+   
 		<?php
 		$description = $this->club->notes;
 		$description = HTMLHelper::_('content.prepare', $description);
 		echo $description;
 		?>
-    </div>
+   
 	<?php			
-		}
+		}			
 			
-			
-			
-/*
-				if ($this->config['show_fusion'])
-				{
-					if ($this->familytree)
-					{
-						$class_collapse = 'collapse in';
-					}
-					else
-					{
-						$class_collapse = 'collapse';
-					}
-					?>
-                    <a href="#fusion" class="btn btn-info btn-block" data-toggle="collapse">
-                        <strong>
-							<?php echo Text::_('Fusionen'); ?>
-                        </strong>
-                    </a>
-                    <div id="fusion" class="<?PHP echo $class_collapse; ?>">
-                        <div class="tree">
+		?>      
+  
+  
+  
+  
+  </div>
+  </div>
 
-                            <ul>
-                                <li>
-									<?php
-									if (!$this->config['show_bootstrap_tree'])
-									{
-										?>
-                                        <span><i class="icon-folder-open"></i> aktueller Verein</span>
-										<?php
-									}
-									?>
-                                    <a href="#"><?PHP echo HTMLHelper::image($this->club->logo_big, $this->club->name, 'width="30"') . ' ' . $this->club->name; ?></a>
-									<?php
-									echo $this->familytree;
-									?>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-					<?php
-				}
-			*/
-				?>
-            </div>
-		<?php }
-		?>
-    </div>
-<?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <?php } ?>

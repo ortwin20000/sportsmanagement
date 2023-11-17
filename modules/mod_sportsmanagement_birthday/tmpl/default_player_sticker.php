@@ -17,6 +17,27 @@ use Joomla\CMS\Component\ComponentHelper;
 
 ?>
 
+<style>
+.text_rotate {  
+    -webkit-transform: rotate(90deg); 
+    -moz-transform: rotate(90deg); 
+    -ms-transform: rotate(90deg); 
+    -o-transform: rotate(90deg); 
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); 
+    transform: rotate(90deg);
+    //display:block; 
+    transform-origin: 0% 50%;
+}
+
+.vertical{
+     transform: rotate(180deg);
+     writing-mode: vertical-lr;
+     text-align: center;
+  color: #000000;
+}  
+  
+  
+</style>
 <!--<link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">-->
 
 <?php
@@ -131,126 +152,89 @@ if (count($persons) > 0)
 
 	
 	?>
-		<div>
-		<div class="container-fluid" style="width:250px; 
-											height: 380px;
-											display: flex;
-											<?php echo $style;?> 
-											">
-											
-				<div  style="border: 1px solid <?php echo $border_color;?>; 
-											background-color: #eee;
-											border-radius: 20px;
-											width:180px; 
-											height: 230px;
-											background-image: url(<?php echo $picture; ?>);
-								   		    background-size: cover;
-											position: absolute;
-											background-position: center;
-											background-repeat: no-repeat;
-											margin: 30px 0px 0px 5px;
-											">					
-
-				</div>
 		
-			<p style="color: <?php echo $text_color;?> ; 
+
+<div class="container" style="<?php echo $style;?>" >
+<div class="row">
+<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 vertical" style="">
+
+<?php echo $person['team_name'] ?>  
+  
+  
+</div>  
+
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="">
+
+  
+<div class="short-div d-flex justify-content-center" style="">
+   <p style="color: <?php echo $text_color;?> ; 
 				    font-family: sans-serif;
 					width:180px; 
 					font-size: 18px; 
 					margin: 0px 0px 0px 15px;
-									">	<?php echo $text ?> </p>
-		
-		
-		    <?php
-		
-			if ($show_project)
-				{
-				?>
-					<p style="color: <?php echo $title_color;?>; 
-							font-family: sans-serif; 
-							font-size: <?php echo $title_size;?>px;
-							position: absolute;
-							writing-mode: tb-rl;
-							transform: rotate(-180deg);
-							margin: 110px 0px 0px 185px;
-											">	<?php echo SubStr($person['project_slug'],strpos($person['project_slug'],":")+1); ?> </p>						
-				<?php							
-				}
-
-			?>
-
-			<p style="color: <? echo $text_color;?>; 
-				      font-family: sans-serif; 
-					font-size: <? echo $text_size;?>px;
-					position: absolute;
-					margin: 260px 0px 0px 5px;
-									">	<?php echo Text::_($person['position_name']) ?> </p>
-									
-									
-			<p style="color: <? echo $text_color;?>; 
-				      font-family: sans-serif; 
-					font-size: <? echo $text_size;?>px;
-					position: absolute;
-					margin: 290px 0px 0px 5px;
-									">	<?php echo $birthdaytext ?> </p>						
-									
-									
-		    <?php
-		
-			if ($show_team)
-				{
-				?>									
-									
-					<p style="color: <? echo $title_color;?>; 
-							font-family: sans-serif; 
-							font-size: <? echo $title_size;?>px;
-							position: absolute;
-							margin: 130px 0px 0px -20px;
-							writing-mode: tb-rl;
-							transform: rotate(-180deg);
-											">	<?php echo $person['team_name'] ?> </p>	
-				<?php							
-				}
-
-			?>
+									">	<?php echo $text ?> </p> 
+  </div>
+  
+<div class="short-div d-flex justify-content-center" style="">
+   <picture>
+             <img src="<?php echo $picture; ?>" class="img-fluid" alt="a" width="180px"/>
+          </picture>
+  </div>  
+  
+  <div class="short-div d-flex justify-content-center  text-dark" style="">
+  
+    <?php echo Text::_($person['position_name']) ?>
+  </div>
+  
+<div class="short-div d-flex justify-content-center  text-dark" style="">
+  <?php echo $birthdaytext ?>
+  </div>  
+  
+</div>  
+  
+  
+  
+  
+<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 vertical" style="">
+ <img src="<?php echo $flag_url; ?>"  >
+                  <?php echo SubStr($person['project_slug'],strpos($person['project_slug'],":")+1); ?>
+  
+  
+  
+</div>    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+</div>
 
 
-			<div  style="	background-color: #eee;
-							border-radius: 30px;
-							width:30px; 
-							height: 30px;
-							background-image: url(<?php echo $flag_url; ?>);
-						    background-size: contain;
-							position: absolute;
-							background-position: center;
-							background-repeat: no-repeat;
-							margin: 240px 0px 0px 160px;
-							">
-									
-		
-			</div>
-		
-		<?php 
-			if ($today and $birthday_cake)
-				{
-		?>
-			<div  style="	border-radius: 30px;
-							width:100px; 
-							height: 100px;
-							background-image: url(<?php echo $cake_image; ?>);
-						    background-size: contain;
-							position: absolute;
-							background-position: center;
-							background-repeat: no-repeat;
-							margin: 0px 0px 0px 160px;
-							">			
-			</div>
-			<?php
-				}
-			?>
-		
-		</div>	
-	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 <?php	
 	}
 }
