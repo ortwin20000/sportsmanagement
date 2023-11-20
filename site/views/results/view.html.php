@@ -851,7 +851,7 @@ class sportsmanagementViewResults extends sportsmanagementView
 		$part_results_left  = explode(";", (string)$game->team1_result_split);
 		$part_results_right = explode(";", (string)$game->team2_result_split);
 
-		if ($config['show_part_results'] && $game->team1_result != null && $game->team2_result != null)
+		if ($config['show_part_results'])
 		{
 			for ($i = 0; $i < count($part_results_left); $i++)
 			{
