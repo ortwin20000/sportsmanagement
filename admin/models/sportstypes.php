@@ -139,12 +139,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		return $this->jsmdb->loadObject()->count;
 	}
@@ -164,12 +164,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		return $this->jsmdb->loadObject()->count;
 	}
@@ -189,12 +189,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		return $this->jsmdb->loadObject()->count;
 	}
@@ -214,12 +214,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -242,12 +242,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -302,12 +302,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -334,12 +334,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -365,12 +365,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -399,12 +399,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -430,12 +430,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -461,12 +461,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -493,12 +493,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -528,12 +528,13 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$result = $this->jsmdb->loadObjectList())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+try {
+	$result = $this->jsmdb->loadObjectList();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
+	
 
 		return $result;
 	}
@@ -558,12 +559,12 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
-
-			return false;
-		}
+		try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
@@ -591,12 +592,13 @@ class sportsmanagementModelSportsTypes extends JSMModelList
 
 		$this->jsmdb->setQuery($this->jsmquery);
 
-		if (!$this->jsmdb->execute())
-		{
-			$this->setError($this->jsmdb->getErrorMsg());
+try {
+	$this->jsmdb->execute();
+	} catch (Exception $e) {
+ $this->setError($e->getMessage());
+ return false;
+}
 
-			return false;
-		}
 
 		$result = $this->jsmdb->loadObject()->count;
 		$this->jsmdb->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect

@@ -37,7 +37,7 @@ HTMLHelper::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolow
         <tr>
             <th width="5" style="vertical-align: top; "><?php echo Text::_('COM_SPORTSMANAGEMENT_GLOBAL_NUM'); ?></th>
             <th width="20" style="vertical-align: top; ">
-                <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);"/>
+                <?php echo HTMLHelper::_('grid.checkall'); ?>
             </th>
 
             <th class="title" nowrap="nowrap" style="vertical-align: top; ">
@@ -158,12 +158,14 @@ HTMLHelper::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolow
 					}
 					else
 					{
+echo sportsmanagementHelper::getBootstrapModalImage('collapseModallogo_picture' . $this->item->id, Uri::root() . $this->item->assocflag, $this->item->name, '20', Uri::root() . $this->item->assocflag);						
 						?>
+						<!--
                         <a href="<?php echo Uri::root() . $this->item->assocflag; ?>" title="<?php echo $this->item->name; ?>"
                            class="modal">
                             <img src="<?php echo Uri::root() . $this->item->assocflag; ?>" alt="<?php echo $this->item->name; ?>"
                                  width="20"/>
-                        </a>
+                        </a> -->
 						<?PHP
 					}
 					?>
@@ -180,12 +182,14 @@ HTMLHelper::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolow
 					}
 					else
 					{
+echo sportsmanagementHelper::getBootstrapModalImage('collapseModallogo_picture' . $this->item->id, Uri::root() . $this->item->picture, $this->item->name, '20', Uri::root() . $this->item->picture);						
 						?>
+						<!--
                         <a href="<?php echo Uri::root() . $this->item->picture; ?>" title="<?php echo $this->item->name; ?>"
                            class="modal">
                             <img src="<?php echo Uri::root() . $this->item->picture; ?>" alt="<?php echo $this->item->name; ?>"
                                  width="20"/>
-                        </a>
+                        </a> -->
 						<?PHP
 					}
 					?>
@@ -203,12 +207,14 @@ HTMLHelper::_('sortablelist.sortable', $this->view.'list', 'adminForm', strtolow
 					}
 					else
 					{
+echo sportsmanagementHelper::getBootstrapModalImage('collapseModallogo_picture' . $this->item->id, Uri::root() . $this->item->flag_maps, $this->item->name, '20', Uri::root() . $this->item->flag_maps);						
 						?>
+						<!--
                         <a href="<?php echo Uri::root() . $this->item->flag_maps; ?>" title="<?php echo $this->item->name; ?>"
                            class="modal">
                             <img src="<?php echo Uri::root() . $this->item->flag_maps; ?>" alt="<?php echo $this->item->name; ?>"
                                  width="20"/>
-                        </a>
+                        </a> -->
 						<?PHP
 					}
 					?>

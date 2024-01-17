@@ -2,25 +2,34 @@
 <structur>
 
 
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="1" parentmain="0">Andalucía</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="2" parentmain="0">Aragón</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="3" parentmain="0">Asturias</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="4" parentmain="0">Baleares</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="5" parentmain="0">Canarias</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="6" parentmain="0">Cantabria</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="7" parentmain="0">Cast.La Mancha</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="8" parentmain="0">Castilla y León</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="9" parentmain="0">Catalunya</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="10" parentmain="0">Ceuta</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="11" parentmain="0">Com.Valenciana</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Andaluza" main="1" parentmain="0">Andalucía</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Aragonesa" main="2" parentmain="0">Aragón</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Asturias" main="3" parentmain="0">Asturias</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de les Illes Balears" main="4" parentmain="0">Baleares</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Canaria" main="5" parentmain="0">Canarias</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Cántabra" main="6" parentmain="0">Cantabria</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Castilla La Mancha" main="7" parentmain="0">Cast.La Mancha</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Castilla y León" main="8" parentmain="0">Castilla y León</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Catalana" main="9" parentmain="0">Catalunya</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Ceuta" main="10" parentmain="0">Ceuta</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Valenciana" main="11" parentmain="0">Com.Valenciana</assocname></associations>
 <associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="12" parentmain="0">Euskadi</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="13" parentmain="0">Extremadura</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="14" parentmain="0">Galicia</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="15" parentmain="0">La Rioja</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="16" parentmain="0">Madrid</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="17" parentmain="0">Melilla</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Extremeña" main="13" parentmain="0">Extremadura</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Gallega" main="14" parentmain="0">Galicia</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Riojana" main="15" parentmain="0">La Rioja</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Madrid" main="16" parentmain="0">Madrid</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Melillense" main="17" parentmain="0">Melilla</assocname></associations>
 <associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="18" parentmain="0">Murcia</assocname></associations>
-<associations><assocname country="ESP" icon="" flag="" website="" shortname="" main="19" parentmain="0">Navarra</assocname></associations>
- 
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Navarra" main="19" parentmain="0">Navarra</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Alavesa" main="20" parentmain="0">Alava (Baskenland)</assocname></associations> 
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Guipuzcoana" main="23" parentmain="0">Gipuzkoa (Baskenland)</assocname></associations>
+  
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Las Palmas" main="21" parentmain="0">Las Palmas</assocname></associations>
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Tenerife" main="22" parentmain="0">Teneriffa</assocname></associations>  
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Vizcaína" main="24" parentmain="0">Vizcaína</assocname></associations>  
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Vasca" main="25" parentmain="0">Vasca</assocname></associations>  
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. de Murcia" main="26" parentmain="0">Murcia</assocname></associations> 
+
+<associations><assocname country="ESP" icon="" flag="" website="" shortname="F. Española" main="27" parentmain="0">Española</assocname></associations>
   
 </structur>

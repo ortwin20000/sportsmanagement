@@ -172,10 +172,17 @@ class sportsmanagementModelRanking extends BaseDatabaseModel
             }
             break;
             }
-
+try
+		{
 				// Update their details in the users table using id as the primary key.
 				$result_update = Factory::getDbo()->updateObject('#__sportsmanagement_project_team', $object, 'id');
-          
+          }
+		catch (Exception $e)
+		{
+			$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'error');
+			$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'error');
+		
+		}
           
           
         }
@@ -1061,19 +1068,16 @@ else
 			$feed = new stdclass;
 			if ($rssDoc != false)
 			{
-				// Channel header and link
+				/** Channel header and link */
 				$feed->title       = $rssDoc->get_title();
 				$feed->link        = $rssDoc->get_link();
 				$feed->description = $rssDoc->get_description();
-
-				// Channel image if exists
+				/** Channel image if exists */
 				$feed->image->url   = $rssDoc->get_image_url();
 				$feed->image->title = $rssDoc->get_image_title();
-
-				// Items
+				/** Items */
 				$items = $rssDoc->get_items();
-
-				// Feed elements
+				/** Feed elements */
 				$feed->items = array_slice($items, 0, $rssitems);
 				$lists[]     = $feed;
 			}
@@ -1094,7 +1098,6 @@ else
 	function playedCmp(&$a, &$b)
 	{
 		$res = $a->cnt_matches - $b->cnt_matches;
-
 		return $res;
 	}
 
@@ -1122,7 +1125,6 @@ else
 	function wonCmp(&$a, &$b)
 	{
 		$res = $a->cnt_won - $b->cnt_won;
-
 		return $res;
 	}
 
@@ -1137,7 +1139,6 @@ else
 	function drawCmp(&$a, &$b)
 	{
 		$res = ($a->cnt_draw - $b->cnt_draw);
-
 		return $res;
 	}
 
@@ -1152,7 +1153,6 @@ else
 	function lossCmp(&$a, &$b)
 	{
 		$res = ($a->cnt_lost - $b->cnt_lost);
-
 		return $res;
 	}
 
@@ -1167,7 +1167,6 @@ else
 	function wotCmp(&$a, &$b)
 	{
 		$res = $a->cnt_wot - $b->cnt_wot;
-
 		return $res;
 	}
 
@@ -1182,7 +1181,6 @@ else
 	function wsoCmp(&$a, &$b)
 	{
 		$res = $a->cnt_wso - $b->cnt_wso;
-
 		return $res;
 	}
 
@@ -1197,7 +1195,6 @@ else
 	function lotCmp(&$a, &$b)
 	{
 		$res = $a->cnt_lot - $b->cnt_lot;
-
 		return $res;
 	}
 
@@ -1212,7 +1209,6 @@ else
 	function lsoCmp(&$a, &$b)
 	{
 		$res = $a->cnt_lso - $b->cnt_lso;
-
 		return $res;
 	}
 
@@ -1246,7 +1242,6 @@ else
 		$pct_a = $a->cnt_won / ($a->cnt_won + $a->cnt_lost + $a->cnt_draw);
 		$pct_b = $b->cnt_won / ($b->cnt_won + $b->cnt_lost + $b->cnt_draw);
 		$res   = ($pct_a < $pct_b);
-
 		return $res;
 	}
 
@@ -1261,7 +1256,6 @@ else
 	function goalspCmp(&$a, &$b)
 	{
 		$res = ($a->sum_team1_result - $b->sum_team1_result);
-
 		return $res;
 	}
 
@@ -1276,7 +1270,6 @@ else
 	function goalsforCmp(&$a, &$b)
 	{
 		$res = ($a->sum_team1_result - $b->sum_team1_result);
-
 		return $res;
 	}
 
@@ -1291,7 +1284,6 @@ else
 	function goalsagainstCmp(&$a, &$b)
 	{
 		$res = ($a->sum_team2_result - $b->sum_team2_result);
-
 		return $res;
 	}
 
@@ -1306,7 +1298,6 @@ else
 	function legsdiffCmp(&$a, &$b)
 	{
 		$res = ($a->diff_team_legs - $b->diff_team_legs);
-
 		return $res;
 	}
 
@@ -1321,7 +1312,6 @@ else
 	function legsratioCmp(&$a, &$b)
 	{
 		$res = ($a->legsRatio - $b->legsRatio);
-
 		return $res;
 	}
 
@@ -1336,7 +1326,6 @@ else
 	function diffCmp(&$a, &$b)
 	{
 		$res = ($a->diff_team_results - $b->diff_team_results);
-
 		return $res;
 	}
 
@@ -1351,7 +1340,6 @@ else
 	function pointsCmp(&$a, &$b)
 	{
 		$res = ($a->getPoints() - $b->getPoints());
-
 		return $res;
 	}
 
@@ -1365,9 +1353,8 @@ else
 	 */
 	function startCmp(&$a, &$b)
 	{
-		$res = ($a->team->start_points * $b->team->start_points);
-
-		return $res;
+	$res = ($a->team->start_points * $b->team->start_points);
+	return $res;
 	}
 
 	/**
@@ -1381,7 +1368,6 @@ else
 	function bonusCmp(&$a, &$b)
 	{
 		$res = ($a->bonus_points - $b->bonus_points);
-
 		return $res;
 	}
 
@@ -1396,7 +1382,6 @@ else
 	function penaltypointsCmp(&$a, &$b)
 	{
 		$res = ($a->penalty_points - $b->penalty_points);
-
 		return $res;
 	}
 
@@ -1411,7 +1396,6 @@ else
 	function negpointsCmp(&$a, &$b)
 	{
 		$res = ($a->neg_points - $b->neg_points);
-
 		return $res;
 	}
 
@@ -1426,7 +1410,6 @@ else
 	function pointsratioCmp(&$a, &$b)
 	{
 		$res = ($a->pointsRatio - $b->pointsRatio);
-
 		return $res;
 	}
 
