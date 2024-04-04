@@ -25,7 +25,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 
 ?>
 <!-- START: game roster -->
-<div class="<?php echo $this->divclassrow; ?> table-responsive" id="matchreport">
+<div class="<?php echo $this->divclassrow; ?> " id="matchreport-roster">
 	<!-- Show Match players -->
 	<?php
 	if (!empty($this->matchplayerpositions))
@@ -33,7 +33,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 		?>
 
 		<h2><?php echo Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP'); ?></h2>
-		<table class="table ">
+		<div class="row ">
 			<?php
 			foreach ($this->matchplayerpositions as $pos)
 			{
@@ -50,14 +50,18 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 				if ($personCount > 0)
 				{
 					?>
-					<tr>
-						<td colspan="2" class="positionid"><?php echo Text::_($pos->name); ?></td>
-					</tr>
-					<tr>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-end" style="">
+            </div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 d-flex justify-content-center" style="">
+						<?php echo Text::_($pos->name); ?>
+					</div>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-end" style="">
+          </div>
+					
 						<!-- list of home-team -->
-						<td class="list">
-							<div style="text-align: left; ">
-								<ul style="list-style-type: none;">
+						
+							<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-end" style="">
+								<ul style="list-style-type: none;text-align: right;">
 									<?php
 									foreach ($this->matchplayers as $player)
 									{
@@ -108,7 +112,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 
 														if ($this->config['show_player_profile_link_alignment'] == 0)
 														{
-															echo HTMLHelper::link($player_link, $match_player . HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber, $player->jerseynumber, array('title' => $player->jerseynumber)));
+															echo HTMLHelper::link($player_link, $match_player . HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber . '#', $player->jerseynumber, array('title' => $player->jerseynumber)));
 														}
 													}
 												}
@@ -158,7 +162,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 														if ($this->config['show_player_profile_link_alignment'] == 1)
 														{
 															echo '<br>';
-															echo HTMLHelper::link($player_link, $match_player . HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber, $player->jerseynumber, array('title' => $player->jerseynumber)));
+															echo HTMLHelper::link($player_link, $match_player . HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber . '#', $player->jerseynumber, array('title' => $player->jerseynumber)));
 														}
 														echo '&nbsp;';
 													}
@@ -172,10 +176,13 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 									?>
 								</ul>
 							</div>
-						</td>
+						
+                      
+                      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+                  </div>
 						<!-- list of guest-team -->
-						<td class="list">
-							<div style="text-align: right;">
+						
+							<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-start" style="">
 								<ul style="list-style-type: none;">
 									<?php
 									foreach ($this->matchplayers as $player)
@@ -228,7 +235,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 														if ($this->config['show_player_profile_link_alignment'] == 1)
 														{
 															echo '<br>';
-															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber, $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
+															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber . '#', $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
 														}
 													}
 													else
@@ -247,7 +254,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 														if ($this->config['show_player_profile_link_alignment'] == 1)
 														{
 															echo '<br>';
-															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber, $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
+															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber . '#', $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
 														}
 														echo '&nbsp;';
 													}
@@ -264,7 +271,7 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 
 														if ($this->config['show_player_profile_link_alignment'] == 0)
 														{
-															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber, $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
+															echo HTMLHelper::link($player_link, HTMLHelper::image(Uri::root() . 'images/com_sportsmanagement/database/teamplayers/shirt.php?text=' . $player->jerseynumber . '#', $player->jerseynumber, array('title' => $player->jerseynumber)) . $match_player);
 														}
 
 													}
@@ -296,13 +303,13 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 									?>
 								</ul>
 							</div>
-						</td>
-					</tr>
+						
+					
 					<?php
 				}
 			}
 			?>
-		</table>
+		</div>
 		<?php
 	}
 	?>

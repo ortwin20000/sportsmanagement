@@ -108,3 +108,46 @@ use Joomla\CMS\HTML\HTMLHelper;
     </table>
 </div>
 <br/>
+
+<?php
+$this->notes = array();
+$this->notes[] = Text::_('COM_SPORTSMANAGEMENT_PLAYGROUND_HISTORY_NOTIC');
+echo $this->loadTemplate('jsm_notes');
+
+foreach ( $this->playgroundnotic as $key => $value ) 
+{
+?>    
+<div class="row" >
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+<?php
+echo sportsmanagementHelper::convertDate($value->date_von, 1);
+?>
+</div>
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+<?php
+echo sportsmanagementHelper::convertDate($value->date_bis, 1)
+?>
+</div>
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+<?php
+echo $value->name_visitors;
+?>
+</div>
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+<?php
+echo $value->notes;
+?>
+</div>
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="">
+<?php
+echo $value->max_visitors;
+?>
+</div>
+
+
+</div>  
+<?php  
+}
+
+
+?>

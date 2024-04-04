@@ -759,7 +759,10 @@ class sportsmanagementHelperHtml
 		//        $routeparameter['layout'] = '';
 
 		if ($form) {
-			$routeparameter['r'] = $roundid;
+			if ($roundid != 0)
+			{
+				$routeparameter['r'] = $roundid;
+			}
 			$currenturl = sportsmanagementHelperRoute::getSportsmanagementRoute('results', $routeparameter);
 			$options = array();
 
@@ -769,7 +772,10 @@ class sportsmanagementHelperHtml
 				$options[] = HTMLHelper::_('select.option', $link, $r->text);
 			}
 		} else {
-			$routeparameter['r'] = $roundid;
+			if ($roundid != 0)
+			{
+				$routeparameter['r'] = $roundid;
+			}
 			$currenturl = sportsmanagementHelperRoute::getSportsmanagementRoute('results', $routeparameter);
 			$options = array();
 
@@ -1018,6 +1024,7 @@ class sportsmanagementHelperHtml
 
 			$params["s"] = $jinput->get('s');
 			$params["p"] = $jinput->get('p');
+            $params["Itemid"] = $jinput->get('Itemid');
 
 			$query = Uri::buildQuery($params);
 			echo HTMLHelper::link(
@@ -1048,7 +1055,7 @@ class sportsmanagementHelperHtml
 		$output = "";
 		$img = '';
 
-		if ($config['column_sorting'] || $config == null) {
+		if ($config == null || $config['column_sorting']) {
 			$params = array(
 				"option" => "com_sportsmanagement",
 				"view" => "ranking"

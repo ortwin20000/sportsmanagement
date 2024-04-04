@@ -257,7 +257,7 @@ $app    = Factory::getApplication();
 		$query->select('pr.firstname,pr.nickname,pr.lastname,pr.country,pr.birthday,pr.deathday,pr.id AS pid,pr.id AS person_id,pr.picture AS ppic');
 		$query->select('pr.suspension AS suspension,pr.away AS away,pr.injury AS injury,pr.id AS pid,pr.picture AS ppic,CONCAT_WS(\':\',pr.id,pr.alias) AS person_slug');
       //$query->select('perpos.project_position_id as position_id');
-      $query->select('ppos.position_id as position_id');
+      $query->select('ppos.position_id as position_id,ppos.id as pposid');
       $query->select('pos.name AS position');
       $query->select('st.id AS season_team_id');
       $query->select('pt.project_id AS project_id');
@@ -305,6 +305,7 @@ $app    = Factory::getApplication();
 		//$query->where('pos.persontype = ' . $persontype);
 		$query->where('tp.season_id = ' . self::$seasonid);
       $query->where('tp.team_id = ' . $projectteam->season_team_id);
+      $query->where('pr.show_on_frontend = 1');
       
       //$query->where('st.season_id = ' . self::$seasonid);
 		//$query->where('pt.project_id = ' . self::$projectid);
@@ -537,7 +538,8 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' .'players <pre>'.print_r(self
 		$query     = $db->getQuery(true);
 		$starttime = microtime();
 		$result    = '';
-		$query->select('max(round_date_last)');
+		//$query->select('max(round_date_last)');
+		$query->select('max(round_date_first) as firstday, max(round_date_last) as lastday');
 		$query->from('#__sportsmanagement_round ');
 		$query->where('project_id =' . (int) self::$projectid);
 
@@ -546,7 +548,20 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' .'players <pre>'.print_r(self
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->loadResult();
+			//$result = $db->loadResult();
+			$round_date = $db->loadObjectList();
+			if ($round_date[0]->firstday == null && $round_date[0]->lastday == null)
+			{
+				$result = '0000-00-00';
+			}
+			else if ($round_date[0]->lastday == null || $round_date[0]->lastday == '0000-00-00' || $round_date[0]->firstday > $round_date[0]->lastday)
+			{
+				$result = $round_date[0]->firstday;
+			}
+			else
+			{
+				$result =  $round_date[0]->lastday;
+			}
 		}
 		catch (Exception $e)
 		{

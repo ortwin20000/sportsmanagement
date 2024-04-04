@@ -215,6 +215,43 @@ if (!$country_federation)
 // Build the script.
 $script   = array();
 $script[] = "\n";
+/**
+$script[] = "$(document).ready(function(){
+// Handling data-toggle manually
+    $('.nav-tabs a').click(function(){
+        $(this).tab('show');
+    });
+// The on tab shown event
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+       // alert('Hello from the other siiiiiide!');
+        var current_tab = e.target;
+        //alert('Hello from the other siiiiiide!' + current_tab );
+        console.log('current_tab ' + current_tab);
+        var previous_tab = e.relatedTarget;
+    });
+});";
+*/
+
+$script[] = "$(document).ready(function(){
+
+var id = $('.tab-content .active').attr('id');
+console.log('current_tab ' + id);
+//console.log('aktueller index ' + $($(this).attr('href')).index() );
+
+    
+$('.nav-tabs a').click(function (e) {
+     e.preventDefault();
+     //alert( $($(this).attr('href')).index() );
+     
+     console.log('klick index ' + $($(this).attr('href')).index() );
+     console.log('klick tab ' + $('.tab-content .active').attr('id') );
+});   
+
+    
+
+});";
+
+  
 $script[] = "jQuery(document).ready(function ($){";
 
 foreach ($points as $row)
@@ -521,6 +558,7 @@ loadHtml = \"<p id='loadingDiv-\"
 				\"modules/mod_sportsmanagement_ajax_top_navigation_menu/img/ajax-loader.gif'>\";
 	loadHtml += \"</p>\";
 	document.getElementById('pagination').innerHTML += loadHtml;
+ document.getElementById('ajax-nav-list').innerHTML = '';
   ";
 
 	$script[] = "var value10 = $('#jlamtopprojects" . $row->name . $module->id . "').val();";
@@ -580,7 +618,8 @@ if (data11.link != '')
 
 //const linktext = Joomla.getOptions('linktext');
 //console.log('linktext ajax-> ' + linktext);
-$('ul.jsmpage').append('<li class=\'nav-item\' ><a href=\"' + data11.link + '\">' + data11.linktext + '</a></li>');  
+//$('ul.jsmpage').append('<li class=\'nav-item\' ><a href=\"' + data11.link + '\">' + data11.linktext + '</a></li>'); 
+$('#ajax-nav-list').append('<li class=\'nav-item\' ><a href=\"' + data11.link + '\">' + data11.linktext + '</a></li>');  
 }
 
 });

@@ -375,8 +375,8 @@ class sportsmanagementViewMatch extends sportsmanagementView
 				{
 					$projectreferees2[] = HTMLHelper::_(
 						'select.option', $referee->value,
-						sportsmanagementHelper::formatName(null, $referee->firstname, $referee->nickname, $referee->lastname, $default_name_format) .
-						' - (' . strtolower(Text::_($referee->positionname)) . ')'
+						 $referee->text .
+						' - (' . Text::_($referee->positionname ) . ')'
 					);
 				}
 			}
@@ -421,7 +421,7 @@ $this->notes[] = Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_NO_REF_POS');
 						{
 							$temp[$key][] = HTMLHelper::_(
 								'select.option', $referee->value,
-								sportsmanagementHelper::formatName(null, $referee->firstname, $referee->nickname, $referee->lastname, $default_name_format)
+								$referee->text
 							);
 						}
 					}

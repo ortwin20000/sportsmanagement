@@ -144,10 +144,14 @@ foreach ($current as $ptid => $team)
 	echo '</td>';
 	echo "\n";
 
-	// **************logo - jersey
+	/** **************logo - jersey */
 	$team->team->logo_small = empty($team->team->logo_small) ? sportsmanagementHelper::getDefaultPlaceholder('clublogosmall') : $team->team->logo_small;
 	$team->team->logo_big   = empty($team->team->logo_big) ? sportsmanagementHelper::getDefaultPlaceholder('logo_big') : $team->team->logo_big;
 
+    $logohistory = $this->mdlClub->getlogohistory(0,$this->project->season_id,$team->_teamid);
+foreach ($logohistory as $key => $value) {
+ $team->team->logo_big = $value->logo_big;
+}
 	if ($config['show_logo_small_table'] != "no_logo")
 	{
 		echo '<td class="rankingrow_logo"';
@@ -221,6 +225,10 @@ foreach ($current as $ptid => $team)
 	echo ">";
 	$isFavTeam               = in_array($team->team->id, explode(",", $this->project->fav_team));
 	$config['highlight_fav'] = $isFavTeam;
+    
+    $team->team->name = !empty($team->teamname) ? $team->teamname : $team->team->name;
+    //$team->team = $team->season_teamname != '' ? $team->season_teamname : $team->team;
+    
 	echo sportsmanagementHelper::formatTeamName($team->team, $this->teamrow . $team->team->id, $config, $isFavTeam, null, $this->cfg_which_database);
 
 	if ($config['show_unique_id'])

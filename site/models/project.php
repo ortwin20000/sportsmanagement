@@ -304,6 +304,7 @@ $db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.h
 
 			if (self::$projectid > 0)
 			{
+				$query->clear();
 				$query->select('p.*, l.country, st.id AS sport_type_id, st.name AS sport_type_name');
 				$query->select('st.icon AS sport_type_picture, st.eventtime as useeventtime, l.picture as leaguepicture, l.name as league_name, s.name as season_name,r.name as round_name');
 				$query->select('LOWER(SUBSTR(st.name, CHAR_LENGTH( "COM_SPORTSMANAGEMENT_ST_")+1)) AS fs_sport_type_name');
@@ -320,8 +321,19 @@ $db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.h
 				$query->where('p.id = ' . (int) self::$projectid);
 try{
 				$db->setQuery($query, 0, 1);
-
 				self::$_project = $db->loadObject();
+
+$query->clear();
+$query->select('logo_big');
+$query->from('#__sportsmanagement_league_logos');
+$query->where('league_id = ' . (int) self::$_project->league_id );
+$query->where('season_id = ' . (int) self::$_project->season_id );	
+$db->setQuery($query);
+$result = $db->loadResult();
+if ( $result )
+{
+self::$_project->leaguepicture = $result;
+}	
                 }
 		catch (Exception $e)
 		{
@@ -1014,7 +1026,7 @@ try{
 		$query->select('t.picture as team_picture,t.id,t.name,t.short_name,t.middle_name,t.notes,t.club_id');
 		$query->select('u.username,u.email');
 		$query->select('st.team_id');
-		$query->select('c.email as club_email,c.phone as club_phone,c.fax as club_fax,c.logo_small,c.logo_middle,c.logo_big,c.country,c.website,c.new_club_id,c.facebook,c.twitter');
+		$query->select('c.email as club_email,c.phone as club_phone,c.fax as club_fax,c.logo_small,c.logo_middle,c.logo_big,c.country,c.website,c.new_club_id,c.facebook,c.twitter,c.instagram');
 		$query->select('d.name AS division_name,d.shortname AS division_shortname,d.parent_id AS parent_division_id');
 		$query->select('plg.name AS playground_name,plg.short_name AS playground_short_name, c.trikot_home, c.trikot_away');
 		$query->select('CONCAT_WS(\':\',p.id,p.alias) AS project_slug');
@@ -1449,7 +1461,14 @@ $events = false;
 
 			if ($statid)
 			{
-				$query->where('stat.id = ' . (int) $statid);
+				if (is_array($statid))
+				{
+					$query->where('stat.id in (' . implode(",", $statid) . ')');
+				}
+				else
+				{
+					$query->where('stat.id = ' . (int) $statid);
+				}
 			}
 
 			$query->where('stat.published = 1');

@@ -97,14 +97,19 @@ switch ($view)
 		JLoader::import('components.com_sportsmanagement.models.clubnames', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.models.rounds', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.models.projectteams', JPATH_ADMINISTRATOR);
+	JLoader::import('components.com_sportsmanagement.models.club', JPATH_ADMINISTRATOR);
+	JLoader::import('components.com_sportsmanagement.models.league', JPATH_ADMINISTRATOR);
 		break;
 	case 'results':
 		JLoader::import('components.com_sportsmanagement.helpers.comments', JPATH_SITE);
-		JLoader::import('components.com_sportsmanagement.helpers.pagination', JPATH_SITE);
-        JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
+		//JLoader::import('components.com_sportsmanagement.helpers.pagination', JPATH_SITE);
+        	//JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
 		JLoader::import('components.com_sportsmanagement.models.rounds', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.models.round', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.models.match', JPATH_ADMINISTRATOR);
+
+	JLoader::import('components.com_sportsmanagement.models.pagination', JPATH_SITE);
+	
 		break;
 	case 'editmatch':
 	case 'jltournamenttree':
@@ -125,22 +130,28 @@ switch ($view)
 		JLoader::import('components.com_sportsmanagement.models.round', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.models.projectteams', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.helpers.pagination', JPATH_SITE);
-        JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
+        	JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
 		JLoader::import('components.com_sportsmanagement.helpers.comments', JPATH_SITE);
+	JLoader::import('components.com_sportsmanagement.models.club', JPATH_ADMINISTRATOR);
+	JLoader::import('components.com_sportsmanagement.models.league', JPATH_ADMINISTRATOR);
 		break;
 	case 'resultsmatrix':
 		JLoader::import('components.com_sportsmanagement.models.projectteams', JPATH_ADMINISTRATOR);
 		JLoader::import('components.com_sportsmanagement.helpers.pagination', JPATH_SITE);
-        JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
+        	JLoader::import('components.com_sportsmanagement.helpers.jsmpagination', JPATH_SITE);
 		JLoader::import('components.com_sportsmanagement.models.matrix', JPATH_SITE);
 		JLoader::import('components.com_sportsmanagement.models.results', JPATH_SITE);
 		JLoader::import('components.com_sportsmanagement.helpers.comments', JPATH_SITE);
+		JLoader::import('components.com_sportsmanagement.models.round', JPATH_ADMINISTRATOR);
 		break;
 	case 'roster':
     case 'rosteralltime':
 		JLoader::import('components.com_sportsmanagement.models.player', JPATH_SITE);
         JLoader::import('components.com_sportsmanagement.models.jlextindividualsport', JPATH_ADMINISTRATOR);
 		break;
+case 'clubinfo':        
+        JLoader::import('components.com_sportsmanagement.models.club', JPATH_ADMINISTRATOR);
+        break;
 	case 'teamplan':
 		JLoader::import('components.com_sportsmanagement.helpers.comments', JPATH_SITE);
 		break;
@@ -149,7 +160,6 @@ switch ($view)
 	case 'teamstree':
 	case 'matrix':
 	case 'rankingalltime':
-	case 'clubinfo':
 	case 'clubplan':
 	case 'eventsranking':
 	case 'stats':

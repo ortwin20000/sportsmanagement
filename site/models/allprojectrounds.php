@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.utilities.array');
 jimport('joomla.utilities.arrayhelper');
@@ -70,13 +71,19 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 		$this->_params['show_columns']       = $jinput->get('show_columns', 0, 'INT');
 		$this->_params['show_sectionheader'] = $jinput->get('show_sectionheader', 0, 'INT');
 
-		$this->_params['show_firstroster']  = $jinput->get('show_firstroster', 0, 'INT');
-		$this->_params['show_firstsubst']   = $jinput->get('show_firstsubst', 0, 'INT');
-		$this->_params['show_firstevents']  = $jinput->get('show_firstevents', 0, 'INT');
-		$this->_params['show_secondroster'] = $jinput->get('show_secondroster', 0, 'INT');
-		$this->_params['show_secondsubst']  = $jinput->get('show_secondsubst', 0, 'INT');
-		$this->_params['show_secondevents'] = $jinput->get('show_secondevents', 0, 'INT');
-        $this->_params['show_favteaminfo'] = $jinput->get('show_favteaminfo', 0, 'INT');
+      
+      $config       = sportsmanagementModelProject::getTemplateConfig('allprojectrounds', $jinput->getInt('cfg_which_database', 0));
+      
+     // echo '<pre>'.print_r($config,true).'</pre>';
+      
+      
+		$this->_params['show_firstroster']  = $config['show_firstroster'] ;
+		$this->_params['show_firstsubst']   = $config['show_firstsubst'];
+		$this->_params['show_firstevents']  = $config['show_firstevents'];
+		$this->_params['show_secondroster'] =$config['show_secondroster'];
+		$this->_params['show_secondsubst']  = $config['show_secondsubst'];
+		$this->_params['show_secondevents'] = $config['show_secondevents'];
+        $this->_params['show_favteaminfo'] = $config['show_favteaminfo'];
 
 		$this->_params['s']           = $jinput->get('s', 0, 'INT');
 		$this->_params['p']           = $jinput->get('p', 0, 'INT');
@@ -183,6 +190,21 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 			}
 		}
 
+		if ( !$this->ProjectTeams )
+		{
+$query->clear();
+			$query->select('pt.*');
+			$query->from('#__sportsmanagement_project_team as pt');
+          		$query->join('INNER', '#__sportsmanagement_season_team_id AS st ON st.id = pt.team_id');
+			$query->where('pt.project_id =' . $this->projectid);
+			$db->setQuery($query);
+			$this->ProjectTeams = $db->loadObjectList();
+
+
+		}
+
+		
+
 		return $this->ProjectTeams;
 	}
 
@@ -208,6 +230,8 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 	{
 		$app = Factory::getApplication();
 
+      //echo __LINE__.' rounds<pre>'.print_r($this->result,true).'</pre>';
+      
 		if (count($rounds) % 2)
 		{
 			//   echo "Zahl ist ungrade<br>";
@@ -232,24 +256,28 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 		$htmlcontent = array();
 		$content     = '<table class="' . $this->_params['table_class'] . '">';
 
-		for ($a = 0; $a < $countrows; $a++)
+      foreach ($rounds as $key2 => $round)
+		//for ($a = 0; $a < $countrows; $a++)
 		{
+        
+        //echo __LINE__.' round name<pre>'.print_r($round->name,true).'</pre>';
+        
 			if ($config['show_columns'] == 1)
 			{
 				// Zwei spalten
 				$secondcolumn = $a + $countrows;
 
-				$htmlcontent[$a]['header'] = '';
+				$htmlcontent[$a]['header'] = '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">';
 				$htmlcontent[$a]['first']  = '<table class="' . $this->_params['table_class'] . '">';
 				$htmlcontent[$a]['second'] = '<table class="' . $this->_params['table_class'] . '">';
-				$htmlcontent[$a]['header'] = '<thead><tr><th colspan="" >' . $rounds[$a]->name . '</th><th colspan="" >' . $rounds[$secondcolumn]->name . '</th></tr></thead>';
+				//$htmlcontent[$a]['header'] = '<thead><tr><th colspan="" >' . $rounds[$a]->name . '</th><th colspan="" >' . $rounds[$secondcolumn]->name . '</th></tr></thead>';
 
 				$roundcode       = $a + 1;
 				$secondroundcode = $a + 1 + $countrows;
 
 				foreach ($this->result as $match)
 				{
-					if ((int) $match->roundcode === (int) $roundcode)
+					if ((int) $match->round_id === (int) $round->id)
 					{
 						$htmlcontent[$a]['first'] .= '<tr><td width="40%">' . $match->home_name . '</td>';
 						$htmlcontent[$a]['first'] .= '<td width="10%">' . $match->team1_result . '</td>';
@@ -258,32 +286,32 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 
 						foreach ($this->ProjectTeams as $key => $value)
 						{
-							if ((int) $match->projectteam1_id === (int) $value || (int) $match->projectteam2_id === (int) $value)
+							if ((int) $match->projectteam1_id === (int) $value->id || (int) $match->projectteam2_id === (int) $value->id)
 							{
 								if ($config['show_firstroster'])
 								{
 									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
-									$this->matchid                  = $match->id;
-									$this->projectteam_id           = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getMatchPlayers());
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+									$htmlcontent[$a]['first'] .= implode(",", self::getMatchPlayers($match->id,$value->id));
 									$htmlcontent[$a]['first'] .= '</td></tr>';
 								}
 
 								if ($config['show_firstsubst'])
 								{
 									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
-									$this->matchid                 = $match->id;
-									$this->projectteam_id          = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getSubstitutes());
+									//$this->matchid                 = $match->id;
+									//$this->projectteam_id          = $value;
+									$htmlcontent[$a]['first'] .= implode(",", self::getSubstitutes($match->id,$value->id));
 									$htmlcontent[$a]['first'] .= '</td></tr>';
 								}
 
 								if ($config['show_firstevents'])
 								{
 									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
-									$this->matchid                  = $match->id;
-									$this->projectteam_id           = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getPlayersEvents());
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+									$htmlcontent[$a]['first'] .= implode(",", self::getPlayersEvents($match->id,$value->id));
 									$htmlcontent[$a]['first'] .= '</td></tr>';
 								}
 							}
@@ -299,32 +327,32 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 
 						foreach ($this->ProjectTeams as $key => $value)
 						{
-							if ((int) $match->projectteam1_id === (int) $value || (int) $match->projectteam2_id === (int) $value)
+							if ((int) $match->projectteam1_id === (int) $value->id || (int) $match->projectteam2_id === (int) $value->id)
 							{
 								if ($config['show_secondroster'])
 								{
 									$htmlcontent[$a]['second'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
-									$this->matchid                   = $match->id;
-									$this->projectteam_id            = $value;
-									$htmlcontent[$a]['second'] .= implode(",", $this->getMatchPlayers());
+									//$this->matchid                   = $match->id;
+									//$this->projectteam_id            = $value;
+									$htmlcontent[$a]['second'] .= implode(",", $this->getMatchPlayers($match->id,$value->id));
 									$htmlcontent[$a]['second'] .= '</td></tr>';
 								}
 
 								if ($config['show_secondsubst'])
 								{
 									$htmlcontent[$a]['second'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
-									$this->matchid                  = $match->id;
-									$this->projectteam_id           = $value;
-									$htmlcontent[$a]['second'] .= implode(",", $this->getSubstitutes());
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+									$htmlcontent[$a]['second'] .= implode(",", $this->getSubstitutes($match->id,$value->id));
 									$htmlcontent[$a]['second'] .= '</td></tr>';
 								}
 
 								if ($config['show_secondevents'])
 								{
 									$htmlcontent[$a]['second'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
-									$this->matchid                   = $match->id;
-									$this->projectteam_id            = $value;
-									$htmlcontent[$a]['second'] .= implode(",", $this->getPlayersEvents());
+									//$this->matchid                   = $match->id;
+									//$this->projectteam_id            = $value;
+									$htmlcontent[$a]['second'] .= implode(",", $this->getPlayersEvents($match->id,$value->id));
 									$htmlcontent[$a]['second'] .= '</td></tr>';
 								}
 							}
@@ -337,57 +365,160 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 			}
 			else
 			{
+              //echo __LINE__.' round name<pre>'.print_r($round->name,true).'</pre>';
 				// Nur eine spalte
-				$htmlcontent[$a]['header'] = '';
-				$htmlcontent[$a]['first']  = '<table class="' . $this->_params['table_class'] . '">';
-				$htmlcontent[$a]['header'] = '<thead><tr><th colspan="" >' . $rounds[$a]->name . '</th></tr></thead>';
-				$roundcode                 = $a + 1;
+              $htmlcontent[$key2]['header'] = '<div class="row">';
+              $htmlcontent[$key2]['header'] .= '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">';
+              $htmlcontent[$key2]['header'] .= '<b>' .$round->name .'</b>';
+              $htmlcontent[$key2]['header'] .= '</div>';
+              $htmlcontent[$key2]['header'] .= '</div>';
+              
+				//$htmlcontent[$a]['header'] = '';
+				//$htmlcontent[$a]['first']  = '<table class="' . $this->_params['table_class'] . '">';
+				//$htmlcontent[$a]['header'] = '<thead><tr><th colspan="" >' . $rounds[$a]->name . '</th></tr></thead>';
+				//$roundcode                 = $a + 1;
 
 				foreach ($this->result as $match)
 				{
-					if ((int) $match->roundcode === (int) $roundcode)
+					if ((int) $match->round_id === (int) $round->id)
 					{
-						$htmlcontent[$a]['first'] .= '<tr><td width="45%">' . $match->home_name . '</td>';
-						$htmlcontent[$a]['first'] .= '<td width="5%">' . $match->team1_result . '</td>';
-						$htmlcontent[$a]['first'] .= '<td width="5%">' . $match->team2_result . '</td>';
-						$htmlcontent[$a]['first'] .= '<td width="45%">' . $match->away_name . '</td></tr>';
+                      $htmlcontent[$key2]['first'] .= '<div class="row">';
 
-						foreach ($this->ProjectTeams as $key => $value)
-						{
-							if ((int) $match->projectteam1_id === (int) $value || (int) $match->projectteam2_id === (int) $value)
-							{
+                      //$htmlcontent[$a]['first'] .= '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">';
+                      $htmlcontent[$key2]['first'] .= '<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-end">';
+                      $htmlcontent[$key2]['first'] .=  $match->home_name;
+                      $htmlcontent[$key2]['first'] .= '</div>';
+                      $htmlcontent[$key2]['first'] .= '<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 d-flex justify-content-center">';
+                      $htmlcontent[$key2]['first'] .= $match->team1_result;
+                      $htmlcontent[$key2]['first'] .= '</div>';
+                      $htmlcontent[$key2]['first'] .= '<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 d-flex justify-content-center">';
+                      $htmlcontent[$key2]['first'] .= $match->team2_result;
+                      $htmlcontent[$key2]['first'] .= '</div>';
+                      $htmlcontent[$key2]['first'] .= '<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 d-flex justify-content-start">';
+                      $htmlcontent[$key2]['first'] .= $match->away_name;
+                      $htmlcontent[$key2]['first'] .= '</div>';
+                      //$htmlcontent[$a]['first'] .= '</div>';
+                      $htmlcontent[$key2]['first'] .= '</div>';
+						
+						
+						
+						
+$htmlcontent[$key2]['first'] .= '<div class="row">';
+						//foreach ($this->ProjectTeams as $key => $value)
+						//{
+                          /** heimmannschaft */
+                          
+                          //echo 'projectteam id -> '.$match->projectteam1_id.' projektteam id -> '.$value->id.'<br>';
+                            
+                            
+							//if ((int) $match->projectteam1_id === (int) $value->id )
+							//{
+                              $htmlcontent[$key2]['first'] .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
 								if ($config['show_firstroster'])
 								{
-									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
-									$this->matchid                  = $match->id;
-									$this->projectteam_id           = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getMatchPlayers());
-									$htmlcontent[$a]['first'] .= '</td></tr>';
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+                                 $htmlcontent[$key2]['first'] .= '<div>';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getMatchPlayers($match->id,$match->projectteam1_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
 								}
 
 								if ($config['show_firstsubst'])
 								{
-									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
-									$this->matchid                 = $match->id;
-									$this->projectteam_id          = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getSubstitutes());
-									$htmlcontent[$a]['first'] .= '</td></tr>';
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
+									//$this->matchid                 = $match->id;
+									//$this->projectteam_id          = $value;
+                                  $htmlcontent[$key2]['first'] .= '<div >';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getSubstitutes($match->id,$match->projectteam1_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
 								}
 
 								if ($config['show_firstevents'])
 								{
-									$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
-									$this->matchid                  = $match->id;
-									$this->projectteam_id           = $value;
-									$htmlcontent[$a]['first'] .= implode(",", self::getPlayersEvents());
-									$htmlcontent[$a]['first'] .= '</td></tr>';
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+                                  $htmlcontent[$key2]['first'] .= '<div>';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getPlayersEvents($match->id,$match->projectteam1_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
 								}
-							}
-						}
+                              $htmlcontent[$key2]['first'] .= '</div>';
+							//}
+                          
+                          
+                          //if ( (int) $match->projectteam2_id === (int) $value->id)
+							//{
+                            /** gastmannschaft */
+                            $htmlcontent[$key2]['first'] .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
+								if ($config['show_firstroster'])
+								{
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+                                  $htmlcontent[$key2]['first'] .= '<div>';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_STARTING_LINE-UP') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getMatchPlayers($match->id,$match->projectteam2_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
+								}
+
+								if ($config['show_firstsubst'])
+								{
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
+									//$this->matchid                 = $match->id;
+									//$this->projectteam_id          = $value;
+                                  $htmlcontent[$key2]['first'] .= '<div>';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_SUBSTITUTES') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getSubstitutes($match->id,$match->projectteam2_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
+								}
+
+								if ($config['show_firstevents'])
+								{
+									//$htmlcontent[$a]['first'] .= '<tr><td colspan="4"><b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
+									//$this->matchid                  = $match->id;
+									//$this->projectteam_id           = $value;
+                                  $htmlcontent[$key2]['first'] .= '<div>';
+                                  $htmlcontent[$key2]['first'] .= '<b>' . Text::_('COM_SPORTSMANAGEMENT_MATCHREPORT_EVENTS') . ' : </b>';
+									$htmlcontent[$key2]['first'] .= implode(",", self::getPlayersEvents($match->id,$match->projectteam2_id));
+									$htmlcontent[$key2]['first'] .= '</div>';
+								}
+                            $htmlcontent[$key2]['first'] .= '</div>';
+							//}
+                          
+                      $htmlcontent[$key2]['first'] .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
+                      $htmlcontent[$key2]['first'] .=  HTMLHelper::image(Uri::root() ."administrator/components/com_sportsmanagement/assets/images/stadion.png","stadion.png",array("title" => 'Stadion' )).  $match->playground_name.
+                        '  ' . HTMLHelper::image(Uri::root() ."administrator/components/com_sportsmanagement/assets/images/zuschauer.png","stadion.png",array("title" => 'Stadion' )).  $match->crowd;
+                        ;
+                          $htmlcontent[$key2]['first'] .= '</div>';
+                                            $htmlcontent[$key2]['first'] .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
+                      //$htmlcontent[$key2]['first'] .=  HTMLHelper::image(Uri::root() ."administrator/components/com_sportsmanagement/assets/images/zuschauer.png","stadion.png",array("title" => 'Stadion' )).  $match->crowd;
+                          $htmlcontent[$key2]['first'] .= '</div>';
+                          
+						//}
+                      				$htmlcontent[$key2]['first'] .= '</div>';
+                      
+                      $referees = self::getMatchReferees($match->id);
+                     // echo __LINE__.' referees <pre>'.print_r($referees,true).'</pre>';
+                      
+                      if ( $referees )
+                      {
+                       $htmlcontent[$key2]['first'] .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
+                       $htmlcontent[$key2]['first'] .=  HTMLHelper::image(Uri::root() ."administrator/components/com_sportsmanagement/assets/images/schiedsrichter.png","stadion.png",array("title" => 'Stadion' )); 
+                        foreach ( $referees as $key => $value )
+                        {
+                          $htmlcontent[$key2]['first'] .= $value->text.' / '; 
+                        }
+                       $htmlcontent[$key2]['first'] .= '</div>'; 
+                      }
+                      
 					}
 				}
 
-				$htmlcontent[$a]['first'] .= '</table>';
+				//$htmlcontent[$a]['first'] .= '</div>';
 			}
 		}
 
@@ -433,23 +564,27 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 				}
 				else
 				{
+                  
+                  
+                  
 					$content .= $value['header'];
-					$content .= '<tr><td>' . $value['first'] . '</td></tr>';
+					$content .= $value['first'];
 
 					if (array_key_exists('firstroster', $value))
 					{
-						$content .= '<tr><td>' . $value['firstroster'] . '</td></tr>';
+						$content .= $value['firstroster'];
 					}
 
 					if (array_key_exists('firstsubst', $value))
 					{
-						$content .= '<tr><td>' . $value['firstsubst'] . '</td></tr>';
+						$content .= $value['firstsubst'] ;
 					}
 
 					if (array_key_exists('firstevents', $value))
 					{
-						$content .= '<tr><td>' . $value['firstevents'] . '</td></tr>';
+						$content .= $value['firstevents'];
 					}
+                  
 				}
 			}
 		}
@@ -464,7 +599,7 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 	 *
 	 * @return
 	 */
-	function getMatchPlayers()
+	function getMatchPlayers($match_id = 0,$projectteam_id = 0)
 	{
 		$app = Factory::getApplication();
 		$db    = Factory::getDbo();
@@ -492,9 +627,9 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 
 		$query->join('INNER', ' #__sportsmanagement_team AS t ON t.id = st1.team_id');
 
-		$query->where('mp.match_id = ' . (int) $this->matchid);
+		$query->where('mp.match_id = ' . (int) $match_id);
 		$query->where('mp.came_in = 0');
-		$query->where('pt.id = ' . $this->projectteam_id);
+		$query->where('pt.id = ' . $projectteam_id);
 		$query->where('p.published = 1');
 
 		$query->order('mp.ordering, stp1.jerseynumber, p.lastname');
@@ -513,7 +648,7 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 			$query->clear();
 			$query->select('in_out_time');
 			$query->from('#__sportsmanagement_match_player');
-			$query->where('match_id = ' . (int) $this->matchid);
+			$query->where('match_id = ' . (int) $match_id);
 			$query->where('in_for = ' . (int) $row->teamplayer_id);
 			$db->setQuery($query);
 			$row->in_out_time = $db->loadResult();
@@ -537,7 +672,7 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 	 *
 	 * @return
 	 */
-	function getSubstitutes()
+	function getSubstitutes($match_id = 0,$projectteam_id = 0)
 	{
 		$app = Factory::getApplication();
 		$db    = Factory::getDbo();
@@ -578,8 +713,8 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 
 		$query->join('INNER', ' #__sportsmanagement_team AS t ON t.id = st1.team_id');
 
-		$query->where('mp.match_id = ' . (int) $this->matchid);
-		$query->where('pt.id = ' . $this->projectteam_id);
+		$query->where('mp.match_id = ' . (int) $match_id);
+		$query->where('pt.id = ' . $projectteam_id);
 		$query->where('mp.came_in > 0');
 
 		$query->group('mp.in_out_time+mp.teamplayer_id+pt.team_id');
@@ -610,7 +745,7 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 	 *
 	 * @return
 	 */
-	function getPlayersEvents()
+	function getPlayersEvents($match_id = 0,$projectteam_id = 0)
 	{
 		$app = Factory::getApplication();
 		$db    = Factory::getDbo();
@@ -628,8 +763,8 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 		$query->join('INNER', ' #__sportsmanagement_project_team AS pt ON pt.team_id = st1.id ');
 		$query->join('INNER', ' #__sportsmanagement_person AS p ON stp1.person_id = p.id AND p.published = 1 ');
 
-		$query->where('ev.match_id = ' . (int) $this->matchid);
-		$query->where('ev.projectteam_id = ' . $this->projectteam_id);
+		$query->where('ev.match_id = ' . (int) $match_id);
+		$query->where('ev.projectteam_id = ' . $projectteam_id);
 		$query->group('ev.id');
       $query->order('ev.event_time');
 
@@ -650,6 +785,33 @@ class sportsmanagementModelallprojectrounds extends BaseDatabaseModel
 		// 			$this->_playersevents = $events;
 
 		return $playersevents;
+
+	}
+
+	function getMatchReferees($match_id = 0)
+	{
+		$app = Factory::getApplication();
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$referees = array();
+
+		 $query->clear();
+		$query->select('p.id,pref.id AS person_id,p.firstname,p.lastname,pos.name AS position_name,CONCAT_WS(\':\',p.id,p.alias) AS person_slug,p.nickname ');
+		$query->select('mr.project_position_id,pos.name as position_name,pref.picture');
+      $query->select('concat(p.firstname, \' - \',p.lastname) AS text');
+		$query->from('#__sportsmanagement_match_referee AS mr');
+		$query->join('LEFT', '#__sportsmanagement_project_referee AS pref ON mr.project_referee_id=pref.id');
+		$query->join('INNER', '#__sportsmanagement_season_person_id AS spi ON pref.person_id=spi.id');
+		$query->join('INNER', '#__sportsmanagement_person AS p ON spi.person_id=p.id');
+		$query->join('LEFT', '#__sportsmanagement_project_position AS ppos ON mr.project_position_id=ppos.id');
+		$query->join('LEFT', '#__sportsmanagement_position AS pos ON ppos.position_id=pos.id');
+		$query->where('mr.match_id = ' . (int) $match_id);
+		$query->where('p.published = 1');
+		$query->order('pos.name,mr.ordering');
+		$db->setQuery($query);
+		$referees = $db->loadObjectList();
+		
+return $referees;
 
 	}
 

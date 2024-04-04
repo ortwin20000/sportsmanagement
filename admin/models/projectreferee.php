@@ -37,6 +37,10 @@ class sportsmanagementModelprojectreferee extends JSMModelAdmin
 	{
 		$pks  = $this->jsmjinput->getVar('cid', null, 'post', 'array');
 		$post = $this->jsmjinput->post->getArray(array());
+		$app = Factory::getApplication();
+        
+//         $app->enqueueMessage(__METHOD__ . ' ' . __LINE__ . 'post<pre>' . print_r($post, true) . '</pre>', 'Error');
+//      $app->enqueueMessage(__METHOD__ . ' ' . __LINE__ . 'pks <pre>' . print_r($pks, true) . '</pre>', 'Error');
 
 		$result = true;
 
@@ -54,6 +58,9 @@ class sportsmanagementModelprojectreferee extends JSMModelAdmin
     		}
 			catch (Exception $e)
 			{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+$app->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($query->dump(), true) . '</pre>', 'Error');				
 			}
 
 		}

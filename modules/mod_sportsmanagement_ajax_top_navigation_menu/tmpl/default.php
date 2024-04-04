@@ -23,6 +23,9 @@ elseif (version_compare(substr(JVERSION, 0, 3), '3.0', 'ge'))
 HTMLHelper::_('behavior.tooltip');
 }
 
+$div_col_1 = $params->get('col_tabs');
+$div_col_2 = $params->get('col_img');
+$div_col_3 = $params->get('col_menu');
 
 ?>
     <script type="text/javascript">
@@ -31,10 +34,10 @@ HTMLHelper::_('behavior.tooltip');
 
     <div class="container-fluid">
 
+<div class="row">
 
 
-
-
+<div class="col-lg-<?php echo $div_col_1; ?> col-md-<?php echo $div_col_1; ?> col-sm-<?php echo $div_col_1; ?> col-xs-<?php echo $div_col_1; ?>">
 
 
         <!-- Nav tabs -->
@@ -82,17 +85,7 @@ HTMLHelper::_('behavior.tooltip');
                 <div  class="tab-pane fade <?php echo $selected ?>"
                      id="jlajaxtopmenu-<?php echo $value ?><?php echo $module->id ?>"
 					 >
-					<?PHP
-					if ($country_id)
-					{
-					$flag =  JSMCountries::getCountryFlag($country_id,'',false,true);	
-						?>
-                        <img style="float: right;"
-                             src="<?php echo $flag; ?>"
-                             alt="<?php echo $country_id ?>" width="144" height=""/>
-						<?PHP
-					}
-					?>
+					
 
                     <table>
                         <tr>
@@ -241,13 +234,18 @@ HTMLHelper::_('behavior.tooltip');
                                     <tr>
                                         <td>
 
-                                            <ul class="jsmpage pagination" id="pagination">
-
-
-                                            </ul>
+                                           
 
 
 											<?php if ($project_id)
+											{
+												?>
+                                                
+											<?php } ?>
+                                        </td>
+
+                                        <td>
+											<?php if ($team_id)
 											{
 												?>
                                                 <div style="margin: 0 auto;">
@@ -255,6 +253,79 @@ HTMLHelper::_('behavior.tooltip');
 
                                                         <!-- <ul class="nav-list"> -->
                                                         <ul class="">
+															<?php if ($params->get('show_nav_links'))
+																:
+																?>
+
+																<?php for ($i = 17; $i < 23; $i++)
+																:
+																?>
+																<?php
+																if ($params->get('navpointct' . $i) && $link = $helper->getLink($params->get('navpointct' . $i)))
+																	:
+																	?>
+                                                                    <li class="nav-item"><?php echo HTMLHelper::link(Route::_($link), $params->get('navpointct_label' . $i)); ?></li>
+																<?php elseif ($params->get('navpointct' . $i) == "separator")
+																	:
+																	?>
+                                                                    <li class="nav-item separator"><?php echo $params->get('navpointct_label' . $i); ?></li>
+																<?php endif; ?>
+															<?php endfor; ?>
+
+
+															<?php
+															endif;
+															?>
+                                                        </ul>
+                                                    </fieldset>
+                                                </div>
+											<?php } ?>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <!--jlajaxtopmenu<?php echo $value ?>-<?php echo $module->id ?> end-->
+
+				<?PHP
+			}
+			?>
+
+        </div>
+
+</div>
+<div class="col-lg-<?php echo $div_col_2; ?> col-md-<?php echo $div_col_2; ?> col-sm-<?php echo $div_col_2; ?> col-xs-<?php echo $div_col_2; ?>">
+<?PHP
+					if ($country_id)
+					{
+					$flag =  JSMCountries::getCountryFlag($country_id,'',false,true);	
+						?>
+                        <img style="float: right;"
+                             src="<?php echo $flag; ?>"
+                             alt="<?php echo $country_id ?>" width="144" height=""/>
+						<?PHP
+					}
+					?>  
+</div>  
+<div class="col-lg-<?php echo $div_col_3; ?> col-md-<?php echo $div_col_3; ?> col-sm-<?php echo $div_col_3; ?> col-xs-<?php echo $div_col_3; ?>">
+<div style="margin: 0 auto;">
+   <ul class="jsmpage pagination" id="pagination">
+
+
+                                            </ul>
+<?php if ($project_id)
+											{
+												?>
+                                                    <fieldset class="">
+
+                                                        <!-- <ul class="nav-list"> -->
+                                                        <ul class="" id="ajax-nav-list">
 															<?php if ($params->get('show_nav_links'))
 																:
 																?>
@@ -324,68 +395,13 @@ HTMLHelper::_('behavior.tooltip');
 															?>
                                                         </ul>
                                                     </fieldset>
+													<?php } ?>
                                                 </div>
-											<?php } ?>
-                                        </td>
 
-                                        <td>
-											<?php if ($team_id)
-											{
-												?>
-                                                <div style="margin: 0 auto;">
-                                                    <fieldset class="">
-
-                                                        <!-- <ul class="nav-list"> -->
-                                                        <ul class="">
-															<?php if ($params->get('show_nav_links'))
-																:
-																?>
-
-																<?php for ($i = 17; $i < 23; $i++)
-																:
-																?>
-																<?php
-																if ($params->get('navpointct' . $i) && $link = $helper->getLink($params->get('navpointct' . $i)))
-																	:
-																	?>
-                                                                    <li class="nav-item"><?php echo HTMLHelper::link(Route::_($link), $params->get('navpointct_label' . $i)); ?></li>
-																<?php elseif ($params->get('navpointct' . $i) == "separator")
-																	:
-																	?>
-                                                                    <li class="nav-item separator"><?php echo $params->get('navpointct_label' . $i); ?></li>
-																<?php endif; ?>
-															<?php endfor; ?>
-
-
-															<?php
-															endif;
-															?>
-                                                        </ul>
-                                                    </fieldset>
-                                                </div>
-											<?php } ?>
-                                        </td>
-
-                                    </tr>
-
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-
-                </div>
-
-                <!--jlajaxtopmenu<?php echo $value ?>-<?php echo $module->id ?> end-->
-
-				<?PHP
-			}
-			?>
-
-        </div>
-
+</div>
     </div>
 
-
+    </div>
 <?PHP
 
 ?>

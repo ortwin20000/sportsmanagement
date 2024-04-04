@@ -85,7 +85,7 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		//$menu = JMenu::getInstance('site');
         $menu = Factory::getApplication()->getMenu();
 		$item = $menu->getActive();
-        
+        /**
         //$app->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($item,true).'</pre>'), 'error');
         if ( $item )
 	{
@@ -99,9 +99,9 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 		}
 	}
 		$params = $menu->getParams($item->id);
+        */
         
-        
-
+/**
 		if (COM_SPORTSMANAGEMENT_SHOW_DEBUG_INFO)
 		{
 			$this->debug_info = true;
@@ -111,9 +111,9 @@ class sportsmanagementModelRankingAllTime extends BaseDatabaseModel
 			$this->debug_info = false;
 		}
         
-        
+        */
         //$app->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($params,true).'</pre>'), 'error');
-
+/**
 		if ($item->query['view'] == 'rankingalltime')
 		{
 			// Diddipoeler
@@ -152,26 +152,9 @@ foreach ($field->fieldset as $fieldset)
 			}          
           
           
-		  /*
-			$strXmlFile = JPATH_SITE . DIRECTORY_SEPARATOR . JSM_PATH . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'rankingalltime' . DIRECTORY_SEPARATOR . 'tmpl' . DIRECTORY_SEPARATOR . 'default.xml';
-			$xml      = Factory::getXML($strXmlFile);
-			$children = $xml->document->children();
-			
-			foreach ($xml->children() as $field)
-			{
-				foreach ($field->fieldset as $fieldset)
-				{
-					foreach ($fieldset->field as $param)
-					{
-						$attributes = $param->attributes();
-
-						$this->_params[(string) $param->attributes()->name[0]] = (string) $param->attributes()->default[0];
-					}
-				}
-			}
-            */
+		  
 		}
-
+*/
 		parent::__construct();
 
 	}
@@ -350,7 +333,7 @@ catch (Exception $e)
 		{
 			Log::add(Text::_('COM_SPORTSMANAGEMENT_NO_RANKING_PROJECTINFO'), Log::WARNING, 'jsmerror');
 
-			return false;
+			return $this->_teams;
 		}
 
 	}
@@ -429,7 +412,7 @@ catch (Exception $e)
 	 *
 	 * @return
 	 */
-	function getAllTimeRanking()
+	function getAllTimeRanking($use_negpoints_ranking_all_time = 0)
 	{
 		$option = Factory::getApplication()->input->getCmd('option');
 		$app    = Factory::getApplication();
@@ -606,8 +589,8 @@ catch (Exception $e)
 
 					if ($shownegpoints == 1)
 					{
-						$home->neg_points += ($decision == 0 || isset($home_score) ? ($win_points - $draw_points) : 0); // Bug fixed, timoline 250709
-						$away->neg_points += ($decision == 0 || isset($away_score) ? ($win_points - $draw_points) : 0);// ex. for soccer, your loss = 2 points not 1 point
+						$home->neg_points += ($decision == 0 || isset($home_score) ? ($win_points - $draw_points) : 0); 
+						$away->neg_points += ($decision == 0 || isset($away_score) ? ($win_points - $draw_points) : 0);
 					}
 				}
 				elseif ($home_score < $away_score)
@@ -669,13 +652,13 @@ catch (Exception $e)
 					$away->neg_points += $loss_points;
 				}
 
-				// Final Win/Loss Decision
+				/** Final Win/Loss Decision */
 				if ($match->team_won == 0)
 				{
 					$home->cnt_lost++;
 					$away->cnt_lost++;
 
-					// Record a won on the home team
+					/** Record a won on the home team */
 				}
 				elseif ($match->team_won == 1)
 				{
@@ -684,7 +667,7 @@ catch (Exception $e)
 					$home->sum_points += $win_points;
 					$away->cnt_lost_home++;
 
-					// Record a won on the away team
+					/** Record a won on the away team */
 				}
 				elseif ($match->team_won == 2)
 				{
@@ -693,7 +676,7 @@ catch (Exception $e)
 					$away->sum_points += $win_points;
 					$home->cnt_lost_home++;
 
-					// Record a loss on both teams
+					/** Record a loss on both teams */
 				}
 				elseif ($match->team_won == 3)
 				{
@@ -702,7 +685,7 @@ catch (Exception $e)
 					$away->cnt_lost_home++;
 					$home->cnt_lost_home++;
 
-					// Record a won on both teams
+					/** Record a won on both teams */
 				}
 				elseif ($match->team_won == 4)
 				{
@@ -713,11 +696,11 @@ catch (Exception $e)
 				}
 			}
 
-			// Winpoints
+			/** Winpoints */
 
 			$home->winpoints = $win_points;
 
-			// Bonus points
+			/** Bonus points */
 
 			$home->sum_points   += $match->home_bonus;
 			$home->bonus_points += $match->home_bonus;
@@ -725,7 +708,7 @@ catch (Exception $e)
 			$away->sum_points   += $match->away_bonus;
 			$away->bonus_points += $match->away_bonus;
 
-			// Goals for/against/diff
+			// Goals for/against/diff */
 
 			$home->sum_team1_result  += $home_score;
 			$home->sum_team2_result  += $away_score;
@@ -754,11 +737,13 @@ catch (Exception $e)
 		 *
 		 *
 		 */
-		/*
+		if ( $use_negpoints_ranking_all_time )
+        {
 		foreach ( $this->_teams as $team )
 		{
-		if ( $team->use_finally )
-		{
+		//if ( $team->use_finally )
+		//{
+		  /**
 		if ( $win_points )
         {
 		if ( $team->won_finally && $team->draws_finally )
@@ -770,7 +755,9 @@ catch (Exception $e)
 		$team->neg_points_finally = ( $loss_points * $team->lost_finally ) + ( $draw_points * $team->draws_finally );
 		}
 		}
-		$this->teams[$team->team_id]->sum_points += $team->points_finally;
+        */
+		$this->teams[$team->team_id]->sum_points += $team->start_points;
+        /**
 		$this->teams[$team->team_id]->neg_points += $team->neg_points_finally;
 		$this->teams[$team->team_id]->cnt_matches += $team->matches_finally;
 		$this->teams[$team->team_id]->cnt_won += $team->won_finally;
@@ -779,9 +766,10 @@ catch (Exception $e)
 		$this->teams[$team->team_id]->sum_team1_result += $team->homegoals_finally;
 		$this->teams[$team->team_id]->sum_team2_result += $team->guestgoals_finally;
 		$this->teams[$team->team_id]->diff_team_results += $team->diffgoals_finally;
-        }
+        */
+        //}
 		}
-		*/
+		}
 
 		return $this->teams;
 
@@ -855,6 +843,7 @@ catch (Exception $e)
 			$query->select('league_id');
 			$query->from('#__sportsmanagement_project');
 			$query->where('id = ' . $projekt);
+            $query->where('published != -2 ');
 			$query->order('name ');
 			$db->setQuery($query);
             try
@@ -874,6 +863,7 @@ catch (Exception $e)
 		$query->from('#__sportsmanagement_project as p');
 		$query->join('INNER', '#__sportsmanagement_season AS s ON p.season_id = s.id ');
 		$query->where('p.league_id = ' . $league);
+        $query->where('p.published != -2 ');
         if ( $use_leaguechampion )
         {
             $query->where('p.use_leaguechampion = ' . $use_leaguechampion);
@@ -918,6 +908,7 @@ catch (Exception $e)
 			$query->select('league_id');
 			$query->from('#__sportsmanagement_project');
 			$query->where('id = ' . $projekt);
+            $query->where('published != -2 ');
 			$query->order('name ');
 			$db->setQuery($query);
 			$league = $db->loadResult();
@@ -927,6 +918,7 @@ catch (Exception $e)
 		$query->select('id');
 		$query->from('#__sportsmanagement_project');
 		$query->where('league_id = ' . $league);
+        $query->where('published != -2 ');
         if ( $use_leaguechampion )
         {
             $query->where('use_leaguechampion = ' . $use_leaguechampion);
@@ -953,14 +945,25 @@ catch (Exception $e)
 		return $result;
 	}
 
+	
 	/**
 	 * sportsmanagementModelRankingAllTime::getAllTimeParams()
-	 *
+	 * 
+	 * @param bool $come_from_menue
+	 * @param mixed $config
 	 * @return
 	 */
-	function getAllTimeParams()
+	function getAllTimeParams($come_from_menue = false, $config = array() )
 	{
-		return $this->_params;
+	   if ( !$come_from_menue )
+       {
+       return $config; 
+       }
+       else
+       {
+		return $config;
+        }
+        
 	}
 
 	/**
@@ -968,7 +971,7 @@ catch (Exception $e)
 	 *
 	 * @return
 	 */
-	function getCurrentRanking()
+	function getCurrentRanking($ranking_order = array() )
 	{
 		$option = Factory::getApplication()->input->getCmd('option');
 		$app    = Factory::getApplication();
@@ -1001,7 +1004,7 @@ catch (Exception $e)
 			$newranking[0][$key->team_id] = $new;
 		}
 
-		$newranking[0] = self::_sortRanking($newranking[0]);
+		$newranking[0] = self::_sortRanking($newranking[0],$ranking_order);
 
 		$oldpoints = 0;
 		$rank      = 0;
@@ -1033,7 +1036,7 @@ catch (Exception $e)
 	 *
 	 * @return
 	 */
-	function _sortRanking(&$ranking)
+	function _sortRanking($ranking = array(), $ranking_order = array() )
 	{
 		// Reference global application object
 		$app       = Factory::getApplication();
@@ -1047,6 +1050,10 @@ catch (Exception $e)
 		{
 			$arr2[$row->_teamid] = ArrayHelper::fromObject($row);
 		}
+
+
+//echo 'ranking_order<pre>'.print_r($ranking_order,true).'</pre>';
+//echo 'order<pre>'.print_r($order,true).'</pre>';
 
 		if (!$order)
 		{
@@ -1086,7 +1093,10 @@ catch (Exception $e)
 		}
 		else //     if ( !$order_dir)
 		{
-			switch ($order)
+		  
+          foreach ($ranking_order as $order)
+			{
+			switch ( strtolower($order) )
 			{
 				case 'played':
 					// Uasort($ranking, array(self::$classname, "playedCmp"));
@@ -1174,6 +1184,7 @@ catch (Exception $e)
 					}
 					break;
 			}
+            }
 
 			$arr2 = $this->array_msort($arr2, $sortarray);
 

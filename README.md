@@ -71,6 +71,10 @@ Extensions ?
 
 Änderungen
 ---------------------
+*   23-03-2024: **4.21.00** 2 neue Tabellen
+*   11-03-2024: **4.20.00** 2 neue Tabellen
+*   08-03-2024: **4.19.00** Teamname historisch
+*   20-01-2024: **4.18.00** Anpassungen Joomla 4
 *   02-05-2023: **4.17.00** Neue Felder für Einzelsportart Tischtennis
 *   17-04-2023: **4.16.00** Neue Felder für Einzelsportart Tischtennis
 *   16-04-2023: **4.15.00** Neue Felder für Einzelsportart Tischtennis

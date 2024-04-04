@@ -17,6 +17,8 @@ use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 
+use sportsmanagement\Site\Model\JSMSportsmanagementPagination;
+
 jimport('joomla.html.pane');
 
 /** welche joomla version ? */
@@ -65,7 +67,7 @@ class sportsmanagementModelResults extends JSMModelList
 	function __construct()
 	{
 		parent::__construct();
-		self::$limitstart = $this->jsmjinput->getVar('limitstart', 0, '', 'int');
+		//self::$limitstart = $this->jsmjinput->getVar('limitstart', 0, '', 'int');
 		self::$divisionid = $this->jsmjinput->getVar('division', '0');
 		self::$mode       = $this->jsmjinput->getVar('mode', '0');
 		self::$order      = $this->jsmjinput->getVar('order', '0');
@@ -95,66 +97,33 @@ class sportsmanagementModelResults extends JSMModelList
 		$this->config                        = sportsmanagementModelProject::getTemplateConfig('results', self::$cfg_which_database);
 	}
 
-	/**
-	 * Method to get the starting number of items for the data set.
-	 *
-	 * @return integer  The starting number of items available in the data set.
-	 *
-	 * @since 11.1
-	 */
-	public function getStart()
-	{
-		$this->setState('list.start', self::$limitstart);
 
-		$store = $this->getStoreId('getstart');
+ public function getPagination()
+{
+    // Get a storage key.
+    $store = $this->getStoreId('getPagination');
 
-		/** Try to load the data from internal storage. */
-		if (isset($this->cache[$store]))
-		{
-			return $this->cache[$store];
-		}
+    // Try to load the data from internal storage.
+    if (isset($this->cache[$store])) {
+        return $this->cache[$store];
+    }
 
-		$start = $this->getState('list.start');
-		$limit = $this->getState('list.limit');
-		$total = $this->getTotal();
+    $limit = (int) $this->getState('list.limit') - (int) $this->getState('list.links');
 
-		if ($start > $total - $limit)
-		{
-			$start = max(0, (int) (ceil($total / $limit) - 1) * $limit);
-		}
+    // Create the pagination object and add the object to the internal cache.
+    $this->cache[$store] = new JSMSportsmanagementPagination($this->getTotal(), $this->getStart(), $limit);
 
-		/** Add the total to the internal cache. */
-		$this->cache[$store] = $start;
+//echo 'store<pre>'.print_r($store,true).'</pre>';
+//echo 'limit<pre>'.print_r($limit,true).'</pre>';
+//echo 'getTotal<pre>'.print_r($this->getTotal(),true).'</pre>';
+//echo 'getStart<pre>'.print_r($this->getStart(),true).'</pre>';
+	
+    return $this->cache[$store];
+}
+	
+	
 
-		return $this->cache[$store];
-	}
-
-	/**
-	 * sportsmanagementModelResults::getTotal()
-	 *
-	 * @return
-	 */
-	function getTotal()
-	{
-		// Load the content if it doesn't already exist
-		if (empty($this->_total))
-		{
-			$query = self::getResultsRows((int) self::$roundid, (int) self::$divisionid, $this->config, null, self::$cfg_which_database, 0, true);
-
-			try
-			{
-				$this->_total = $this->_getListCount($query);
-			}
-			catch (Exception $e)
-			{
-				$this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getMessage()), 'error');
-
-				return false;
-			}
-		}
-
-		return $this->_total;
-	}
+	
 
 	/**
 	 * sportsmanagementModelResults::getResultsRows()
@@ -263,7 +232,7 @@ class sportsmanagementModelResults extends JSMModelList
 				}
 				else
 				{
-					$db->setQuery($query);
+					$db->setQuery($query, self::$limitstart, self::$limit);
 					$result = $db->loadObjectList('id');
 				}
 			}
@@ -500,7 +469,7 @@ if (version_compare(JVERSION, '4.0.0', 'ge'))
 
 			try
 			{
-				$this->_data = $this->_getList($query);
+				$this->_data = $this->_getList($query,self::$limitstart,self::$limit);
 			}
 			catch (Exception $e)
 			{
@@ -1078,10 +1047,10 @@ if (version_compare(JVERSION, '4.0.0', 'ge'))
         $round = 0;
 
 		// Get a db connection.
-		$db    = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
+		$db    = sportsmanagementHelper::getDBConnection(true, self::$cfg_which_database);
 		$query = $db->getQuery(true);
 
-		$project = sportsmanagementModelProject::getProject($cfg_which_database, __METHOD__);
+		$project = sportsmanagementModelProject::getProject(self::$cfg_which_database, __METHOD__);
 
 		if (!$round && $project)
 		{
@@ -1166,7 +1135,7 @@ if (version_compare(JVERSION, '4.0.0', 'ge'))
 			try
 			{
 				
-				
+				$query->setLimit(self::$limit,self::$limitstart);
 					$result = $query;
 				
 			}

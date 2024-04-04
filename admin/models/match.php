@@ -91,11 +91,11 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 		$query->from('#__sportsmanagement_match_event AS me');
 		$query->join('LEFT', '#__sportsmanagement_season_team_person_id AS tp1 ON tp1.id = me.teamplayer_id');
 		$query->join('LEFT', '#__sportsmanagement_season_team_id AS st1 ON st1.team_id = tp1.team_id and st1.season_id = tp1.season_id');
-		$query->join('LEFT', '#__sportsmanagement_project_team AS pt1 ON st1.id = pt1.team_id');
+		//$query->join('LEFT', '#__sportsmanagement_project_team AS pt1 ON st1.id = pt1.team_id');
 		$query->join('LEFT', '#__sportsmanagement_person AS t1 ON t1.id = tp1.person_id AND t1.published = 1');
 		$query->join('LEFT', '#__sportsmanagement_team AS t ON t.id = st1.team_id');
 		$query->join('LEFT', '#__sportsmanagement_eventtype AS et ON et.id = me.event_type_id ');
-		$query->join('LEFT', '#__sportsmanagement_person_project_position AS ppp on ppp.person_id = tp1.id and ppp.project_id = pt1.project_id');
+		//$query->join('LEFT', '#__sportsmanagement_person_project_position AS ppp on ppp.person_id = tp1.id and ppp.project_id = pt1.project_id');
 		$query->where('me.match_id = ' . $match_id);
 		$query->order('me.event_time ASC');
 		$db->setQuery($query);
@@ -466,7 +466,7 @@ break;
 	{
 		$db     = Factory::getDbo();
 		$query  = $db->getQuery(true);
-		$result = '';
+		$result = array();
 
 		$query->select('spi.id AS value,pr.name,pr.middle_name,pr.short_name,pr.alias');
 		$query->from('#__sportsmanagement_match_referee AS mr');
@@ -500,8 +500,9 @@ break;
 	{
 		$db     = Factory::getDbo();
 		$query  = $db->getQuery(true);
-		$result = '';
+		$result = array();
 		$query->select('pref.id AS value,pl.firstname,pl.nickname,pl.lastname,pl.info,pos.name AS positionname');
+		$query->select('concat(pl.firstname, \' - \',pl.lastname   ) AS text');
 		$query->from('#__sportsmanagement_person AS pl');
 		$query->join('LEFT', '#__sportsmanagement_season_person_id AS spi ON spi.person_id=pl.id');
 		$query->join('LEFT', '#__sportsmanagement_project_referee AS pref ON pref.person_id=spi.id AND pref.published=1');
@@ -1619,7 +1620,7 @@ $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($t
 					}
 				}
 
-				if (($post['team1_result_ot' . $pks[$x]]) && ($post['team2_result_ot' . $pks[$x]]))
+				if (is_numeric($post['team1_result_ot' . $pks[$x]]) && is_numeric($post['team2_result_ot' . $pks[$x]]))
 				{
 					$object->team1_result_ot = $post['team1_result_ot' . $pks[$x]];
 					$object->team2_result_ot = $post['team2_result_ot' . $pks[$x]];
@@ -1642,8 +1643,13 @@ $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($t
 						}
 					}
 				}
+				else
+				{
+					$object->team1_result_ot = null;
+					$object->team2_result_ot = null;
+				}
 
-				if (($post['team1_result_so' . $pks[$x]]) && ($post['team2_result_so' . $pks[$x]]))
+				if (is_numeric($post['team1_result_so' . $pks[$x]]) && is_numeric($post['team2_result_so' . $pks[$x]]))
 				{
 					$object->team1_result_so = $post['team1_result_so' . $pks[$x]];
 					$object->team2_result_so = $post['team2_result_so' . $pks[$x]];
@@ -1665,6 +1671,11 @@ $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($t
 							$object->team_lost = $object->projectteam1_id;
 						}
 					}
+				}
+				else
+				{
+					$object->team1_result_so = null;
+					$object->team2_result_so = null;
 				}
 			}
 
@@ -2148,10 +2159,14 @@ break;
 					$this->jsmdb->setQuery($this->jsmquery);
 					$result_referee = $this->jsmdb->loadResult();
 
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' result <pre>'.print_r($result,true).'</pre>'   , 'notice');
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' project_referee_id <pre>'.print_r($project_referee_id,true).'</pre>'   , 'notice');
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' result_referee <pre>'.print_r($result_referee,true).'</pre>'   , 'notice');
+					
 					if ($result_referee)
 					{
 						$object                      = new stdClass;
-						$object->id                  = $result;
+						$object->id                  = $result_referee;
 						$object->project_position_id = $key;
 						$object->ordering            = $x;
 
@@ -2393,8 +2408,9 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 	{
 		$db     = Factory::getDbo();
 		$query  = $db->getQuery(true);
-		$result = '';
+		$result = array();
 		$query->select('pref.id AS value,pr.firstname,pr.nickname,pr.lastname,pr.email');
+		$query->select('concat(pr.firstname, \' - \',pr.lastname) AS text');
 		$query->from('#__sportsmanagement_match_referee AS mr');
 		$query->join('LEFT', '#__sportsmanagement_project_referee AS pref ON mr.project_referee_id=pref.id AND pref.published = 1');
 		$query->join('LEFT', '#__sportsmanagement_season_person_id AS spi ON pref.person_id=spi.id');
@@ -2615,6 +2631,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 				$query->clear();
 				$query->delete(Factory::getDBO()->quoteName('#__sportsmanagement_match_staff'));
 				$query->where('id IN (' . implode(",", $result) . ')');
+				$db->setQuery($query);
 
 				try
 				{

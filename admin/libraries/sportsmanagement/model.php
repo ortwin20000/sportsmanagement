@@ -317,6 +317,7 @@ if ( $config->get('debug') )
 				if (array_key_exists('copy_jform', $post))
 				{
 					$data['picture']     = $post['copy_jform']['picture'];
+                    $data['logo_big']     = $post['copy_jform']['logo_big'];
 					$data['trikot_home'] = $post['copy_jform']['trikot_home'];
 					$data['trikot_away'] = $post['copy_jform']['trikot_away'];
 				}
@@ -324,6 +325,11 @@ if ( $config->get('debug') )
 				if (version_compare(JVERSION, '4.0.0', 'ge') && !empty($data['picture']))
 				{
 					$data['picture'] = \Joomla\CMS\Helper\MediaHelper::getCleanMediaFieldValue($data['picture']);
+				}
+                
+                if (version_compare(JVERSION, '4.0.0', 'ge') && !empty($data['logo_big']))
+				{
+					$data['logo_big'] = \Joomla\CMS\Helper\MediaHelper::getCleanMediaFieldValue($data['logo_big']);
 				}
 
 				if (version_compare(JVERSION, '4.0.0', 'ge') && !empty($data['trikot_home']))
@@ -363,6 +369,7 @@ if ( $config->get('debug') )
 				$object = new stdClass;
 				$object->id          = (int) $post['jform']['team_id'];
 				$object->picture     = $data['picture'];
+                $object->logo_big     = $data['logo_big'];
 				$object->modified    = $this->jsmdate->toSql();
 				$object->modified_by = $this->jsmuser->get('id');
 				$result = Factory::getDbo()->updateObject('#__sportsmanagement_season_team_id', $object, 'id');
@@ -413,6 +420,27 @@ $result = $this->jsmdb->execute();
 				{
 					$data['dissolved'] = sportsmanagementHelper::convertDate($data['dissolved'], 0);
 				}
+                
+/** historische logos */
+foreach ( $post['season_history'] as $key => $value ) if ( $value )
+{
+$profile             = new stdClass;
+$profile->league_id = $data['id'];
+$profile->season_id       = $value;
+$profile->logo_big   = $post['league_logo_history'];
+$profile->modified         = $this->jsmdate->toSql();
+$profile->modified_by      = $this->jsmuser->get('id');
+try{
+$insertresult = $this->jsmdb->insertObject('#__sportsmanagement_league_logos', $profile);    
+}
+catch (Exception $e)
+{
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+//return false;
+}	
+}
+                
 				break;
 			case 'teamplayer':
                 if (array_key_exists('copy_jform', $post))
@@ -802,7 +830,29 @@ switch ( $row_sports_type )
             {
             $data['founded_year'] = 'kein';
             }
-				
+
+/** historische logos */
+foreach ( $post['season_history'] as $key => $value ) if ( $value )
+{
+$profile             = new stdClass;
+$profile->club_id = $data['id'];
+$profile->season_id       = $value;
+$profile->logo_big   = $post['logo_big_history'];
+$profile->modified         = $this->jsmdate->toSql();
+$profile->modified_by      = $this->jsmuser->get('id');
+try{
+$insertresult = $this->jsmdb->insertObject('#__sportsmanagement_club_logos', $profile);    
+}
+catch (Exception $e)
+{
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+//return false;
+}	
+}
+
+
+			
 				break;
                 case 'jlextfederation':
                 /** wurden jahre mitgegeben ? */
@@ -944,6 +994,78 @@ switch ( $row_sports_type )
 				{
 					$data['max_visitors'] = 0;
 				}
+                
+                /** informationen zum playground */
+			//$this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' post <pre>'.print_r($post,true).'</pre>'  ), '');
+                foreach ( $post['date_von'] as $key => $value )
+                {
+                $profile             = new stdClass;
+				$profile->playground_id = $data['id'];
+				$profile->date_von       = sportsmanagementHelper::convertDate($post['date_von'][$key], 0) ;
+				$profile->date_bis      = sportsmanagementHelper::convertDate($post['date_bis'][$key], 0) ;
+				$profile->name_visitors  = $post['name_visitors'][$key];
+				$profile->notes  = $post['notes'][$key];
+				$profile->max_visitors   = $post['max_visitors'][$key];
+                $profile->max_visitors_int   = $post['max_visitors_int'][$key];
+                $profile->timestamp_von = sportsmanagementHelper::getTimestamp($profile->date_von);
+                $profile->timestamp_bis = sportsmanagementHelper::getTimestamp($profile->date_bis);
+                $profile->modified         = $this->jsmdate->toSql();
+		        $profile->modified_by      = $this->jsmuser->get('id');
+				$insertresult = $this->jsmdb->insertObject('#__sportsmanagement_playground_details', $profile);    
+                }
+                if ($post['change_id'])
+				{
+            foreach ( $post['change_id'] as $key => $value )
+                {
+              $profile             = new stdClass;
+              $profile->id = $post['change_id'][$value];
+				$profile->playground_id = $post['change_playground_id'][$value];;
+				$profile->date_von       = sportsmanagementHelper::convertDate($post['change_date_von'][$value], 0) ;
+				$profile->date_bis      = sportsmanagementHelper::convertDate($post['change_date_bis'][$value], 0) ;
+				$profile->name_visitors  = $post['change_name_visitors'][$value];
+				$profile->notes  = $post['change_notes'][$value];
+				$profile->max_visitors   = $post['change_max_visitors'][$value] ? $post['change_max_visitors'][$value] : 0;
+                $profile->max_visitors_int   = $post['change_max_visitors_int'][$value] ? $post['change_max_visitors_int'][$value] : 0;
+                $profile->timestamp_von = sportsmanagementHelper::getTimestamp($profile->date_von);
+                $profile->timestamp_bis = sportsmanagementHelper::getTimestamp($profile->date_bis);
+                $profile->modified         = $this->jsmdate->toSql();
+		        $profile->modified_by      = $this->jsmuser->get('id');
+$result = Factory::getDbo()->updateObject('#__sportsmanagement_playground_details', $profile, 'id');
+/**			
+			try{
+              $result = Factory::getDbo()->updateObject('#__sportsmanagement_playground_details', $profile, 'id');
+			}
+catch (Exception $e)
+{
+Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_($e->getMessage()), 'Error');
+Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__.' profile <br><pre>'.print_r($profile,true).'</pre>'),'error');        
+} 
+*/
+				
+            }
+            
+            }
+                
+/** historische logos */
+foreach ( $post['season_history'] as $key => $value ) if ( $value )
+{
+$profile             = new stdClass;
+$profile->playground_id = $data['id'];
+$profile->season_id       = $value;
+$profile->logo_big   = $post['playground_logo_history'];
+$profile->modified         = $this->jsmdate->toSql();
+$profile->modified_by      = $this->jsmuser->get('id');
+try{
+$insertresult = $this->jsmdb->insertObject('#__sportsmanagement_playground_logos', $profile);    
+}
+catch (Exception $e)
+{
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+//$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+//return false;
+}	
+}
+                
 				break;
 
 			/** projekt */
@@ -1308,10 +1430,13 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 							}
                             else
                             {
-                            $teamname = $data['teamvalue'][$value];  
+                            $teamname = $data['teamvalue'][$value];
+                            $season_teamname = $data['season_teamname'][$value];   
                             $object = new stdClass;
 				$object->id          = $result;
                 $object->teamname          = $teamname;
+                $object->season_teamname          = $season_teamname;
+                
 				$object->modified    = $this->jsmdate->toSql();
 				$object->modified_by = $this->jsmuser->get('id');
 				$resultupdate = $this->jsmdb->updateObject('#__sportsmanagement_season_team_id', $object, 'id');  
@@ -1608,6 +1733,7 @@ $this->jsmapp->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' jsmjinput id '.$
 				break;
 			case 'projectteam':
 				$form->setFieldAttribute('picture', 'type', $cfg_which_media_tool);
+                $form->setFieldAttribute('logo_big', 'type', $cfg_which_media_tool);
 				$form->setFieldAttribute('trikot_home', 'type', $cfg_which_media_tool);
 				$form->setFieldAttribute('trikot_away', 'type', $cfg_which_media_tool);
 				break;

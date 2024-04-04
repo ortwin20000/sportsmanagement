@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage resultsmatrix
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -48,6 +44,7 @@ class sportsmanagementViewResultsmatrix extends sportsmanagementView
 		$params = $this->app->getParams();
 
 		$this->document->addScript(Uri::root(true) . '/components/' . $this->option . '/assets/js/smsportsmanagement.js');
+        $this->pagination = $this->get('Pagination');
 
 		// Add the matrix model
 		$matrixmodel = new sportsmanagementModelMatrix;
@@ -67,14 +64,14 @@ class sportsmanagementViewResultsmatrix extends sportsmanagementView
 
 		if ($resultsmodel::$roundid)
 		{
-			$roundcode = $mdlRound->getRoundcode($resultsmodel::$roundid);
+			$roundcode = $mdlRound::getRoundcode($this->jinput->getInt('r', 0), $this->jinput->getInt('cfg_which_database', 0) );
 		}
 		else
 		{
 			$roundcode = '';
 		}
 
-		$rounds = sportsmanagementModelProject::getRoundOptions('ASC', $this->jinput->getInt('cfg_which_database', 0));
+		$rounds = sportsmanagementModelProject::getRoundOptions('ASC', $this->jinput->getInt('cfg_which_database', 0) );
 
 		if (!isset($resultsconfig['switch_home_guest']))
 		{

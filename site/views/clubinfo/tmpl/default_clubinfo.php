@@ -214,6 +214,18 @@ else
 					<?php
 				}
 
+			if ($this->club->instagram)
+				{
+					?>
+                    <address>
+                        <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_EXT_PERSON_INSTAGRAM'); ?></strong>
+<span itemprop="url">
+						<?php echo HTMLHelper::_('link', $this->club->instagram, $this->club->instagram, array("target" => "_blank")); ?>
+</span>
+                    </address>
+					<?php
+				}
+			
 				if ($this->club->twitter)
 				{
 					?>
@@ -389,7 +401,7 @@ else
   
   
   </div>
-   
+   <!-- beschreibung -->
     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="">
 <?PHP
 if ($this->config['show_notes_club'])
@@ -410,29 +422,61 @@ echo $this->loadTemplate('jsm_notes');
    
 	<?php			
 		}			
-			
+
+  
+$this->notes = array();
+$this->notes[] = Text::_('COM_SPORTSMANAGEMENT_CLUB_HISTORYLOGO');
+echo $this->loadTemplate('jsm_notes');
+  
+?>
+      
+      
+     
+      
+      
+      
+
+	<?php			
+foreach ( $this->logohistory_detail as $key => $value )					
+{
+?>
+<div class="row">
+ <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+    
+  
+	<?php			
+echo HTMLHelper::image($key, 'name1', array('title' => 'name2', 'width' => 50 ));					
+
+?>
+   </div>
+    
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    <p class="text-break" > 
+      
+    
+	<?php			
+echo implode(",", $value); 					
+
+?>
+    
+     </p> 
+   </div>
+
+  </div>
+	<?php			
+					
+}
+?>
+
+      
+<?php
+
+      
+        	
 		?>      
   
-  
-  
-  
   </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
    <?php } ?>

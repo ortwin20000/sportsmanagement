@@ -91,9 +91,9 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_club` (
   `website` VARCHAR(250) NOT NULL DEFAULT '' ,
   `president` VARCHAR(50) NOT NULL DEFAULT '' ,
   `manager` VARCHAR(50) NOT NULL DEFAULT '' ,
-  `logo_big` VARCHAR(255) NOT NULL DEFAULT '' ,
-  `logo_middle` VARCHAR(255) NOT NULL DEFAULT '' ,
-  `logo_small` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `logo_big` VARCHAR(255) NULL DEFAULT NULL ,
+  `logo_middle` VARCHAR(255) NULL DEFAULT NULL ,
+  `logo_small` VARCHAR(255) NULL DEFAULT NULL ,
   `standard_playground` INT(11) NULL DEFAULT NULL ,
   `extended` TEXT NULL ,
   `ordering` INT(11) NOT NULL DEFAULT '0' ,
@@ -727,6 +727,7 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_playground` (
   `state` VARCHAR(50) NOT NULL DEFAULT '' ,
   `openligaid` int(11) DEFAULT NULL,
   `playground_size` VARCHAR(200) NOT NULL DEFAULT '' ,
+  `max_visitors_int` INT(11) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (`id`) ,
   KEY `club_id` (`club_id`),
   KEY `country` (`country`)
@@ -994,7 +995,7 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_project_team` (
   `import` TINYINT(1) NOT NULL DEFAULT '0' ,
   `published` TINYINT(1) NOT NULL DEFAULT '1' ,
   `cr_picture` varchar(255) DEFAULT NULL,
-  `finaltablerank` tinyint(1) NOT NULL DEFAULT '0',
+  `finaltablerank` INT(11) NOT NULL DEFAULT '0',
   `picturenotes` TEXT NULL DEFAULT NULL ,
   `cache_points_finally` SMALLINT(6) NOT NULL DEFAULT '0' ,
   `cache_neg_points_finally` SMALLINT(6) NOT NULL DEFAULT '0' ,
@@ -1179,6 +1180,7 @@ CREATE  TABLE IF NOT EXISTS `#__sportsmanagement_season_team_id` (
   `cr_logo_big` varchar(255) DEFAULT NULL,
   `kaderlink` VARCHAR( 250 ) NULL DEFAULT NULL,
   `teamname` VARCHAR( 75 ) NULL DEFAULT NULL,
+  `season_teamname` VARCHAR( 200 ) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) ,
   UNIQUE KEY `combi` (`team_id`,`season_id`) ,
   KEY `team_id` (`team_id`),
@@ -2285,3 +2287,118 @@ CREATE TABLE IF NOT EXISTS `#__sportsmanagement_log_entries` (
   `category` varchar(255) DEFAULT NULL,
   KEY `idx_category_date_priority` (`category`,`date`,`priority`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
+--
+-- Tabellenstruktur für Tabelle `#__sportsmanagement_playground_details`
+--
+CREATE TABLE IF NOT EXISTS `#__sportsmanagement_playground_details` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `playground_id` int(11) NOT NULL DEFAULT 0,
+  `date_von` date NOT NULL DEFAULT '0000-00-00',
+  `date_bis` date NOT NULL DEFAULT '0000-00-00',
+  `name_visitors` enum('NAME','VISITORS') NOT NULL DEFAULT 'VISITORS',
+  `notes` varchar(255) DEFAULT NULL,
+  `max_visitors` int(11) NOT NULL DEFAULT 0,
+  `picture` varchar(255) DEFAULT NULL,
+  `ordering` int(11) NOT NULL DEFAULT 0,
+  `checked_out` int(11) NOT NULL DEFAULT 0,
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(11) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1,
+  `cr_picture` varchar(255) DEFAULT NULL,
+  `timestamp_von` bigint(20) NOT NULL DEFAULT 0,
+  `timestamp_bis` bigint(20) NOT NULL DEFAULT 0,
+  `max_visitors_int` INT(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `history` (`playground_id`,`date_von`,`date_bis`,`name_visitors`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+
+--
+-- Tabellenstruktur für Tabelle `#__sportsmanagement_club_logos`
+--
+CREATE TABLE IF NOT EXISTS `#__sportsmanagement_club_logos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `club_id` int(11) NOT NULL DEFAULT 0,
+  `season_id` int(11) NOT NULL DEFAULT 1,
+  `logo_big` varchar(255) DEFAULT NULL,
+  `ordering` int(11) NOT NULL DEFAULT 0,
+  `checked_out` int(11) NOT NULL DEFAULT 0,
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(11) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `clubseason` (`club_id`,`season_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+--
+-- Tabellenstruktur für Tabelle `#__sportsmanagement_league_logos`
+--
+CREATE TABLE IF NOT EXISTS `#__sportsmanagement_league_logos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `league_id` int(11) NOT NULL DEFAULT 0,
+  `season_id` int(11) NOT NULL DEFAULT 1,
+  `logo_big` varchar(255) DEFAULT NULL,
+  `ordering` int(11) NOT NULL DEFAULT 0,
+  `checked_out` int(11) NOT NULL DEFAULT 0,
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(11) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `clubseason` (`league_id`,`season_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- Tabellenstruktur für Tabelle `#__sportsmanagement_playground_logos`
+--
+CREATE TABLE IF NOT EXISTS `#__sportsmanagement_playground_logos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `playground_id` int(11) NOT NULL DEFAULT 0,
+  `season_id` int(11) NOT NULL DEFAULT 1,
+  `logo_big` varchar(255) DEFAULT NULL,
+  `ordering` int(11) NOT NULL DEFAULT 0,
+  `checked_out` int(11) NOT NULL DEFAULT 0,
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(11) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `clubseason` (`playground_id`,`season_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

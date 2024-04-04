@@ -23,6 +23,23 @@ Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' fieldset -> ' . $this->fieldset
 
 switch ($this->fieldset)
 {
+	case 'playgroundnotic';
+	echo $this->loadTemplate('playgroundnotiz');
+	break;
+    
+    case 'clublogohistory';
+	echo $this->loadTemplate('clublogos');
+	break;
+    
+    
+     case 'playgroundlogohistory';
+	echo $this->loadTemplate('playgroundlogos');
+	break;
+    
+     case 'leaguelogohistory';
+	echo $this->loadTemplate('leaguelogos');
+	break;
+	
 	/**
 	 *
 	 * für die spielfeldpositionen

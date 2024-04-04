@@ -114,7 +114,7 @@ $this->dragable_group = 'data-dragable-group="none"';
 			$canEdit    = $this->user->authorise('core.edit', 'com_sportsmanagement');
 			$canCheckin = $this->user->authorise('core.manage', 'com_checkin') || $this->item->checked_out == $this->user->get('id') || $this->item->checked_out == 0;
 			$checked    = HTMLHelper::_('jgrid.checkedout', $this->count_i, $this->user->get('id'), $this->item->checked_out_time, 'projectreferees.', $canCheckin);
-
+$canChange  = $this->user->authorise('core.edit.state', 'com_sportsmanagement.projectreferee.' . $this->item->id) && $canCheckin;
 			$inputappend = '';
 			?>
             <tr class="row<?php echo $this->count_i % 2; ?>" <?php echo $this->dragable_group; ?>>
@@ -216,10 +216,28 @@ echo HTMLHelper::_('image','administrator/components/com_sportsmanagement/assets
 					?>
                 </td>
                 <td class="center">
+                <div class="btn-group">
+					<?php echo HTMLHelper::_('jgrid.published', $this->item->published, $this->count_i, 'projectreferees.', $canChange, 'cb'); ?>
+					<?php
+					/**  Create dropdown items and render the dropdown list. */
+					if ($canChange)
+					{
+						HTMLHelper::_('actionsdropdown.' . ((int) $this->item->published === 2 ? 'un' : '') . 'archive', 'cb' . $this->count_i, 'projectreferees');
+						HTMLHelper::_('actionsdropdown.' . ((int) $this->item->published === -2 ? 'un' : '') . 'trash', 'cb' . $this->count_i, 'projectreferees');
+						echo HTMLHelper::_('actionsdropdown.render', $this->escape($this->item->lastname));
+					}
+					?>
+                </div>
+            </td>
+                <!--
+                <td class="center">
 					<?php
 					echo HTMLHelper::_('grid.published', $this->item, $this->count_i, 'tick.png', 'publish_x.png', 'projectreferees.');
 					?>
                 </td>
+                -->
+                
+                
                 <td class="order" id="defaultdataorder">
 <?php
 echo $this->loadTemplate('data_order');
