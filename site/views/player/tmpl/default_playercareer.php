@@ -13,7 +13,17 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Filesystem\File;
 
+/**
+ * team_picture = bild aus dem projekt team
+ * project_picture = das projekt bild
+ * league_picture = das bild aus der liga
+ */
+
+//echo __FILE__.' - '__LINE__.'<pre>'.print_r($this->historyPlayer,true).'</pre>'; 
+ 
 ?>
 <div class="<?php echo $this->divclassrow; ?> table-responsive" id="defaultplayercareer">
 	<?php
@@ -95,7 +105,17 @@ use Joomla\CMS\Factory;
 						<?php
 						if ($this->config['show_project_logo'])
 						{
-							$station->project_picture = ($station->project_picture != '') ? $station->project_picture : sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+							//$station->project_picture = ($station->project_picture != '') ? $station->project_picture : sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+                            switch ( $station->project_picture )
+                            {
+                                case '':
+                                $station->project_picture = sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+                                break;
+                                case 'images/com_sportsmanagement/database/placeholders/placeholder_150.png':
+                                $station->project_picture = $station->league_picture;
+                                break;
+                            }
+                            
 							echo sportsmanagementHelperHtml::getBootstrapModalImage(
 								'playercareerproject' . $station->project_id . '-' . $station->team_id,
 								$station->project_picture,

@@ -63,7 +63,7 @@ $uri = Uri::getInstance();
     </script>
 <?PHP
 
-$version           = '4.0.27';
+$version           = '3.0.7';
 
 $minor = 0;
 $major = 0;

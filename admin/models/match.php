@@ -104,6 +104,33 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 	}
 
 
+public static function getMatchAllSingleData($project_id = 0)
+	{
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+        $result = array();
+        $query->clear();
+		$query->select('msi.round_id,msi.match_number,msi.projectteam1_id,msi.projectteam2_id,msi.match_id,msi.teamplayer1_id,msi.teamplayer2_id,msi.team1_result,msi.team2_result,r.roundcode');
+		$query->select('msi.team1_result_split,msi.team2_result_split');
+		$query->from('#__sportsmanagement_match_single AS msi');
+		$query->join('INNER', ' #__sportsmanagement_round AS r ON r.id = msi.round_id ');
+		$query->where('r.project_id = ' . (int) $project_id);
+
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->loadObjectList();
+		}
+		catch (Exception $e)
+		{
+			Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_($e->getMessage()), 'Error');
+		}
+return $result;
+
+	}
+
+
+	
 	/**
 	 * sportsmanagementModelMatch::getMatchSingleData()
 	 * 
@@ -261,7 +288,7 @@ break;
 
 		$query = Factory::getDbo()->getQuery(true);
 		$query->select('sp.id AS value');
-		$query->select('pl.firstname,pl.nickname,pl.lastname,pl.info,sp.jerseynumber,pl.ordering');
+		$query->select('pl.firstname,pl.nickname,pl.lastname,pl.info,sp.jerseynumber,pl.ordering,pl.knvbnr');
 		$query->select('pos.name AS positionname');
 		$query->from('#__sportsmanagement_person AS pl');
 		$query->join('INNER', ' #__sportsmanagement_season_team_person_id AS sp ON sp.person_id = pl.id ');
@@ -553,7 +580,7 @@ break;
 		{
 			case 'player':
 				$id = 'teamplayer_id';
-				$query->select('mp.' . $id . ' AS tpid,mp.' . $id . ',mp.project_position_id,mp.match_id,mp.id as update_id');
+				$query->select('mp.' . $id . ' AS tpid,mp.' . $id . ',mp.project_position_id,mp.match_id,mp.id as update_id,mp.trikot_number');
 				break;
 			case 'staff':
 				$id = 'team_staff_id';
@@ -563,9 +590,9 @@ break;
 
 		$query->select('pt.id as projectteam_id');
 		$query->select('sp.id AS value');
-		$query->select('pl.firstname,pl.nickname,pl.lastname');
+		$query->select('pl.firstname,pl.nickname,pl.lastname,pl.knvbnr');
 		$query->select('pos.name AS positionname');
-		$query->select('ppos.position_id,ppos.id AS pposid');
+		$query->select('ppos.position_id,ppos.id AS pposid, mp.ordering as playerordering');
 		$query->from('#__sportsmanagement_match_' . $table . ' AS mp');
 		$query->join('INNER', '#__sportsmanagement_season_team_person_id AS sp ON mp.' . $id . ' = sp.id');
 		$query->join('INNER', '#__sportsmanagement_season_team_id AS st ON st.team_id = sp.team_id ');
@@ -2728,9 +2755,10 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 
 		if ((int) $data['in_out_time'] > (int) $data['projecttime'])
 		{
+			/** erst einmal ausgeschaltet
 			$this->setError(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_SUBST_TIME_OVER_PROJECTTIME', $data['in_out_time'], $data['projecttime']));
-
 			return false;
+			*/
 		}
 
 		if (!($data['matchid']))
@@ -2988,15 +3016,15 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 		if (empty($data['notes']))
 		{
 			Log::add(Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_COMMENT_NO_COMMENT'), Log::ERROR, 'jsmerror');
-
 			return false;
 		}
 
 		if ((int) $data['event_time'] > (int) $data['projecttime'])
 		{
+			/** erst einmal ausgeschaltet
 			Log::add(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_COMMENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime']), Log::ERROR, 'jsmerror');
-
 			return false;
+			*/
 		}
 
 		$db                = Factory::getDbo();
@@ -3068,12 +3096,14 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 
 		if ($data['useeventtime'])
 		{
+			/** erst einmal ausgeschaltet
 			if ((int) $data['event_time'] > (int) $data['projecttime'])
 			{
 				Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' ' . Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime'])), Log::ERROR, 'jsmerror');
 				//$this->setError(Text::sprintf('COM_SPORTSMANAGEMENT_ADMIN_MATCH_MODEL_EVENT_TIME_OVER_PROJECTTIME', $data['event_time'], $data['projecttime']));
 				return false;
 			}
+			*/
 		}
 
 		$db    = Factory::getDbo();
@@ -3668,7 +3698,7 @@ $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAI
 
 		// From the table
 		$query->from('#__sportsmanagement_person');
-		$query->where('firstname LIKE ' . $db->Quote('' . trim($firstname) . ''));
+		$query->where('firstname LIKE ' . $db->Quote('' . trim($firstname) . '') );
 		$query->where('lastname LIKE ' . $db->Quote('' . trim($lastname) . ''));
 		$db->setQuery($query);
 

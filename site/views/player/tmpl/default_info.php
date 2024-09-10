@@ -6,7 +6,7 @@
  * @subpackage player
  * @file       default_info.php
  * @author     diddipoeler, stony, svdoldie und donclumsy (diddipoeler@gmx.de)
- * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
+ * @copyright  Copyright: © 2013-2023 Fussball in Europa https://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -14,6 +14,10 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+
+//echo '<pre>'.print_r($this->person,true).'</pre>';
+//echo '<pre>'.print_r($this->teamPlayer,true).'</pre>';
 
 ?>
 <!-- person data START -->
@@ -33,6 +37,13 @@ use Joomla\CMS\Factory;
 			{
 				$picture = $this->person->picture;
 			}
+            
+            /**
+			if ( !File::exists(Uri::root() .$picture) )
+			{
+				$picture = sportsmanagementHelper::getDefaultPlaceholder("player");
+			}
+            */
 
 			echo sportsmanagementHelperHtml::getBootstrapModalImage(
 				'playerinfo' . $this->person->id,
@@ -280,6 +291,55 @@ use Joomla\CMS\Factory;
 		}
 
 
+ 
+if (($this->person->twitter != "") && $this->config['show_person_website'])
+		{
+			?>
+            <address>
+                <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_EXT_PERSON_TWITTER'); ?></strong>
+				<?php
+				echo HTMLHelper::_('link', $this->person->twitter, $this->person->twitter, array('target' => '_blank'));
+				?>
+            </address>
+			<?php
+		}
+
+if (($this->person->facebook != "") && $this->config['show_person_website'])
+		{
+			?>
+            <address>
+                <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_EXT_PERSON_FACEBOOK'); ?></strong>
+				<?php
+				echo HTMLHelper::_('link', $this->person->facebook, $this->person->facebook, array('target' => '_blank'));
+				?>
+            </address>
+			<?php
+		}
+        
+if (($this->person->instagram != "") && $this->config['show_person_website'])
+		{
+			?>
+            <address>
+                <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_EXT_PERSON_INSTAGRAM'); ?></strong>
+				<?php
+				echo HTMLHelper::_('link', $this->person->instagram, $this->person->instagram, array('target' => '_blank'));
+				?>
+            </address>
+			<?php
+		}
+
+if (($this->person->linkedin != "") && $this->config['show_person_website'])
+		{
+			?>
+            <address>
+                <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_EXT_PERSON_LINKEDIN'); ?></strong>
+				<?php
+				echo HTMLHelper::_('link', $this->person->linkedin, $this->person->linkedin, array('target' => '_blank'));
+				?>
+            </address>
+			<?php
+		}        
+
 		if (($this->person->height > 0) && $this->config['show_person_height'])
 		{
 			?>
@@ -310,6 +370,7 @@ use Joomla\CMS\Factory;
 		)
 		{
 			?>
+            
             <address>
                 <strong><?php echo Text::_('COM_SPORTSMANAGEMENT_PERSON_NUMBER'); ?></strong>
 				<?php

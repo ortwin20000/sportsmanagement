@@ -13,6 +13,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Filesystem\File;
 
 $picture_path_sport_type_name = 'images/com_sportsmanagement/database/events';
 $colspan                      = 1;
@@ -225,7 +227,17 @@ $this->inoutstat->playedtime = 0;
 						<?php
 						if ($this->config['show_project_logo'])
 						{
-							$player_hist->project_picture = ($player_hist->project_picture != '') ? $player_hist->project_picture : sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+							//$player_hist->project_picture = ($player_hist->project_picture != '') ? $player_hist->project_picture : sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+                            switch ( $player_hist->project_picture )
+                            {
+                                case '':
+                                $player_hist->project_picture = sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+                                break;
+                                case 'images/com_sportsmanagement/database/placeholders/placeholder_150.png':
+                                $player_hist->project_picture = $player_hist->league_picture;
+                                break;
+                            }
+                            
 							echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstatsproject' . $player_hist->project_id . '-' . $player_hist->team_id,
 								$player_hist->project_picture,
 								$player_hist->project_name,
@@ -260,6 +272,8 @@ $this->inoutstat->playedtime = 0;
 							if ($this->config['show_team_picture'])
 							{
 								$player_hist->team_picture = ($player_hist->team_picture != '') ? $player_hist->team_picture : sportsmanagementHelper::getDefaultPlaceholder("team");
+            
+                                
 								echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstatsteampicture' . $player_hist->project_id . '-' . $player_hist->team_id,
 									$player_hist->team_picture,
 									$player_hist->team_name,
@@ -292,6 +306,11 @@ $this->inoutstat->playedtime = 0;
                         <td id="show_plstats_ppicture">
 							<?PHP
 							$player_hist->season_picture = ($player_hist->season_picture != '') ? $player_hist->season_picture : sportsmanagementHelper::getDefaultPlaceholder("team");
+            if ( !File::exists(Uri::root() .$player_hist->season_picture) )
+			{
+				$player_hist->season_picture = sportsmanagementHelper::getDefaultPlaceholder("player");
+			}
+                            
 							echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstats' . $player_hist->project_id . '-' . $player_hist->team_id,
 								$player_hist->season_picture,
 								$player_hist->team_name,

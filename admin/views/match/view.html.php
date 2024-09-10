@@ -53,11 +53,26 @@ class sportsmanagementViewMatch extends sportsmanagementView
 		$this->form   = $this->get('Form');
 		$this->item   = $this->get('Item');
 		$this->script = $this->get('Script');
+        $this->match                = $this->model->getMatchData($this->item->id);
 
 		$mdlProject      = BaseDatabaseModel::getInstance("Project", "sportsmanagementModel");
 		$this->projectws = $mdlProject->getProject($this->project_id);
 		$this->eventsprojecttime = $this->projectws->game_regular_time;
-		$this->match                = $this->model->getMatchData($this->item->id);
+        /** nachspielzeit */
+        $this->eventsprojecttime += $this->match->overtime;
+		if ( $this->projectws->allow_add_time )
+		{
+		$this->eventsprojecttime += $this->projectws->add_time;
+        /** nachspielzeit */
+        $this->eventsprojecttime += $this->match->overtime;	
+		}
+		
+		/**
+		$this->app->enqueueMessage(Text::_('projectws<pre>'.print_r($this->projectws,true).'</pre>' ), '');
+		$this->app->enqueueMessage(Text::_('eventsprojecttime<pre>'.print_r($this->eventsprojecttime,true).'</pre>' ), '');
+		*/
+		
+		
         
         if($this->match) {
             $this->match->team1_legs = $this->match->team1_legs ? $this->match->team1_legs : 0;

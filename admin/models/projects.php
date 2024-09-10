@@ -127,6 +127,8 @@ class sportsmanagementModelProjects extends JSMModelList
 		$this->setState('filter.search_agegroup', $this->getUserStateFromRequest($this->context . '.filter.search_agegroup', 'filter_search_agegroup', ''));
 		$this->setState('filter.unique_id', $this->getUserStateFromRequest($this->context . '.filter.unique_id', 'filter_unique_id', ''));
 
+		$this->setState('filter.search_associations_leagues', $this->getUserStateFromRequest($this->context . '.filter.search_associations_leagues', 'filter_search_associations_leagues', ''));
+
 		$this->setState('filter.show_notassign', $this->getUserStateFromRequest($this->context . '.filter.show_notassign', 'filter_show_notassign', ''));
 
 
@@ -239,6 +241,12 @@ Factory::getApplication()->setUserState( "$this->jsmoption.projects_search_leagu
 			$this->jsmquery->join('INNER', '#__sportsmanagement_user_extra_fields as ef ON ef.id = ev.field_id');
 			$this->jsmquery->where('ef.id = ' . $this->getState('filter.userfields'));
 		}
+
+		if ($this->getState('filter.search_associations_leagues'))
+		{
+			$this->jsmquery->where('l.associations = ' . $this->getState('filter.search_associations_leagues'));
+		}
+		
 
 		if ($this->getState('filter.search') )
 		{

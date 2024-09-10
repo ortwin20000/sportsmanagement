@@ -17,6 +17,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Filesystem\File;
 
 if (PluginHelper::isEnabled('system', 'jsm_bootstrap'))
 {
@@ -162,13 +163,11 @@ if (count($this->stafflist) > 0)
 						{
 							$picture = $row->ppic;
 						}
-
-						/*
-				 if ( !file_exists( $picture ) )
-				 {
-				  $picture = sportsmanagementHelper::getDefaultPlaceholder("player");
-				 }
-						*/
+if ( !File::exists(Uri::root() .$picture) )
+							{
+								$picture = sportsmanagementHelper::getDefaultPlaceholder("player");
+							}
+						
 						?>
                         <td class="" width="" nowrap="nowrap">
 							<?php
