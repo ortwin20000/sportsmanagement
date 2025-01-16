@@ -173,18 +173,21 @@ class sportsmanagementModelRosteralltime extends ListModel
 
 	}
 
+
 	/**
 	 * sportsmanagementModelRosteralltime::getPlayerPosition()
-	 *
+	 * 
+	 * @param integer $sports_type_id
 	 * @return
 	 */
-	function getPlayerPosition()
+	function getPlayerPosition($sports_type_id = 1)
 	{
         $this->jsmquery->clear();
 		$this->jsmquery->select('po.*');
 		$this->jsmquery->from('#__sportsmanagement_position as po');
-		$this->jsmquery->where('po.parent_id = 0 ');
+		$this->jsmquery->where('po.parent_id != 0 ');
 		$this->jsmquery->where('po.persontype = 1 ');
+        $this->jsmquery->where('po.sports_type_id = '.$sports_type_id);
 
 try
 {
@@ -193,8 +196,8 @@ return $this->jsmdb->loadObjectList();
 }
 catch (RuntimeException $e)
 {
-$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
-$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'Error');
+$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'Error');
 $this->jsmapp->enqueueMessage(__METHOD__ . ' ' . __LINE__ . '<pre>' . print_r($this->jsmquery->dump(), true) . '</pre>', 'Error');
 return false;
 }
@@ -318,7 +321,7 @@ return false;
         $this->jsmquery->clear();
 		$this->jsmquery->select('pr.firstname,pr.nickname,pr.lastname,pr.country,pr.birthday,pr.deathday,pr.id AS pid,pr.id AS person_id,pr.picture AS ppic');
 		$this->jsmquery->select('pr.suspension AS suspension,pr.away AS away,pr.injury AS injury,pr.picture AS ppic,CONCAT_WS(\':\',pr.id,pr.alias) AS person_slug');
-		$this->jsmquery->select('tp.id AS playerid,tp.id AS season_team_person_id,tp.jerseynumber AS position_number,tp.notes AS description,tp.market_value AS market_value,tp.picture');
+		$this->jsmquery->select('tp.id AS playerid,tp.id AS season_team_person_id,tp.jerseynumber AS position_number,tp.notes AS description,tp.market_value AS market_value,tp.market_text AS market_text,tp.picture');
 		$this->jsmquery->select('st.id AS season_team_id');
 		$this->jsmquery->select('pt.project_id AS project_id');
 		$this->jsmquery->select('pos.name AS position');

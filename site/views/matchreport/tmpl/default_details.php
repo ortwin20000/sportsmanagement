@@ -247,7 +247,7 @@ use Joomla\CMS\Factory;
 
 							if (!$first)
 							{
-								echo ', ';
+								echo '<br> ';
 							}
 
 							$referee_name = sportsmanagementHelper::formatName(null, $referee->firstname, $referee->nickname, $referee->lastname, $this->config["name_format"]);
@@ -255,7 +255,7 @@ use Joomla\CMS\Factory;
 
 							if ($this->config["show_referee_position"] == 1)
 							{
-								$link .= ' (' . $referee->position_name . ')';
+								$link .= ' (' . Text::_($referee->position_name) . ')';
 							}
 
 							echo $link;

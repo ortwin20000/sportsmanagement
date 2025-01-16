@@ -40,9 +40,6 @@ class sportsmanagementViewjlextindividualsportes extends sportsmanagementView
 
 if ( Factory::getConfig()->get('debug') )
 {  
-// QUERY_STRING    
-//Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' id' . '<pre>'.print_r($this->jinput,true).'</pre>' ), Log::NOTICE, 'jsmerror');
-
 Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' pid' . $this->jinput->getInt('pid', 0)), Log::NOTICE, 'jsmerror');    
 Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' id' . $this->jinput->getInt('id', 0)), Log::NOTICE, 'jsmerror');
 Log::add(Text::_(__METHOD__ . ' ' . __LINE__ . ' team1' . $this->jinput->getInt('team1', 0)), Log::NOTICE, 'jsmerror');
@@ -728,10 +725,41 @@ Double against Double
 		$this->projectws   = $mdlProject->getProject($project_id);
 		$mdlRound   = BaseDatabaseModel::getInstance("Round", "sportsmanagementModel");
 		$this->roundws    = $mdlRound->getRound($this->rid );
+        
+        $mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
 
 		$this->model->checkGames($this->projectws , $this->match_id, $this->rid , $this->projectteam1_id, $this->projectteam2_id);
 
-		$this->matches    = $this->get('Items');
+		//$this->matches    = $this->get('Items');
+        $this->singlematches = $mdlMatch::getSingleMatchDatas($this->match_id);
+        
+        /** es sind keine spiele vorhanden */
+        if ( !$this->singlematches && $this->projectws->sport_type_name == 'COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD' )
+        {
+            //$mdlMatch = BaseDatabaseModel::getInstance("Match", "sportsmanagementModel");
+            $starters_home    = $mdlMatch::getMatchPersons($this->projectteam1_id, 0, $this->match_id, 'player');
+            $starters_away    = $mdlMatch::getMatchPersons($this->projectteam2_id, 0, $this->match_id, 'player');
+
+/** erst einmal 5 spiele */
+for ($a=1; $a < 6;$a++)
+{
+foreach ( $starters_home as $keyhome => $valuehome ) if ( $valuehome->trikot_number == $a)
+    {
+    foreach ( $starters_away as $keyaway => $valueaway ) if ( $valueaway->trikot_number == $a)
+    {
+    $insertsinglematch = $mdlMatch::insertSingleMatchData($this->match_id,$a,$valuehome->teamplayer_id, $valueaway->teamplayer_id,$valuehome->projectteam_id, $valueaway->projectteam_id,$this->rid);    
+
+        
+    }    
+        
+    }
+
+}
+
+        }
+        
+        $this->matches    = $this->get('Items');
+        
 		$this->total      = $this->get('Total');
 		$this->pagination = $this->get('Pagination');
 

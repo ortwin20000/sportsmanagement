@@ -19,6 +19,7 @@ use Joomla\CMS\Filesystem\File;
 $picture_path_sport_type_name = 'images/com_sportsmanagement/database/events';
 $colspan                      = 1;
 $this->LeaguehistoryPlayer = array();
+$this->TeamhistoryPlayer = array();
 
 ?>
 <div class="<?php echo $this->divclassrow; ?> table-responsive" id="playerstats">
@@ -234,7 +235,8 @@ $this->inoutstat->playedtime = 0;
                                 $player_hist->project_picture = sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
                                 break;
                                 case 'images/com_sportsmanagement/database/placeholders/placeholder_150.png':
-                                $player_hist->project_picture = $player_hist->league_picture;
+                                case 'images/com_sportsmanagement/database/placeholders/placeholder_450_2.png':
+                                $player_hist->project_picture = $player_hist->league_picture != '' ? $player_hist->league_picture : 'images/com_sportsmanagement/database/placeholders/placeholder_450_2.png';
                                 break;
                             }
                             
@@ -306,11 +308,12 @@ $this->inoutstat->playedtime = 0;
                         <td id="show_plstats_ppicture">
 							<?PHP
 							$player_hist->season_picture = ($player_hist->season_picture != '') ? $player_hist->season_picture : sportsmanagementHelper::getDefaultPlaceholder("team");
+                            /**
             if ( !File::exists(Uri::root() .$player_hist->season_picture) )
 			{
 				$player_hist->season_picture = sportsmanagementHelper::getDefaultPlaceholder("player");
 			}
-                            
+             */
 							echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstats' . $player_hist->project_id . '-' . $player_hist->team_id,
 								$player_hist->season_picture,
 								$player_hist->team_name,
@@ -323,12 +326,11 @@ $this->inoutstat->playedtime = 0;
                         </td>
 						<?PHP
 					}
-
+/** history der liga */
 if ( !array_key_exists( $player_hist->league_id, $this->LeaguehistoryPlayer ) )
 {              
 $this->LeaguehistoryPlayer[$player_hist->league_id] = array();              
 }              
-              
 if ( !array_key_exists( 'played', $this->LeaguehistoryPlayer[$player_hist->league_id] ) )
 {              
 $this->LeaguehistoryPlayer[$player_hist->league_id]['played'] = 0;              
@@ -350,16 +352,56 @@ if ( !array_key_exists( 'playedtime', $this->LeaguehistoryPlayer[$player_hist->l
 $this->LeaguehistoryPlayer[$player_hist->league_id]['playedtime'] = 0;              
 }               
               
+$this->LeaguehistoryPlayer[$player_hist->league_id]['league'] = $player_hist->league_name;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['project_picture'] = $player_hist->project_picture;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['played'] += $this->inoutstat->played;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['started'] += $this->inoutstat->started;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['in'] += $this->inoutstat->sub_in;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['out'] += $this->inoutstat->sub_out;
+$this->LeaguehistoryPlayer[$player_hist->league_id]['playedtime'] += $timePlayed;
+
+/** history der mannschaften*/
+if ( !array_key_exists( $player_hist->team_id, $this->TeamhistoryPlayer ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id] = array();              
+}              
+if ( !array_key_exists( 'played', $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id]['played'] = 0;              
+}
+if ( !array_key_exists( 'started', $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id]['started'] = 0;              
+} 
+if ( !array_key_exists( 'in', $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id]['in'] = 0;              
+} 
+if ( !array_key_exists( 'out', $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id]['out'] = 0;              
+} 
+if ( !array_key_exists( 'playedtime', $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id]['playedtime'] = 0;              
+}               
               
-              
-              
-              
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['league'] = $player_hist->league_name;
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['played'] += $this->inoutstat->played;
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['started'] += $this->inoutstat->started;
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['in'] += $this->inoutstat->sub_in;
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['out'] += $this->inoutstat->sub_out;
-              $this->LeaguehistoryPlayer[$player_hist->league_id]['playedtime'] += $timePlayed;
+$this->TeamhistoryPlayer[$player_hist->team_id]['team_name'] = $player_hist->team_name;
+
+$this->TeamhistoryPlayer[$player_hist->team_id]['team_picture'] = $player_hist->team_picture;
+$this->TeamhistoryPlayer[$player_hist->team_id]['club_picture'] = $player_hist->club_picture;
+
+$this->TeamhistoryPlayer[$player_hist->team_id]['played'] += $this->inoutstat->played;
+$this->TeamhistoryPlayer[$player_hist->team_id]['started'] += $this->inoutstat->started;
+$this->TeamhistoryPlayer[$player_hist->team_id]['in'] += $this->inoutstat->sub_in;
+$this->TeamhistoryPlayer[$player_hist->team_id]['out'] += $this->inoutstat->sub_out;
+$this->TeamhistoryPlayer[$player_hist->team_id]['playedtime'] += $timePlayed;
+
+
+
+
+
+
               
 					?>
                     <!-- Player stats History - played start -->
@@ -422,12 +464,19 @@ $this->LeaguehistoryPlayer[$player_hist->league_id]['playedtime'] = 0;
 							{
 								$stat = $player->getPlayerEvents($eventtype->id, $player_hist->project_id, $player_hist->ptid, $this->config['show_events_as_sum'] );
                                 
-                                
+/** history der liga */                                
 if ( !array_key_exists( $eventtype->name, $this->LeaguehistoryPlayer[$player_hist->league_id] ) )
 {              
 $this->LeaguehistoryPlayer[$player_hist->league_id][$eventtype->name] = 0;              
 }                                
-                              $this->LeaguehistoryPlayer[$player_hist->league_id][$eventtype->name] += $stat;
+$this->LeaguehistoryPlayer[$player_hist->league_id][$eventtype->name] += $stat;
+/** history der mannschaften*/
+if ( !array_key_exists( $eventtype->name, $this->TeamhistoryPlayer[$player_hist->team_id] ) )
+{              
+$this->TeamhistoryPlayer[$player_hist->team_id][$eventtype->name] = 0;              
+}                                
+$this->TeamhistoryPlayer[$player_hist->team_id][$eventtype->name] += $stat;
+
 								?>
 
                                 <td ptid="<?php echo $player_hist->ptid; ?>" id="<?php echo $eventtype->id; ?>"
@@ -646,13 +695,25 @@ if (count($this->AllEvents))
               
 </tr>
 </thead>              
-<?php              
+<?php       
+/** history der liga */       
 foreach ($this->LeaguehistoryPlayer as $player_hist_league)
 {
 ?>
 <tr class="">
 <td class="td_l" nowrap="nowrap">
 <?php
+if ($this->config['show_project_logo'])
+{
+echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstatsproject' . $player_hist_league['league'] ,
+				$player_hist_league['project_picture'],
+				$player_hist_league['league'],
+				$this->config['project_logo_height'],
+				'',
+				$this->modalwidth,
+				$this->modalheight,
+				$this->overallconfig['use_jquery_modal']);
+						}
 echo $player_hist_league['league'];
 ?>                    
 </td>
@@ -690,25 +751,224 @@ echo $player_hist_league['playedtime'];
 
 
 if (count($this->AllEvents))
-				{
-					foreach ($this->AllEvents as $eventtype)
-					{
-						?>
-                        <td class="td_c">
-							<?php
-							echo $player_hist_league[$eventtype->name];
-							?>
-                        </td>
-						<?php
-					}
-				}
+{
+foreach ($this->AllEvents as $eventtype)
+{
+?>
+<td class="td_c">
+<?php
+echo $player_hist_league[$eventtype->name];
+?>
+</td>
+<?php
+}
+}
 ?>
 </tr>
 <?php
 }
 ?>              
               
-</table>              
+</table> 
+<table class="<?PHP echo $this->config['player_table_class']; ?>" id="playerstatsteamtable">    
+<thead>
+        <tr class="sectiontableheader">
+            <th class="td_l" class="nowrap"><?php echo Text::_('COM_SPORTSMANAGEMENT_PERSON_TEAM'); ?></th>              
+            <th class="td_c">
+				<?php
+				$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_PLAYED');
+				$picture    = $picture_path_sport_type_name . '/played.png';
+				if (!curl_init($picture))
+				{
+					$picture = sportsmanagementHelper::getDefaultPlaceholder("icon");
+				}
+
+				echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
+				?></th>
+                
+                <?php
+                if ($this->config['show_substitution_stats'])
+			{
+                if ((isset($this->overallconfig['use_jl_substitution'])) && ($this->overallconfig['use_jl_substitution'] == 1))
+				{
+                ?>
+                <th class="td_c"><?php
+						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_STARTROSTER');
+						$picture    = $picture_path_sport_type_name . '/startroster.png';
+						if (!curl_init($picture))
+						{
+							$picture = sportsmanagementHelper::getDefaultPlaceholder("icon");
+						}
+						echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
+						?></th>
+                    <th class="td_c"><?php
+						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_IN');
+						$picture    = $picture_path_sport_type_name . '/in.png';
+						if (!curl_init($picture))
+						{
+							$picture = sportsmanagementHelper::getDefaultPlaceholder("icon");
+						}
+						echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
+						?></th>
+                    <th class="td_c"><?php
+						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PERSON_OUT');
+						$picture    = $picture_path_sport_type_name . '/out.png';
+						if (!curl_init($picture))
+						{
+							$picture = sportsmanagementHelper::getDefaultPlaceholder("icon");
+						}
+						echo HTMLHelper::image($picture, $imageTitle, array(' title' => $imageTitle));
+						?></th>
+
+                    <th class="td_c"><?php
+						$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PLAYED_TIME');
+						$picture    = $picture_path_sport_type_name . '/uhr.png';
+						if (!curl_init($picture))
+						{
+							$picture = sportsmanagementHelper::getDefaultPlaceholder("icon");
+						}
+						echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'height' => 11));
+						?></th>
+                        
+                        
+                        
+<?php
+}
+}
+if (count($this->AllEvents))
+				{
+					foreach ($this->AllEvents as $eventtype)
+					{
+						?>
+                        <th class="td_c"><?php
+							$iconPath = $eventtype->icon;
+							if (!strpos(" " . $iconPath, "/"))
+							{
+								$iconPath = "images/com_sportsmanagement/database/events/" . $iconPath;
+							}
+							if (!curl_init($iconPath))
+							{
+								$iconPath = sportsmanagementHelper::getDefaultPlaceholder("icon");
+							}
+
+							echo HTMLHelper::image($iconPath,
+								Text::_($eventtype->name),
+								array("title"  => Text::_($eventtype->name),
+								      "align"  => "top",
+								      'width'  => 20,
+								      "hspace" => "2"));
+							?></th>
+						<?php
+					}
+				}
+?>
               
+</tr>
+</thead>       
+
+
+        
+<?php
+/** history der mannschaften */
+foreach ($this->TeamhistoryPlayer as $player_hist_team)
+{
+?>
+<tr class="">
+<td class="td_l" nowrap="nowrap">
+<?php
+
+	if ($this->config['show_team_logo'])
+							{
+								$player_hist_team['club_picture'] = ($player_hist_team['club_picture'] != '') ? $player_hist_team['club_picture'] : sportsmanagementHelper::getDefaultPlaceholder("clublogobig");
+								echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstatsteam' . $player_hist_team['team_name'],
+									$player_hist_team['club_picture'],
+									$player_hist_team['team_name'],
+									$this->config['team_logo_height'],
+									'',
+									$this->modalwidth,
+									$this->modalheight,
+									$this->overallconfig['use_jquery_modal']);
+							}
+
+							if ($this->config['show_team_picture'])
+							{
+								$player_hist_team['team_picture'] = ($player_hist_team['team_picture'] != '') ? $player_hist_team['team_picture'] : sportsmanagementHelper::getDefaultPlaceholder("team");
+            
+                                
+								echo sportsmanagementHelperHtml::getBootstrapModalImage('playerstatsteampicture' . $player_hist_team['team_name'],
+									$player_hist_team['team_picture'],
+									$player_hist_team['team_name'],
+									$this->config['team_picture_height'],
+									'',
+									$this->modalwidth,
+									$this->modalheight,
+									$this->overallconfig['use_jquery_modal']);
+
+							}
+
+
+
+
+
+
+
+
+
+echo $player_hist_team['team_name'];
+?>                    
+</td>
+<td class="td_l" nowrap="nowrap">
+<?php
+echo $player_hist_team['played'];
+?>                    
+</td>
+<?php
+if ($this->config['show_substitution_stats'])
+{
+?>
+<td class="td_l" nowrap="nowrap">
+<?php
+echo $player_hist_team['started'];
+?>                    
+</td>
+<td class="td_l" nowrap="nowrap">
+<?php
+echo $player_hist_team['in'];
+?>                    
+</td>
+<td class="td_l" nowrap="nowrap">
+<?php
+echo $player_hist_team['out'];
+?>                    
+</td>
+<td class="td_l" nowrap="nowrap">
+<?php
+echo $player_hist_team['playedtime'];
+?>                    
+</td>
+<?php
+}
+
+
+if (count($this->AllEvents))
+{
+foreach ($this->AllEvents as $eventtype)
+{
+?>
+<td class="td_c">
+<?php
+echo $player_hist_team[$eventtype->name];
+?>
+</td>
+<?php
+}
+}
+?>
+</tr>
+<?php
+}
+
+?>      
+</table>        
 </div>
 <!-- Player stats History END -->

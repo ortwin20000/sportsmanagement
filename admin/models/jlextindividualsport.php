@@ -47,6 +47,10 @@ class sportsmanagementModeljlextindividualsport extends JSMModelAdmin
 		$this->jsmapp    = Factory::getApplication();
 		$this->jsmjinput = $this->jsmapp->input;
 		$this->jsmoption = $this->jsmjinput->getCmd('option');
+
+		$this->jsmdate = Factory::getDate();
+		$this->jsmuser = Factory::getUser();
+		
 	}
 
 	/**
@@ -246,7 +250,7 @@ return false;
         $projectteam1_id = $post['projectteam1_id'];
         $projectteam2_id = $post['projectteam2_id'];
 
-if ( $this->joomlaconfig->get('debug') )
+if ( Factory::getConfig()->get('debug') )
 {        
         $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($pks,true).'</pre>'), 'error');
         $this->jsmapp->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . '<pre>'.print_r($post,true).'</pre>'), 'error');
@@ -320,6 +324,11 @@ foreach ( $post['team1_result_split'.$pks[$x]] as $key => $value )
 				}
 			}
             $rowmatch->match_number       = $post['match_number' . $pks[$x]];
+            $rowmatch->teamplayer1_id       = $post['teamplayer1_id' . $pks[$x]];
+            $rowmatch->teamplayer2_id       = $post['teamplayer2_id' . $pks[$x]];
+            $rowmatch->match_type       = $post['match_type' . $pks[$x]];
+            $rowmatch->round_id       = $post['rid'];
+            
 
           $rowmatch->team1_result_split = implode(";", $post['team1_result_split' . $pks[$x]]);
 			$rowmatch->team2_result_split = implode(";", $post['team2_result_split' . $pks[$x]]);

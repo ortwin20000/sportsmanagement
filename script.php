@@ -11,6 +11,7 @@
 
 /**
  * https://www.freeflagicons.com/
+ * https://www.techfry.com/joomla/adding-a-modal-to-joomla-component
 */
 
 
@@ -140,8 +141,8 @@ class com_sportsmanagementInstallerScript
 	 * The release value would ideally be extracted from <version> in the manifest file,
 	 * but at preflight, the manifest file exists only in the uploaded temp folder.
 	 */
-	private $release = '4.21.00';
-    private $old_release = '4.20.00';
+	private $release = '4.22.00';
+    private $old_release = '4.21.00';
 
 	// $language_update = '';
 
@@ -479,10 +480,13 @@ echo '<p> alte Version ' .  $this->oldRelease . '</p>';
 		}
 
 				?>
-		
+
+<a href="index.php?option=com_sportsmanagement/" target="">		
 		<img
 			src="../administrator/components/com_sportsmanagement/assets/icons/logo_transparent.png"
 			alt="SportsManagement" title="SportsManagement" width="180"/>
+            
+            </a>
 		<?php
 		$j = new Version;
 		echo '<h1>' . sprintf(Text::_('COM_SPORTSMANAGEMENT_JOOMLA_VERSION'), $j->getShortVersion()) . '</h1>';
@@ -508,6 +512,10 @@ Like this extension?
 		<img
 			src="../media/com_sportsmanagement/jl_images/Compat_icon_4_0_long.png"
 			alt="JSM Sports Management" title="JSM Sports Management" width="auto"/>
+        <img
+			src="../media/com_sportsmanagement/jl_images/Compat_icon_5_0_long.png"
+			alt="JSM Sports Management" title="JSM Sports Management" width="auto"/>    
+            
 			<?php
 			echo '<p>' . Text::_('COM_SPORTSMANAGEMENT_PREFLIGHT_' . $route . '_TEXT') . $this->release . '</p>';
 
@@ -745,7 +753,7 @@ $result = Factory::getDbo()->updateObject('#__extensions', $object, 'extension_i
 			{
 				case "install":
 					echo HTMLHelper::_('bootstrap.' . $this->addPanel, 'ID-Tabs-Group', 'tab2_id', Text::_(' Modules'));
-					self::installModules($adapter);
+					//self::installModules($adapter);
 					echo HTMLHelper::_('bootstrap.' . $this->endPanel);
 
 					echo HTMLHelper::_('bootstrap.' . $this->addPanel, 'ID-Tabs-Group', 'tab3_id', Text::_(' Plugins'));
@@ -767,7 +775,7 @@ $result = Factory::getDbo()->updateObject('#__extensions', $object, 'extension_i
 						break;
 				case "update":
 					echo HTMLHelper::_('bootstrap.' . $this->addPanel, 'ID-Tabs-Group', 'tab2_id', Text::_(' Modules'));
-					self::installModules($adapter);
+					//self::installModules($adapter);
 					echo HTMLHelper::_('bootstrap.' . $this->endPanel);
 
 					echo HTMLHelper::_('bootstrap.' . $this->addPanel, 'ID-Tabs-Group', 'tab3_id', Text::_(' Plugins'));
@@ -793,6 +801,9 @@ $result = Factory::getDbo()->updateObject('#__extensions', $object, 'extension_i
 
 				echo HTMLHelper::_('bootstrap.' . $this->endPane, 'ID-Tabs-Group');
 		}
+
+/** direkt zur anwendung */
+Factory::getApplication()->Redirect('index.php?option=com_sportsmanagement');
 
 	}
 

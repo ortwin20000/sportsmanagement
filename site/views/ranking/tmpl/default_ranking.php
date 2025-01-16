@@ -11,7 +11,28 @@
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\Registry\Registry;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 //echo '<pre>'.print_r($this->previousgames,true).'</pre>';
+
+
+/** pdf download */
+if ( $this->config['show_button_download_pdf'] )
+{
+?>
+<button onclick="javascript:downpdf('rankingall')"><?php echo HTMLHelper::_('image', 'media/com_sportsmanagement/jl_images/pdf.png', Text::_('COM_SPORTSMANAGEMENT_FES_OVERALL_PARAM_LABEL_SHOW_BUTTON_DOWNLOAD_PDF'), array(' width' => 40));?>  PDF</button>
+<?php
+}
+
+/** excel download */
+if ( $this->config['show_button_download_excel'] )
+{
+?>
+<button onclick="javascript:downexcel('rankingall')"><?php echo HTMLHelper::_('image', 'media/com_sportsmanagement/jl_images/excel.png', Text::_('COM_SPORTSMANAGEMENT_FES_OVERALL_PARAM_LABEL_SHOW_BUTTON_DOWNLOAD_EXCEL'), array(' width' => 40));?> EXCEL</button>
+<?php
+}
+
 if ( $this->currentRanking )
 {	
 /** es wird als erstes die farblegende der divisionen/gruppen gelesen */
@@ -83,7 +104,7 @@ foreach ($this->currentRanking as $division => $cu_rk) if ( array_key_exists($di
 	{
 		?>
         <div class="<?php echo $this->divclassrow; ?> table-responsive">
-            <table class="<?PHP echo $this->config['table_class']; ?>">
+            <table class="<?PHP echo $this->config['table_class']; ?>" id="rankingall">
 				<?php
 				echo $this->loadTemplate('rankingheading');
 				$this->division = $division;

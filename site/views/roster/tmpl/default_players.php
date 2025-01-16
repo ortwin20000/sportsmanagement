@@ -213,6 +213,9 @@ if (!empty($this->rows))
 	if ($this->config['show_player_market_value'])
 	{
 	}
+    if ($this->config['show_player_market_text'])
+	{
+	}
 
 
 	if ($this->config['show_player_numbers'])
@@ -272,10 +275,7 @@ if (!empty($this->rows))
         ?>
         <table class="<?php echo $this->config['table_class']; ?> table-sm text-nowrap " id="tableplayer<?php echo $position->id;?>" width="100%">
 			<?php
-			/**
-			 *
-			 * jetzt kommt die schleife über die positionen
-			 */
+			/** jetzt kommt die schleife über die positionen */
 			foreach ($this->rows as $position_id => $players) 
 			if ( isset($position->id) && $position_id == $position->id )
 			{
@@ -283,14 +283,12 @@ if (!empty($this->rows))
 				$meanage     = 0;
 				$countplayer = 0;
 				$age         = 0;
-				/**
-				 *
-				 * position header
-				 */
+				/** position header */
 				$row      = current($players);
 				$position = $row->position;
 				$k        = 0;
 				?>
+                <!-- start position header -->
                 <thead>
                 <tr class="sectiontableheader rosterheader" id="rosterheader">
                     <th class="" width="5%" colspan="">
@@ -344,6 +342,21 @@ if (!empty($this->rows))
 
 					if ($this->overallconfig['use_jl_substitution'])
 					{
+					   
+                       switch ( $this->project->sport_type_name )
+						  {
+						      case 'COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD':
+                              	?>
+                            <th class="" width="" id="show_games_played">
+								<?php
+								$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ROSTER_PLAYED');
+								$picture    = $picture_path_sport_type_name . '/golfbillard.png';
+
+								echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px' ));
+								?></th>
+							<?php
+                              break;
+                              default:
 						if ($this->config['show_games_played'])
 						{
 							?>
@@ -359,33 +372,43 @@ if (!empty($this->rows))
 
 						if ($this->config['show_substitution_stats'])
 						{
+						  
 							?>
                             <th class="" width="" id="show_substitution_stats_startroster">
 								<?php
 								$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ROSTER_STARTING_LINEUP');
 								$picture    = $picture_path_sport_type_name . '/startroster.png';
 								echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px'));
-								?></th>
+								?>
+                                </th>
                             <th class="" width="" id="show_substitution_stats_in"><?php
 								$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ROSTER_IN');
 								$picture    = $picture_path_sport_type_name . '/in.png';
 								echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px'));
-								?></th>
+								?>
+                                </th>
                             <th class="" width="" id="show_substitution_stats_out"><?php
 								$imageTitle = Text::_('COM_SPORTSMANAGEMENT_ROSTER_OUT');
 								$picture    = $picture_path_sport_type_name . '/out.png';
 								echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px'));
-								?></th>
+								?>
+                                </th>
 
                             <th class="" width="" id="show_substitution_stats_uhr">
 								<?php
 								$imageTitle = Text::_('COM_SPORTSMANAGEMENT_PLAYED_TIME');
 								$picture    = $picture_path_sport_type_name . '/uhr.png';
 								echo HTMLHelper::image($picture, $imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px'));
-								?></th>
+								?>
+                                </th>
 
 							<?php
+                            
 						}
+                        
+                        break;
+                            }
+                        
 					}
 
 					if ($this->config['show_events_stats'])
@@ -476,15 +499,21 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 						}
 					}
 
-					/**
-					 *
-					 * diddipoeler marktwert
-					 */
+					/** diddipoeler marktwert */
 					if ($this->config['show_player_market_value'])
 					{
 						?>
                         <th class="" width="" id="show_player_market_value">
 							<?php echo Text::_('COM_SPORTSMANAGEMENT_EURO_MARKET_VALUE'); ?>
+                        </th>
+						<?php
+					}
+                    
+                    if ($this->config['show_player_market_text'])
+					{
+						?>
+                        <th class="" width="" id="show_player_market_value">
+							<?php echo Text::_('COM_SPORTSMANAGEMENT_MARKET_TEXT'); ?>
                         </th>
 						<?php
 					}
@@ -494,6 +523,7 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
                 </tr>
                 </thead>
                 <!-- end position header -->
+                
                 <!-- Players row-->
 <div itemprop="member" itemscope itemtype="http://schema.org/OrganizationRole"> 
                       <span itemprop="roleName" content="<?php echo Text::_($row->position);?>"></span>
@@ -595,15 +625,12 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 						}
                         elseif ($this->config['show_country_flag_staff'])
 						{
-							/**
-							 *
-							 * Put empty column to keep vertical alignment with the staff table
-							 */
+							/** Put empty column to keep vertical alignment with the staff table */
 							?>
                             <td class="" width="" nowrap="nowrap" style="text-align:center; ">&nbsp;</td><?php
 						}
 						?>
-                        <td class="" width=""><?php
+                        <td class="" width="" id="rosterplayername"><?php
 							if ($this->config['link_player'] == 1)
 							{
 								$routeparameter                       = array();
@@ -614,15 +641,15 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 								$routeparameter['pid']                = $row->person_slug;
 
 								$link = sportsmanagementHelperRoute::getSportsmanagementRoute('player', $routeparameter);
-								//echo HTMLHelper::link($link, '<span class="playername">' . $playerName . '</span>');
                                 echo HTMLHelper::link($link, $playerName);
 							}
 							else
 							{
-								//echo '<span class="playername">' . $playerName . '</span>';
                                 echo $playerName;
 							}
-							?></td>
+							?>
+                            </td>
+                            
                         <td class="" width="" style="text-align: left;" >&nbsp; <?php
 							$model            = $this->getModel();
 							$this->playertool = $model->getTeamPlayer($this->project->current_round, $row->playerid);
@@ -655,12 +682,13 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 									$imageTitle, array('title' => $imageTitle, 'style' => 'width: auto;height: ' . $this->config['events_picture_height'] . 'px')
 								);
 							}
-							?></td>
+							?>
+                            </td>
 						<?php
 						if ($this->config['show_birthday'] > 0)
 						{
 							?>
-                            <td class="" width="" nowrap="nowrap" style="text-align: center;"><?php
+                            <td class="" width="" nowrap="nowrap" style="text-align: center;" id="rosterbirthday"><?php
 							if ($row->birthday != "0000-00-00")
 							{
 								switch ($this->config['show_birthday'])
@@ -698,10 +726,7 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 								$birthdateStr = "-";
 							}
 
-							/**
-							 *
-							 * deathday
-							 */
+							/** deathday */
 							if ($row->deathday != "0000-00-00")
 							{
 								$birthdateStr .= ' [&dagger; ' . HTMLHelper::date($row->deathday, Text::_('COM_SPORTSMANAGEMENT_GLOBAL_DAYDATE')) . ']';
@@ -709,7 +734,8 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 
 							echo $birthdateStr;
 							?>
-                            </td><?php
+                            </td>
+                            <?php
 						}
                         elseif ($this->config['show_birthday_staff'])
 						{
@@ -743,14 +769,13 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 							if ($this->config['show_games_played'])
 							{
 								?>
-                                <td class="" width="" nowrap="nowrap"><?php echo $played; ?></td>
+                                <td class="" width="" nowrap="nowrap" id="show_games_played">
+                                <?php echo $played; ?>
+                                </td>
 								<?php
 							}
 
-							/**
-							 *
-							 * spielzeit des spielers
-							 */
+							/** spielzeit des spielers */
 							$timePlayed = 0;
 
 							if (!isset($this->overallconfig['person_events']))
@@ -761,24 +786,29 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 							$this->timePlayed = sportsmanagementModelPlayer::getTimePlayed($row->season_team_person_id, $this->project->game_regular_time, null, $this->overallconfig['person_events'], $row->project_id);
 							$timePlayed       = $this->timePlayed;
 
-							if ($this->config['show_substitution_stats'])
+ switch ( $this->project->sport_type_name )
+						  {
+						      case 'COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD':
+                              break;
+                            
+                            default:
+                            if ($this->config['show_substitution_stats'])
 							{
 								?>
-                                <td class="" width=""><?php echo $started; ?></td>
-                                <td class="" width=""><?php echo $subIn; ?></td>
-                                <td class="" width=""><?php echo $subOut; ?></td>
-                                <td class="" width=""><?php echo $timePlayed; ?></td>
+                                <td class="" width="" id="rosterstarted"><?php echo $started; ?></td>
+                                <td class="" width="" id="rostersubin"><?php echo $subIn; ?></td>
+                                <td class="" width="" id="rostersubout"><?php echo $subOut; ?></td>
+                                <td class="" width="" id="rostertimeplayed"><?php echo $timePlayed; ?></td>
 								<?php
 							}
+                            break;
+                            }
 						}
 
 
 						if ($this->config['show_events_stats'] && count($this->playereventstats) > 0)
 						{
-							/**
-							 *
-							 * user_defined events in the database are shown
-							 */
+							/** user_defined events in the database are shown */
 							foreach ($this->playereventstats[$row->pid] AS $eventId => $stat)
 							{
 								?>
@@ -867,17 +897,25 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 							}
 						}
 
-						/**
-						 *
-						 * diddipoeler marktwert
-						 */
+						/** diddipoeler marktwert */
 						if ($this->config['show_player_market_value'])
 						{
 							$total_market_value += $row->market_value;
 							?>
-                            <td class="" width="" title="">
+                            <td class="" width="" title="" id="market_value">
 								<?php
 								echo($row->market_value > 0 ? number_format($row->market_value, 0, ',', '.') : $this->overallconfig['zero_events_value']);
+								?>
+                            </td>
+							<?php
+						}
+                        if ($this->config['show_player_market_text'])
+						{
+							
+							?>
+                            <td class="" width="" title="" id="market_text">
+								<?php
+								echo $row->market_text;
 								?>
                             </td>
 							<?php
@@ -956,10 +994,18 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 				?>
                   </div>
                 <!-- end players rows -->
+                
                 <!-- position totals anfang -->
 				<?php
 				if ($this->config['show_totals'] && ($this->config['show_stats'] || $this->config['show_events_stats']))
 				{
+				    
+                    switch ( $this->project->sport_type_name )
+						  {
+						      case 'COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD':
+                              break;
+                              
+                              default:
 					if ($age && $countplayer)
 					{
 						$meanage = round($age / $countplayer, 2);
@@ -1053,10 +1099,7 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 							}
 						}
 
-						/**
-						 *
-						 * diddipoeler marktwert
-						 */
+						/** diddipoeler marktwert */
 						if ($this->config['show_player_market_value'])
 						{
 							?>
@@ -1070,6 +1113,8 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 						?>
                     </tr>
 					<?php
+                    break;
+                    }
 				}
 				?>
                 <!-- position totals ende -->
@@ -1077,7 +1122,7 @@ echo sportsmanagementHelperHtml::getBootstrapModalImage(
 				$k = (1 - $k);
 			}
 			
-			//echo 'position id '.$positionpdf;
+
 			?>
         </table>
         
@@ -1133,3 +1178,4 @@ pdfDocGenerator.getBase64((data) => {
     </div>
 	<?php
 }
+

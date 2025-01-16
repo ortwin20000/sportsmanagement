@@ -49,10 +49,18 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
 		$this->projectids     = $mdlRankingAllTime->getAllProject(1);
 		$this->projectnames   = $mdlRankingAllTime->getAllProjectNames(1);
         
+     // echo '<pre>'.print_r($this->projectids,true).'</pre>';
+      
         foreach ($this->projectids as $this->count_i => $this->project_id)
 		{
 		$mdlProject::$projectid = $this->project_id;
         $project = $mdlProject::getProject();
+          $divisions = $mdlProject::getDivisions();
+          
+          
+          //echo __LINE__.'<pre>'.print_r($divisions,true).'</pre>'; 
+         
+          
         /** aus performancegründen lesen wir den tabellenplatz direkt vom projektteam aus */
           if ( ComponentHelper::getParams('com_sportsmanagement')->get('force_ranking_cache', 0) )
 			{
@@ -69,10 +77,29 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $mdlRanking::$currentRanking = array();
         $mdlRanking::computeRanking(0);
         $currentRanking = $mdlRanking::$currentRanking;
-        $this->currentRanking = $this->model->_sortRanking($currentRanking[0]);            
+               
+       //echo __LINE__.'<pre>'.print_r($currentRanking,true).'</pre>';  
+               /**
+                switch ( $project->project_type)
+          {
+            case 'DIVISIONS_LEAGUE':
+                 foreach ($currentRanking as $this->count_i => $this->champion)
+		{    
+         $this->currentRanking = $this->model->_sortRanking($currentRanking[$this->count_i]);
+                 }
+              break;
+            default:
+              $this->currentRanking = $this->model->_sortRanking($currentRanking[0]);            
+              break;
+          }
+               */
+        //$this->currentRanking = $this->model->_sortRanking($currentRanking[0]);            
                 }
         
-	
+	 //echo '<pre>'.print_r($this->currentRanking,true).'</pre>';
+          foreach ($currentRanking as $this->count_division => $this->division)
+		{    
+            $this->currentRanking = $this->model->_sortRanking($this->division);
         foreach ($this->currentRanking as $this->count_i => $this->champion)
 		{
         
@@ -85,6 +112,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $object->ptid = $this->champion->_ptid;
         $object->teamid = $this->champion->_teamid;
 		$object->project_id = $project->slug;
+        $object->published = $project->published;
 		  $object->project_name = $project->name;
         $object->project_count_matches = $mdlProject::getProjectCountMatches($project->id,false,$project->league_id,$project->season_id);
         
@@ -129,6 +157,10 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         
         }
        
+        }
+          
+          
+          
          
         }
      
@@ -142,6 +174,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $object->ptid_slug = '';
         $object->ptid = 0;
         $object->teamid = 0;
+		$object->published = $this->project_id->published;
 		$object->project_id = $this->project_id->project_slug;  
         $object->project_count_matches = $mdlProject::getProjectCountMatches($this->project_id->id,true,$this->project_id->league_id,$this->project_id->season_id);
         $this->leaguechampions[$this->project_id->seasonname] = $object;
@@ -156,6 +189,7 @@ class sportsmanagementViewleaguechampionoverview extends sportsmanagementView
         $object->ptid_slug = '';
         $object->ptid = 0;
         $object->teamid = 0;
+		$object->published = $this->project_id->published;
 		$object->project_id = $this->project_id->project_slug;  
         $object->project_count_matches = $mdlProject::getProjectCountMatches($this->project_id->id,true,$this->project_id->league_id,$this->project_id->season_id);
         $this->leaguechampions_detail[$this->project_id->seasonname][$this->project_id->id] = $object;

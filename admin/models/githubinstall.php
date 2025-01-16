@@ -20,6 +20,8 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Router\Route;
+
 
 if (version_compare(JVERSION, '3.0.0', 'ge'))
 {
@@ -45,6 +47,13 @@ class sportsmanagementModelgithubinstall extends JSMModelLegacy
 
 	var $_success_text = array();
 
+	 function installfolder()
+  {
+    //$app = Factory::getApplication();
+$url = Route::_('index.php?option=com_sportsmanagement&view=update&task=update.save&file_name=jsm_update_github.php',false);
+Factory::getApplication()->redirect($url,303);	
+  }
+	
 	/**
 	 * sportsmanagementModelgithubinstall::CopyGithubLink()
 	 *
@@ -206,7 +215,7 @@ class sportsmanagementModelgithubinstall extends JSMModelLegacy
 			$package['type']        = $type;
 
 			/** Install the package */
-
+/**
 			if (!$installer->install($package['dir']))
 			{
 				$my_text .= '<span style="color:' . $this->storeFailedColor . '">';
@@ -235,7 +244,12 @@ class sportsmanagementModelgithubinstall extends JSMModelLegacy
 					$my_text .= '<br />';
 				}
 			}
-
+*/
+/**
+//$app = Factory::getApplication();
+$url = Route::_('index.php?option=com_sportsmanagement&view=update&task=update.save&file_name=jsm_update_github.php"');
+Factory::getApplication()->redirect($url);	
+			*/
 			$this->_success_text['Module:'] = $my_text;
 		}
 

@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage staff
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -74,7 +70,16 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
                                 <td>
 									<?PHP
 									//echo $player_hist->season_picture;
-									echo sportsmanagementHelperHtml::getBootstrapModalImage('careerstats' . $player_hist->project_id . '-' . $player_hist->team_id, $player_hist->season_picture, $player_hist->team_name, '50');
+									//echo sportsmanagementHelperHtml::getBootstrapModalImage('careerstats' . $player_hist->project_id . '-' . $player_hist->team_id, $player_hist->season_picture, $player_hist->team_name, '50');
+                                     echo sportsmanagementHelperHtml::getBootstrapModalImage('careerstats' . $player_hist->project_id . '-' . $player_hist->team_id,
+								$player_hist->season_picture,
+								$player_hist->team_name,
+								$this->config['picture_width'],
+								'',
+								$this->modalwidth,
+								$this->modalheight,
+								$this->overallconfig['use_jquery_modal']);
+                                    
 									?>
                                 </td>
                                 <!-- Player stats History - played start -->

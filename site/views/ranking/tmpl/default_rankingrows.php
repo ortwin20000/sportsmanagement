@@ -91,7 +91,7 @@ foreach ($current as $ptid => $team)
 	echo "\n";
 
 	// **************rank row
-	echo '<td class="rankingrow_rank"';
+	echo '<td class="rankingrow_rank" id="rankingrank"';
 
 	if ($color != '')
 	{
@@ -113,7 +113,7 @@ foreach ($current as $ptid => $team)
 	echo "\n";
 
 	// **************Last rank (image)
-	echo '<td class="rankingrow_lastrankimg"';
+	echo '<td class="rankingrow_lastrankimg" id="rankinglastrankimage" ';
 
 	if ($color != '' && $config['use_background_row_color'])
 	{
@@ -126,7 +126,7 @@ foreach ($current as $ptid => $team)
 	echo "\n";
 
 	// **************Last rank (number)
-	echo '<td class="rankingrow_lastrank" nowrap="nowrap"';
+	echo '<td class="rankingrow_lastrank" nowrap="nowrap" id="rankinglastrankrank"';
 
 	if ($color != '' && $config['use_background_row_color'])
 	{
@@ -154,7 +154,7 @@ foreach ($logohistory as $key => $value) {
 }
 	if ($config['show_logo_small_table'] != "no_logo")
 	{
-		echo '<td class="rankingrow_logo"';
+		echo '<td class="rankingrow_logo" id="logodruck" ';
 
 		if ($color != '' && $config['use_background_row_color'])
 		{
@@ -215,7 +215,7 @@ foreach ($logohistory as $key => $value) {
 	}
 
 	// **************Team name
-	echo '<td class="rankingrow_teamname" nowrap="nowrap"';
+	echo '<td class="rankingrow_teamname" nowrap="nowrap" id="rankingteam"';
 
 	if ($color != '' && $config['use_background_row_color'])
 	{
@@ -257,7 +257,7 @@ foreach ($logohistory as $key => $value) {
 		switch (trim(strtoupper($c)))
 		{
 			case 'PLAYED':
-				echo '<td class="rankingrow_played" ';
+				echo '<td class="rankingrow_played" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -271,7 +271,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'WINS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_wins" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -296,7 +296,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'TIES':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_ties" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -321,7 +321,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LOSSES':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_losses" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -346,7 +346,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'WOT':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_wot" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -360,7 +360,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'WSO':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_wso" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -374,7 +374,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LOT':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_lot" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -388,7 +388,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LSO':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_lso" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -402,7 +402,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'WINPCT':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_winpct" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -423,7 +423,7 @@ foreach ($logohistory as $key => $value) {
 					$ref_lost = $team->cnt_lost;
 				}
 
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_gb" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -438,7 +438,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LEGS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_legs" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -452,7 +452,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LEGS_DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow-legs_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -466,7 +466,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'BALLS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_balls" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -480,7 +480,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'BALLS_DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_balls_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -494,7 +494,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'LEGS_RATIO':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_legs_ratio" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -511,7 +511,7 @@ foreach ($logohistory as $key => $value) {
 			// ######################################################################################
 			// ausgabe z.b. für tennis
 			case 'MATCHPOINTS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_matchpoints" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -524,7 +524,7 @@ foreach ($logohistory as $key => $value) {
 				echo "\n";
 				break;
 			case 'MATCHPOINTS_DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_matchpoints_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -538,7 +538,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'MATCHSETS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_macthsets" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -551,7 +551,7 @@ foreach ($logohistory as $key => $value) {
 				echo "\n";
 				break;
 			case 'MATCHSETS_DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_macthsets_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -565,7 +565,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'MATCHGAMES':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_matchgames" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -578,7 +578,7 @@ foreach ($logohistory as $key => $value) {
 				echo "\n";
 				break;
 			case 'MATCHGAMES_DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_matchgames_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -595,7 +595,7 @@ foreach ($logohistory as $key => $value) {
 
 
 			case 'SCOREFOR':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_scorefor" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -609,7 +609,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'SCOREAGAINST':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_scoreagainst" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -623,7 +623,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'SCOREPCT':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_scorepct" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -639,7 +639,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'RESULTS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_results" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -653,7 +653,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'DIFF':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_diff" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -667,7 +667,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'POINTS':
-				echo '<td class="rankingrow_points"';
+				echo '<td class="rankingrow_points" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -681,7 +681,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'PENALTYPOINTS':
-				echo '<td class="rankingrow_points"';
+				echo '<td class="rankingrow_penaltypoints" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -695,7 +695,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'NEGPOINTS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_negpoints" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -709,7 +709,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'OLDNEGPOINTS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow-oldnegpoints" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -723,7 +723,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'POINTS_RATIO':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_points_ratio" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -738,7 +738,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'BONUS':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_bonus" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -752,7 +752,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'START':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_start" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -777,7 +777,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'QUOT':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_quot" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -792,7 +792,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'TADMIN':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_tadmin" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -806,7 +806,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'GFA':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_gfa" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -822,7 +822,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'GAA':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_gaa" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -838,7 +838,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'PPG':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_ppg" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -854,7 +854,7 @@ foreach ($logohistory as $key => $value) {
 				break;
 
 			case 'PPP':
-				echo '<td class="rankingrow"';
+				echo '<td class="rankingrow_ppp" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -871,7 +871,7 @@ foreach ($logohistory as $key => $value) {
                 
                 
                 case 'SHOOTERRINGS':
-                	echo '<td class="rankingrow"';
+                	echo '<td class="rankingrow_shooterrings" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{
@@ -888,7 +888,7 @@ foreach ($logohistory as $key => $value) {
                 break;
 
 			case 'LASTGAMES':
-				echo '<td class="rankingrow lastgames"';
+				echo '<td class="rankingrow_lastgames" id="ranking'.strtolower($c).'" ';
 
 				if ($color != '' && $config['use_background_row_color'])
 				{

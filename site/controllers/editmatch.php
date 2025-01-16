@@ -39,6 +39,53 @@ class sportsmanagementControllerEditMatch extends FormController
 		parent::__construct($config);
 	}
 
+
+	function applyshortsinglematch()
+	{
+		$app  = Factory::getApplication();
+		$post = $app->input->post->getArray(array());
+$app->enqueueMessage('post <pre>'.print_r($post,true).'</pre>', 'notic');
+		$model  = $this->getModel('jlextindividualsport');
+		$return = $model->saveshort();
+		//$return = $model->updateRosterBillard($post);
+
+		$link = $_SERVER['HTTP_REFERER'];
+		$msg  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_CTRL_SAVED');
+
+		$this->setRedirect($link, $msg);
+	}
+
+	function saveshortsinglematch()
+	{
+		$app  = Factory::getApplication();
+		$post = $app->input->post->getArray(array());
+$app->enqueueMessage('post <pre>'.print_r($post,true).'</pre>', 'notic');
+		$model  = $this->getModel('jlextindividualsport');
+		$return = $model->saveshort();
+		//$return = $model->updateRosterBillard($post);
+
+		$link = $_SERVER['HTTP_REFERER'];
+		$msg  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_CTRL_SAVED');
+
+		$this->setRedirect($link, $msg);
+	}
+
+	function deletesinglematch()
+	{
+		$app  = Factory::getApplication();
+		$post = $app->input->post->getArray(array());
+$app->enqueueMessage('post <pre>'.print_r($post,true).'</pre>', 'notic');
+		$model  = $this->getModel('jlextindividualsport');
+		//$return = $model->updateRosterBillard($post);
+
+		$link = $_SERVER['HTTP_REFERER'];
+		$msg  = Text::_('COM_SPORTSMANAGEMENT_ADMIN_MATCH_CTRL_SAVED');
+
+		$this->setRedirect($link, $msg);
+	}
+
+
+	
 	/**
 	 * sportsmanagementControllerEditMatch::savestats()
 	 *

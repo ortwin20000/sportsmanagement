@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage staff
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
@@ -65,7 +61,17 @@ if (count($this->history) > 0)
                                 <td>
 									<?PHP
 									// Echo $player_hist->season_picture;
-									echo sportsmanagementHelperHtml::getBootstrapModalImage('career' . $station->project_id . '-' . $station->team_id, $station->season_picture, $station->team_name, '50');
+									//echo sportsmanagementHelperHtml::getBootstrapModalImage('career' . $station->project_id . '-' . $station->team_id, $station->season_picture, $station->team_name, '50');
+                                    echo sportsmanagementHelperHtml::getBootstrapModalImage('career' . $station->project_id . '-' . $station->team_id,
+								$station->season_picture,
+								$station->team_name,
+								$this->config['picture_width'],
+								'',
+								$this->modalwidth,
+								$this->modalheight,
+								$this->overallconfig['use_jquery_modal']);
+                                    
+                                    
 									?>
                                 </td>
 

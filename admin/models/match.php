@@ -48,19 +48,12 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 	static $_project_id = 0;
 	var $teams = null;
 	var $storeFailedColor = 'red';
-
 	var $storeSuccessColor = 'green';
-
 	var $existingInDbColor = 'orange';
-
 	var $csv_player = array();
-
 	var $csv_in_out = array();
-
 	var $csv_cards = array();
-
 	var $csv_staff = array();
-
 	var $projectteamid = 0;
 
 	/**
@@ -75,6 +68,80 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 	{
 		parent::__construct($config);
 	}
+
+
+
+
+/**
+ * sportsmanagementModelMatch::getSingleMatchDatas()
+ * 
+ * @param integer $match_id
+ * @return
+ */
+public static function getSingleMatchDatas($match_id = 0)
+	{
+		$app    = Factory::getApplication();
+		$jinput = $app->input;
+		$db     = sportsmanagementHelper::getDBConnection(true, $jinput->getInt('cfg_which_database', 0));
+		$query  = $db->getQuery(true);
+		$result = array();
+
+		$query->select('m.*');
+		$query->from('#__sportsmanagement_match_single AS m');
+		$query->where('m.match_id = ' . (int) $match_id);
+		$db->setQuery($query);
+
+		$result = $db->loadObjectList();
+
+		return $result;
+	}
+    
+    
+/**
+ * sportsmanagementModelMatch::insertSingleMatchData()
+ * 
+ * @param integer $match_id
+ * @param string $match_numer
+ * @param integer $valuehometeamplayer_id
+ * @param integer $valueawayteamplayer_id
+ * @param integer $valuehomeprojectteam_id
+ * @param integer $valueawayprojectteam_id
+ * @return
+ */
+public static function insertSingleMatchData($match_id=0,$match_numer='',$valuehometeamplayer_id=0, $valueawayteamplayer_id=0,$valuehomeprojectteam_id=0, $valueawayprojectteam_id=0, $round_id = 0)
+{
+$app    = Factory::getApplication();    
+$date          = Factory::getDate();
+		$user          = Factory::getUser();
+        $db            = sportsmanagementHelper::getDBConnection();
+
+$temp                      = new stdClass;
+		$temp->match_id            = $match_id;
+        $temp->round_id            = $round_id;
+        $temp->match_number            = $match_numer;
+        
+		$temp->projectteam1_id       = $valuehomeprojectteam_id;
+        $temp->projectteam2_id = $valueawayprojectteam_id;
+        
+		$temp->teamplayer1_id            = $valuehometeamplayer_id;
+        $temp->teamplayer2_id            = $valueawayteamplayer_id;
+        $temp->published = 1;
+		$temp->modified            = $date->toSql();
+		$temp->modified_by         = $user->get('id');
+		try
+		{
+		$resultquery = $db->insertObject('#__sportsmanagement_match_single', $temp);
+        return true;
+		}
+		catch (Exception $e)
+		{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+return false;
+		}    
+        
+}
+
 
 	/**
 	 * sportsmanagementModelMatch::getMatchEvents()
@@ -104,6 +171,12 @@ class sportsmanagementModelMatch extends JSMModelAdmin
 	}
 
 
+/**
+ * sportsmanagementModelMatch::getMatchAllSingleData()
+ * 
+ * @param integer $project_id
+ * @return
+ */
 public static function getMatchAllSingleData($project_id = 0)
 	{
 		$db    = Factory::getDbo();
@@ -115,6 +188,7 @@ public static function getMatchAllSingleData($project_id = 0)
 		$query->from('#__sportsmanagement_match_single AS msi');
 		$query->join('INNER', ' #__sportsmanagement_round AS r ON r.id = msi.round_id ');
 		$query->where('r.project_id = ' . (int) $project_id);
+        $query->order('r.roundcode, msi.match_id');
 
 		try
 		{
@@ -593,6 +667,9 @@ break;
 		$query->select('pl.firstname,pl.nickname,pl.lastname,pl.knvbnr');
 		$query->select('pos.name AS positionname');
 		$query->select('ppos.position_id,ppos.id AS pposid, mp.ordering as playerordering');
+
+		$query->select('CONCAT_WS(\':\',pl.firstname,pl.lastname) AS text ');
+		
 		$query->from('#__sportsmanagement_match_' . $table . ' AS mp');
 		$query->join('INNER', '#__sportsmanagement_season_team_person_id AS sp ON mp.' . $id . ' = sp.id');
 		$query->join('INNER', '#__sportsmanagement_season_team_id AS st ON st.team_id = sp.team_id ');

@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * SportsManagement ein Programm zur Verwaltung für alle Sportarten
- *
  * @version    1.0.05
  * @package    Sportsmanagement
  * @subpackage staff
@@ -11,9 +9,7 @@
  * @copyright  Copyright: © 2013-2023 Fussball in Europa http://fussballineuropa.de/ All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -30,22 +26,11 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 class sportsmanagementModelStaff extends BaseDatabaseModel
 {
 	static $projectid = 0;
-
 	static $personid = 0;
-
 	static $teamplayerid = 0;
-
 	static $teamid = 0;
-
-	/**
-	 * data array for staff history
-	 *
-	 * @var array
-	 */
 	static $_history = null;
-
 	static $_inproject = null;
-
 	static $cfg_which_database = 0;
 
 
@@ -76,34 +61,31 @@ class sportsmanagementModelStaff extends BaseDatabaseModel
 	{
 		$app    = Factory::getApplication();
 		$option = Factory::getApplication()->input->getCmd('option');
-
-		// Create a new query object.
 		$db    = sportsmanagementHelper::getDBConnection(true, self::$cfg_which_database);
+        $inoutstat = 0;
 		$query = $db->getQuery(true);
-/**
-		$query = '	SELECT	count(mp.id) AS present
-					FROM #__sportsmanagement_match_staff AS mp
-					INNER JOIN #__sportsmanagement_match AS m ON mp.match_id=m.id
-					INNER JOIN #__sportsmanagement_team_staff AS tp ON tp.id=mp.team_staff_id
-					INNER JOIN #__sportsmanagement_project_team AS pt ON m.projectteam1_id=pt.id
-					WHERE tp.person_id=' . $this->_db->Quote((int) $person_id) . '
-					  AND pt.project_id=' . $this->_db->Quote((int) $project_id) . '
-					  AND tp.published = 1';
-                      */
-                      
-$query = ' SELECT count(mp.id) AS present
- FROM #__sportsmanagement_match_staff AS mp
- INNER JOIN #__sportsmanagement_match AS m ON mp.match_id=m.id
- INNER JOIN #__sportsmanagement_season_team_person_id AS tp ON 
-tp.id=mp.team_staff_id
- INNER JOIN #__sportsmanagement_project_team AS pt ON 
-m.projectteam1_id=pt.id
- WHERE tp.person_id=' . $this->_db->Quote((int) $person_id) . '
- AND pt.project_id=' . $this->_db->Quote((int) $project_id) . '
- AND tp.published = 1';
-                       
+        $query->select('count(mp.id) AS present');
+        $query->from('#__sportsmanagement_match_staff AS mp');
+		$query->join('INNER', '#__sportsmanagement_match AS m ON mp.match_id = m.id');
+		$query->join('INNER', '#__sportsmanagement_season_team_person_id AS tp ON tp.id = mp.team_staff_id');
+        $query->join('INNER', '#__sportsmanagement_project_team AS pt ON m.projectteam1_id = pt.id');
+        $query->where('pt.project_id = ' . $project_id);
+		$query->where('tp.person_id = ' . $person_id);
+		$query->where('tp.published = 1');
+                   
+
+                  try
+                  {     
 		$db->setQuery($query, 0, 1);
 		$inoutstat = $db->loadResult();
+         }
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+}
+
+$db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
 
 		return $inoutstat;
 	}
@@ -136,8 +118,6 @@ m.projectteam1_id=pt.id
 	{
 		$app    = Factory::getApplication();
 		$option = Factory::getApplication()->input->getCmd('option');
-
-		// Create a new query object.
 		$db    = sportsmanagementHelper::getDBConnection(true, self::$cfg_which_database);
 		$query = $db->getQuery(true);
 
@@ -156,10 +136,19 @@ m.projectteam1_id=pt.id
 			$query->where('pt.project_id = ' . self::$projectid);
 			$query->where('ts.person_id = ' . self::$personid);
 			$query->where('ts.published = 1');
-
+try
+{
 			$db->setQuery($query);
 			self::$_inproject = $db->loadObject();
+            }
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+}
 		}
+        
+        $db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
 
 		return self::$_inproject;
 	}
@@ -203,12 +192,12 @@ m.projectteam1_id=pt.id
 	 * get person history across all projects,with team,season,position,... info
 	 *
 	 * @param   int     $person_id  ,linked to player_id from Person object
-	 * @param   int     $order      ordering for season and league,default is ASC ordering
+	 * @param   int     $order      projekt name
 	 * @param   string  $filter     e.g. "s.name=2007/2008",default empty string
 	 *
 	 * @return array of objects
 	 */
-	function getStaffHistory($order = 'ASC')
+	function getStaffHistory($order = 'DESC')
 	{
 		$app      = Factory::getApplication();
 		$option   = Factory::getApplication()->input->getCmd('option');
@@ -244,13 +233,23 @@ $query->join('LEFT', '#__sportsmanagement_project_position AS ppos ON ppos.id = 
 		$query->where('p.published = 1');
 		$query->where('o.persontype = 2');
 		//$query->order('s.ordering ' . $order . ', l.ordering ASC, p.name ASC ');
-		$query->order('s.name DESC ');
+		$query->order('s.name '. $order.', p.name '. $order );
+        try
+        {
 		$db->setQuery($query);
 		self::$_history = $db->loadObjectList();
+         }
+catch (Exception $e)
+{
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
+$app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+}
 
 		if (!self::$_history)
 		{
 		}
+        
+        $db->disconnect(); // See: http://api.joomla.org/cms-3/classes/JDatabaseDriver.html#method_disconnect
 
 		return self::$_history;
 	}

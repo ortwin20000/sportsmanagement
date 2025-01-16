@@ -34,7 +34,12 @@ class JSMRanking extends \stdClass
 	var $_data = null;
 	var $_params = null;
 	var $_criteria = null;
+    var $_rankingsortorder = array();
+    
+    var $_sortrankingcriteria = array();
+    
 	var $_mode = 0;
+    var $_order = 'DESC';
 	var $_from = null;
 	var $_to = null;
 	var $_division = null;
@@ -132,7 +137,7 @@ class JSMRanking extends \stdClass
 		self::setDivisionId($division, $cfg_which_database);
 
 		$teams = self::_collect(null, $cfg_which_database,$sports_type_name);
-		$rankings = self::_buildRanking($teams, $cfg_which_database);
+		$rankings = self::_buildRanking($teams, $cfg_which_database, $sports_type_name);
 
 		return $rankings;
 	}
@@ -193,9 +198,6 @@ class JSMRanking extends \stdClass
             
             
             }
-            /* $home = new JSMRankingTeamClass(0);
-            $away = new JSMRankingTeamClass(0); */
-            
             
             }
         break;
@@ -229,9 +231,10 @@ class JSMRanking extends \stdClass
 			else
 			{
 				$home = new JSMRankingTeamClass(0);
-
-				// In that case, $data wont be affected
-				// $home::$sum_points = 0;
+/**
+In that case, $data wont be affected
+ $home::$sum_points = 0;
+*/
 			}
 
 			if ($mode == 0 || $mode == 2)
@@ -241,9 +244,10 @@ class JSMRanking extends \stdClass
 			else
 			{
 				$away = new JSMRankingTeamClass(0);
-
-				// In that case, $data wont be affected
-				// $away::$sum_points = 0;
+/**
+ In that case, $data wont be affected
+ $away::$sum_points = 0;
+                */
 			}
 
 			$shownegpoints = 1;
@@ -364,15 +368,15 @@ class JSMRanking extends \stdClass
 							break;
 					}
 
-					$home->sum_points += $win_points; /* Home_score can't be null... */
-					$away->sum_points += ($decision == 0 || isset($away_score) ? $loss_points : 0);
+					$home->sum_points += $win_points; /** Home_score can't be null... */
+					$away->sum_points += ( (int) $decision == 0 || isset( $away_score) ? (int)$loss_points : 0);
 
 					/* $home::$sum_points += $win_points; //home_score can't be null...
 					$away::$sum_points += ( $decision == 0 || isset($away_score) ? $loss_points : 0); */
 
 					if ($shownegpoints == 1)
 					{
-						$home->neg_points += $loss_points;
+						$home->neg_points += (int)$loss_points;
 						$away->neg_points += ($decision == 0 || isset($away_score) ? $win_points : 0);
 					}
 				}
@@ -519,7 +523,7 @@ class JSMRanking extends \stdClass
 							break;
 					}
 
-					$home->sum_points += ($decision == 0 || isset($home_score) ? $loss_points : 0);
+					$home->sum_points += ( (int)$decision == 0 || isset($home_score) ? (int)$loss_points : 0);
 					$away->sum_points += $win_points;
 
 					/* $home::$sum_points += ( $decision == 0 || isset($home_score) ? $loss_points : 0);
@@ -528,7 +532,7 @@ class JSMRanking extends \stdClass
 					if ($shownegpoints == 1)
 					{
 						$home->neg_points += ($decision == 0 || isset($home_score) ? $win_points : 0);
-						$away->neg_points += $loss_points;
+						$away->neg_points += (int)$loss_points;
 					}
 				}
 			}
@@ -536,17 +540,17 @@ class JSMRanking extends \stdClass
 			{
 				if ($shownegpoints == 1)
 				{
-					$home->neg_points += $loss_points;
-					$away->neg_points += $loss_points;
+					$home->neg_points += (int)$loss_points;
+					$away->neg_points += (int)$loss_points;
 				}
 
-                   /*  Final Win/Loss Decision */
+                   /**  Final Win/Loss Decision */
 				if ($match->team_won == 0)
 				{
 					$home->cnt_lost++;
 					$away->cnt_lost++;
 
-					/* Record a won on the home team */
+					/** Record a won on the home team */
 				}
 				elseif ($match->team_won == 1)
 				{
@@ -555,7 +559,7 @@ class JSMRanking extends \stdClass
 					$home->sum_points += $win_points;
 					$away->cnt_lost_home++;
 
-					/* Record a won on the away team */
+					/** Record a won on the away team */
 				}
 				elseif ($match->team_won == 2)
 				{
@@ -564,7 +568,7 @@ class JSMRanking extends \stdClass
 					$away->sum_points += $win_points;
 					$home->cnt_lost_home++;
 
-					/* Record a loss on both teams */
+					/** Record a loss on both teams */
 				}
 				elseif ($match->team_won == 3)
 				{
@@ -573,7 +577,7 @@ class JSMRanking extends \stdClass
 					$away->cnt_lost_home++;
 					$home->cnt_lost_home++;
 
-					/* Record a won on both teams */
+					/** Record a won on both teams */
 				}
 				elseif ($match->team_won == 4)
 				{
@@ -584,26 +588,25 @@ class JSMRanking extends \stdClass
 				}
 			}
 
-			/* Winpoints */
-
+			/** Winpoints */
 			$home->winpoints = $win_points;
-
-			/* Bonus points */
-
+			/** Bonus points */
 			$home->sum_points += $match->home_bonus;
-
-			/* $home::$sum_points += $match->home_bonus; */
 			$home->bonus_points += $match->home_bonus;
 
 			$away->sum_points += $match->away_bonus;
-
-			/* $away::$sum_points += $match->away_bonus; */
 			$away->bonus_points += $match->away_bonus;
 
-			/* Goals for/against/diff */
-
+			/** Goals for/against/diff */
 			$home->sum_team1_result  += $home_score;
 			$home->sum_team2_result  += $away_score;
+            
+            $home->scorefor  += $home_score;
+			$home->scoreagainst  += $away_score;
+            
+            $home->goalsfor  += $home_score;
+			$home->goalsagainst  += $away_score;
+            
 			$home->diff_team_results = $home->sum_team1_result - $home->sum_team2_result;
 			$home->sum_team1_legs    += $leg1;
 			$home->sum_team2_legs    += $leg2;
@@ -613,11 +616,13 @@ class JSMRanking extends \stdClass
 			{
             $home->sum_points = ( $home->cnt_won * $win_points ) + ( $home->cnt_draw * $draw_points );
 			$away->sum_points = ( $away->cnt_won * $win_points ) + ( $away->cnt_draw * $draw_points );
-            /* Table with OLDNEGPOINTS Even with the 3 point rule (stony) */
-				$home->neg_points = ( $home->cnt_lost * $win_points ) + ( $home->cnt_draw * ( $win_points - $draw_points ));
-				$away->neg_points = ( $away->cnt_lost * $win_points ) + ( $away->cnt_draw * ( $win_points - $draw_points ));
+            /** Table with OLDNEGPOINTS Even with the 3 point rule (stony) */
+			$home->neg_points = ( $home->cnt_lost * $win_points ) + ( $home->cnt_draw * ( $win_points - $draw_points ));
+			$away->neg_points = ( $away->cnt_lost * $win_points ) + ( $away->cnt_draw * ( $win_points - $draw_points ));
 			}
             
+            $home->points = $home->sum_points;
+			$away->points = $away->sum_points;
             
 			if ( $sports_type_name == 'COM_SPORTSMANAGEMENT_ST_FAUSTBALL' )
 			{
@@ -638,6 +643,13 @@ class JSMRanking extends \stdClass
 
 			$away->sum_team1_result  += $away_score;
 			$away->sum_team2_result  += $home_score;
+            
+            $away->scorefor  += $away_score;
+			$away->scoreagainst  += $home_score;
+            
+            $away->goalsfor  += $away_score;
+			$away->goalsagainst  += $home_score;
+            
 			$away->diff_team_results = $away->sum_team1_result - $away->sum_team2_result;
 			$away->sum_team1_legs    += $leg2;
 			$away->sum_team2_legs    += $leg1;
@@ -1169,32 +1181,35 @@ try{
 	 * @param integer $cfg_which_database
 	 * @return
 	 */
-	function _buildRanking($teams = array(), $cfg_which_database = 0)
+	function _buildRanking($teams = array(), $cfg_which_database = 0,$sports_type_name='')
 	{
 		$app    = Factory::getApplication();
 		$option = $app->input->getCmd('option');
+        $this->_rankingsortorder = explode(',', $this->_params['ranking_sort_order']);
 
 		/** Division filtering */
         $teams = is_array($teams) ? array_filter($teams, array($this, "_filterdivision")) : array();
 		
-		// Initial group contains all teams, unordered, indexed by starting rank 1
+		/** Initial group contains all teams, unordered, indexed by starting rank 1 */
 		$groups = array(1 => $teams);
-
-		// Each criteria will sort teams. All teams that are 'equal' for a given criteria are put in a 'group'
-		// the next criteria will sort inside each of the previously obtained groups
-		// in the end, we obtain a certain number of groups, indexed by rank. this can contain one to several teams of same rank
-		foreach ($this->_getRankingCriteria() as $c)
+/** Each criteria will sort teams. All teams that are 'equal' for a given criteria are put in a 'group'
+the next criteria will sort inside each of the previously obtained groups
+in the end, we obtain a certain number of groups, indexed by rank. this can contain one to several teams of same rank 
+*/
+		foreach ($this->_getRankingCriteria($sports_type_name) as $key => $c)
 		{
 			$newgroups = array(); // Groups that will be used for next loop
 
 			foreach ($groups as $rank => $teams)
 			{
-				// For head to head, we have to init h2h values that are used to collect results just for this group
+				/** For head to head, we have to init h2h values that are used to collect results just for this group */
 				$this->_h2h_group = $teams; // teans of the group
 				$this->_h2h       = null;         // wipe h2h data cache for group
 
 				$newrank = $rank;
 				$current = $rank;
+                
+                $this->_order = $this->_rankingsortorder[$key];
 
 				uasort($teams, array($this, $c)); // Sort
 
@@ -1204,13 +1219,13 @@ try{
 				{
 					if (!$prev || $this->$c($team, $prev) != 0)
 					{
-						// Teams are not 'equal', create new group
+						/** Teams are not 'equal', create new group */
 						$newgroups[$newrank] = array($k => $team);
 						$current             = $newrank;
 					}
 					else
 					{
-						// Teams still have the same rank, add to current group
+						/** Teams still have the same rank, add to current group */
 						$newgroups[$current][$k] = $team;
 					}
 
@@ -1222,7 +1237,7 @@ try{
 			$groups = $newgroups;
 		}
 
-		// Now, let's just sort by name for the team still tied, and output to single array
+		/** Now, let's just sort by name for the team still tied, and output to single array */
 		$res = array();
 
 		foreach ($groups as $rank => $teams)
@@ -1236,20 +1251,72 @@ try{
 			}
 		}
 
+// COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD
+  switch ($sports_type_name)
+		{
+		case 'COM_SPORTSMANAGEMENT_ST_GOLF_BILLARD':
+
+$points = array_column($res, 'points');
+$goalsfor = array_column($res, 'goalsfor');
+$goalsagainst = array_column($res, 'goalsagainst');          
+//echo __METHOD__.' '.__LINE__ .' points <pre>'.print_r($points,true).'</pre>';             
+//echo __METHOD__.' '.__LINE__ .' goalsfor <pre>'.print_r($goalsfor,true).'</pre>';                       
+//echo __METHOD__.' '.__LINE__ .' goalsagainst <pre>'.print_r($goalsagainst,true).'</pre>'; 
+
+//array_multisort($points, SORT_ASC, $goalsfor, SORT_DESC, $res);          
+          
+//        $this->_rankingsortorder = explode(',', $this->_params['ranking_sort_order']);
+//        /** get the values from ranking template setting */
+//		$values = explode(',', $this->_params['ranking_order']);
+  //      unset($this->_sortrankingcriteria);
+    //    for($a=0; $a < sizeof($values); $a++)
+      //  {
+//        $this->_sortrankingcriteria[] = trim(strtolower($values[$a]));
+//        $this->_sortrankingcriteria[] = 'SORT_'.trim($this->_rankingsortorder[$a]);    
+//        }
+        
+        // Sort the data with volume descending, edition ascending
+// Add $data as the last parameter, to sort by the common key
+// array_multisort(): Argument #1 ($array) must be an array or a sort flag
+//$res = array_multisort(implode(",", $this->_sortrankingcriteria), $res);
+
+        break;
+        }
+
+
+
 		return $res;
 	}
+
+
+/**
+function array_multisort(&$a, array $column_names) {
+    usort($a, function($a, $b) use($column_names) {
+        foreach ($column_names as $column_name => $order) {
+            $result = ($a[$column_name] <=> $b[$column_name]) * ($order === SORT_DESC ? -1 : 1);
+            if ($result) return $result;
+        }
+        return 0;
+    });
+}
+*/
 
 	/**
 	 * Returns ranking criteria as an array of methods
 	 * This method will look for method matching the specified criteria: e.g, if the criteria is 'points',
 	 * it will look for _cmpPoints. If the method exists, the criteria is accepted.
-	 *
+	 * ranking_sort_order
 	 * @return array
 	 */
-	function _getRankingCriteria()
+	function _getRankingCriteria($sports_type_name='')
 	{
 		$crit   = array();
-		//_cmpFinaltablerank
+        
+        
+        
+//echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_sortrankingcriteria,true).'</pre>';             
+            
+
 		if ( self::$_use_finaltablerank )
 		{
 			$crit[] = '_cmpFinaltablerank';
@@ -1259,12 +1326,8 @@ try{
 		{
 		if (empty($this->_criteria))
 		{
-			/**
-			 *
-			 * get the values from ranking template setting
-			 */
+			/** get the values from ranking template setting */
 			$values = explode(',', $this->_params['ranking_order']);
-			//$crit   = array();
 
 			foreach ($values as $v)
 			{
@@ -1280,10 +1343,7 @@ try{
 				}
 			}
 
-			/**
-			 *
-			 * set a default criteria if empty
-			 */
+			/** set a default criteria if empty */
 			if (!count($crit))
 			{
 				$crit[] = '_cmpPoints';
@@ -1292,6 +1352,11 @@ try{
 			$this->_criteria = $crit;
 		}
 	}
+
+// echo __METHOD__.' '.__LINE__ .' _rankingsortorder <pre>'.print_r($this->_rankingsortorder,true).'</pre>'; 
+// echo __METHOD__.' '.__LINE__ .' _criteria <pre>'.print_r($this->_criteria,true).'</pre>'; 
+
+//_sortrankingcriteria
 
 		return $this->_criteria;
 	}
@@ -1447,7 +1512,8 @@ try{
 	
 	function _cmpFinaltablerank($a, $b)
 	{
-		return $a->_finaltablerank <=> $b->_finaltablerank;
+		$res = $a->_finaltablerank <=> $b->_finaltablerank;
+        return $res;
 	}
 
 	/**
@@ -1460,6 +1526,56 @@ try{
 	 *
 	 *****************************************************************************/
 
+	function _cmpscorefor($a, $b)
+	{
+		$res = -($a->sum_team1_result - $b->sum_team1_result);
+		return (int) $res;
+	}
+
+	function _cmpscoreagainst($a, $b)
+	{
+		$res = -($a->sum_team2_result - $b->sum_team2_result);
+		return (int) $res;
+	}
+
+
+	function _cmpGoalsfor($a, $b)
+	{
+	   //echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
+      switch ( trim($this->_order) )
+        {
+          case 'DESC':
+        //$res = ($a->goalsfor <=> $b->goalsfor);  
+          $res = -($a->goalsfor - $b->goalsfor);
+          break;
+          case 'ASC':
+          $res = -($b->goalsfor - $a->goalsfor);
+          //$res = ($b->goalsfor <=> $a->goalsfor);
+          break;
+        }
+		//$res = -($a->goalsfor - $b->goalsfor);
+		return (int) $res;
+	}
+
+	function _cmpGoalsagainst($a, $b)
+	{
+	   //echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
+      switch ( trim($this->_order) )
+        {
+       case 'DESC':
+        //$res = -($a->goalsagainst - $b->goalsagainst);  
+          $res = -($a->goalsagainst - $b->goalsagainst);
+          break;
+          case 'ASC':
+          //$res = -($b->goalsagainst - $a->goalsagainst);
+          $res = -($b->goalsagainst - $a->goalsagainst);
+          break;
+          }
+		//$res = -($a->goalsagainst - $b->goalsagainst);
+      //$res = -($b->goalsagainst - $a->goalsagainst);
+		return (int) $res;
+	}
+	
 	/**
 	 * Point comparison
 	 *
@@ -1470,7 +1586,18 @@ try{
 	 */
 	function _cmpPoints($a, $b)
 	{
-		$res = -($a->getPoints() - $b->getPoints());
+	  // echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
+       switch ( $this->_order )
+        {
+       case 'DESC':
+        $res = -($a->getPoints() - $b->getPoints());  
+          break;
+          case 'ASC':
+          $res = -($b->getPoints() - $a->getPoints());
+          break;
+          }
+      
+		//$res = -($a->getPoints() - $b->getPoints());
 		return (int) $res;
 	}
     
@@ -1819,7 +1946,18 @@ try{
 	 */
 	function _cmpPlayed($a, $b)
 	{
-		$res = -($a->cnt_matches - $b->cnt_matches);
+	   switch ( trim($this->_order) )
+        {
+          case 'DESC':
+  
+        $res = -($a->cnt_matches - $b->cnt_matches);
+          break;
+          case 'ASC':
+$res = -($b->cnt_matches - $a->cnt_matches);
+
+          break;
+        }
+		
 		return $res;
 	}
 

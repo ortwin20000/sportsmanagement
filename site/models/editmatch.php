@@ -76,6 +76,17 @@ class sportsmanagementModelEditMatch extends AdminModel
 
 
 
+/**
+ * sportsmanagementModelEditMatch::insertSingleMatchData()
+ * 
+ * @param integer $match_id
+ * @param string $match_numer
+ * @param integer $valuehometeamplayer_id
+ * @param integer $valueawayteamplayer_id
+ * @param integer $valuehomeprojectteam_id
+ * @param integer $valueawayprojectteam_id
+ * @return
+ */
 function insertSingleMatchData($match_id=0,$match_numer='',$valuehometeamplayer_id=0, $valueawayteamplayer_id=0,$valuehomeprojectteam_id=0, $valueawayprojectteam_id=0)
 {
 $app    = Factory::getApplication();    
@@ -92,21 +103,31 @@ $temp                      = new stdClass;
         
 		$temp->teamplayer1_id            = $valuehometeamplayer_id;
         $temp->teamplayer2_id            = $valueawayteamplayer_id;
-        
+        $temp->published = 1;
 		$temp->modified            = $date->toSql();
 		$temp->modified_by         = $user->get('id');
 		try
 		{
 		$resultquery = $db->insertObject('#__sportsmanagement_match_single', $temp);
+        return true;
 		}
 		catch (Exception $e)
 		{
 $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
 $app->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
+return false;
 		}    
+        
 }
 
 
+/**
+ * sportsmanagementModelEditMatch::getSingleMatchData()
+ * 
+ * @param integer $match_id
+ * @param string $match_number
+ * @return
+ */
 function getSingleMatchData($match_id = 0,$match_number = '')
 	{
 		$app    = Factory::getApplication();
@@ -126,6 +147,12 @@ function getSingleMatchData($match_id = 0,$match_number = '')
 		return $result;
 	}
     
+	/**
+	 * sportsmanagementModelEditMatch::getSingleMatchDatas()
+	 * 
+	 * @param integer $match_id
+	 * @return
+	 */
 	function getSingleMatchDatas($match_id = 0)
 	{
 		$app    = Factory::getApplication();
