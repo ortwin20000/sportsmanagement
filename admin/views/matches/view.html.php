@@ -190,7 +190,7 @@ $datum = date("Y-m-d", $timestamp_round);
                 $row->divawayid = 0;
             }
 
-			$this->lists['referees']        = array_merge($teams, $mdlProject->getProjectTeamsOptions($this->project_id, 0));
+			$this->lists['referees']        = array_merge($teams, $this->mdlProject->getProjectTeamsOptions($this->project_id, 0));
 
             if ($projectteams = $this->mdlProject->getProjectTeamsOptions($this->project_id, $divhomeid))
             {
