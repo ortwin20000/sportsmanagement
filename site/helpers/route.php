@@ -56,8 +56,11 @@ class sportsmanagementHelperRoute
 		'scoresheet'    => array('cfg_which_database' => '', 'p' => '', 'mid' => ''),
 
 		'jltournamenttree' => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => ''),
+        'tournamentbracket' => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => ''),
+
 		'matchreport'      => array('cfg_which_database' => '', 's' => '', 'p' => '', 'mid' => ''),
 		'matrix'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'division' => '', 'r' => ''),
+        'rankingmatrix'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'division' => '', 'r' => ''),
 		'nextmatch'        => array('cfg_which_database' => '', 's' => '', 'p' => '', 'mid' => ''),
 		'player'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'tid' => '', 'pid' => ''),
 
@@ -74,7 +77,7 @@ class sportsmanagementHelperRoute
 		
 		
 		'resultsranking'    => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => '', 'mode' => '', 'order' => '', 'layout' => '', 'division' => ''),
-        'resultsmatrix'    => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => '', 'mode' => '', 'order' => '', 'layout' => '', 'division' => '', 'Itemid' => ''),
+        'resultsmatrix'    => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => '', 'mode' => '', 'order' => '', 'layout' => '', 'division' => ''),
 		'rivals'            => array('cfg_which_database' => '', 's' => '', 'p' => '', 'tid' => ''),
 		'roster'            => array('cfg_which_database' => '', 's' => '', 'p' => '', 'tid' => '', 'ptid' => ''),
         'rosteralltime'     => array('cfg_which_database' => '', 's' => '', 'p' => '', 'tid' => '', 'start' => ''),
@@ -116,8 +119,11 @@ class sportsmanagementHelperRoute
 		'scoresheet'    => array('cfg_which_database' => '', 'p' => '', 'mid' => ''),
 
 		'jltournamenttree' => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => '', 'Itemid' => ''),
+        'tournamentbracket' => array('cfg_which_database' => '', 's' => '', 'p' => '', 'r' => '', 'Itemid' => ''),
+        
 		'matchreport'      => array('cfg_which_database' => '', 's' => '', 'p' => '', 'mid' => '', 'Itemid' => ''),
 		'matrix'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'division' => '', 'r' => '', 'Itemid' => ''),
+		'rankingmatrix'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'division' => '', 'r' => '', 'Itemid' => ''),
 		'nextmatch'        => array('cfg_which_database' => '', 's' => '', 'p' => '', 'mid' => '', 'Itemid' => ''),
 		'player'           => array('cfg_which_database' => '', 's' => '', 'p' => '', 'tid' => '', 'pid' => '', 'Itemid' => ''),
 
@@ -272,6 +278,7 @@ $parts['Itemid'] = $parts['Itemid'] < 0 ? $parts['Itemid'] : Factory::getApplica
 						case 'results':
 						case 'resultsranking':
 						case 'matrix':
+                        case 'rankingmatrix':
 						case 'resultsmatrix':
 						case 'stats':
 							if ((int) @$item->query['p'] == (int) $query['p'])
@@ -448,6 +455,23 @@ $parts['Itemid'] = $parts['Itemid'] < 0 ? $parts['Itemid'] : Factory::getApplica
 	{
 		$params = array("option" => "com_sportsmanagement",
 		                "view"   => "jltournamenttree");
+
+		$params["s"]                  = $s;
+		$params["cfg_which_database"] = $cfg_which_database;
+		$params["p"]                  = $projectid;
+		$params["r"]                  = $round;
+
+		// If ( ! is_null( $cfg_which_database) ) { $params["cfg_which_database"] = $cfg_which_database; }
+		$query = self::buildQuery($params);
+		$link  = Route::_('index.php?' . $query, false);
+
+		return $link;
+	}
+
+    public static function gettournamentbracket($projectid, $round = 0, $cfg_which_database = 0, $s = 0)
+	{
+		$params = array("option" => "com_sportsmanagement",
+		                "view"   => "tournamentbracket");
 
 		$params["s"]                  = $s;
 		$params["cfg_which_database"] = $cfg_which_database;

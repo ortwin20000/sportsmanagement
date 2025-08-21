@@ -46,9 +46,10 @@ class modSportsmanagementAjaxTopNavigationMenuHelper
 	var $_team_slug = '';
 	var $_club_slug = '';
 	var $_division_slug = '';
-	var $_league_id;
-	var $_team_id;
-	var $_club_id;
+    var $project_type = 'SIMPLE_LEAGUE';
+	var $_league_id = 0;
+	var $_team_id = 0;
+	var $_club_id = 0;
 	var $_division_id = 0;
 	var $_tnid = 0;
 	var $_round_id = null;
@@ -117,7 +118,7 @@ class modSportsmanagementAjaxTopNavigationMenuHelper
 				return false;
 			}
 
-			$query->select('p.id, p.name,p.league_id');
+			$query->select('p.id, p.name,p.league_id,p.project_type');
 			$query->select('CONCAT_WS(\':\',p.id,p.alias) AS project_slug');
 			$query->select('CONCAT_WS(\':\',s.id,s.alias) AS saeson_slug');
 			$query->select('CONCAT_WS(\':\',l.id,l.alias) AS league_slug');
@@ -142,6 +143,7 @@ class modSportsmanagementAjaxTopNavigationMenuHelper
 			$db->setQuery($query);
 
 			$this->_project      = $db->loadObject();
+            $this->project_type = $this->_project->project_type;
 			self::$_project_id   = $this->_project->id;
 			$this->_project_slug = $this->_project->project_slug;
 			$this->_saeson_slug  = $this->_project->saeson_slug;
@@ -1129,7 +1131,6 @@ try{
 				break;
 
 			case "resultsmatrix":
-				//$link = sportsmanagementHelperRoute::getResultsMatrixRoute($this->_project_slug, $this->_round_slug, $this->_division_id);
                 $routeparameter                       = array();
 				$routeparameter['cfg_which_database'] = $this->_app->input->getInt('cfg_which_database', ComponentHelper::getParams('com_sportsmanagement')->get('cfg_which_database', 0));
 				$routeparameter['s']                  = $this->_app->input->getInt('s', 0);
@@ -1152,6 +1153,16 @@ try{
 				$routeparameter['mode']               = 0;
 				$routeparameter['order']              = 0;
 				$routeparameter['layout']             = 0;
+				$link                                 = sportsmanagementHelperRoute::getSportsmanagementRoute($view, $routeparameter);
+				break;
+
+            case "rankingmatrix":
+				$routeparameter                       = array();
+				$routeparameter['cfg_which_database'] = $this->_app->input->getInt('cfg_which_database', ComponentHelper::getParams('com_sportsmanagement')->get('cfg_which_database', 0));
+				$routeparameter['s']                  = $this->_app->input->getInt('s', 0);
+				$routeparameter['p']                  = $this->_project_slug;
+                $routeparameter['division']           = $this->_division_id;
+				$routeparameter['r']                  = $this->_round_slug;
 				$link                                 = sportsmanagementHelperRoute::getSportsmanagementRoute($view, $routeparameter);
 				break;
 
@@ -1303,6 +1314,13 @@ try{
 			case "jltournamenttree":
 				$link = sportsmanagementHelperRoute::getTournamentRoute($this->_project_slug, $this->_round_slug);
 				break;
+
+case "tournamentbracket":
+$link = sportsmanagementHelperRoute::gettournamentbracket($this->_project_slug, $this->_round_slug);
+				break;
+
+
+
 /**
 			case "jlallprojectrounds":
 				$link = sportsmanagementHelperRoute::getAllProjectrounds($this->_project_slug, $this->_round_slug);

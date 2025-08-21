@@ -106,7 +106,11 @@ class sportsmanagementView extends BaseHtmlView
 	public $warnings = array();
     /** @var    array    An array of notes */
 	public $notes = array();
-	
+
+
+    public $jsmstartzeit = 0;
+	public $jsmendzeit = 0;
+	public $jsmseitenaufbau = 0;
 	
 	/**
 	 * sportsmanagementView::display()
@@ -163,7 +167,7 @@ class sportsmanagementView extends BaseHtmlView
 			$this->document->addScript(Uri::root() . 'administrator/components/com_sportsmanagement/assets/js/joomla4functions.js');
 			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended-1.1.css');
 			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/extended_4.css');
-			//$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css'); 
+			//$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css');
 			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css');
 			$this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox_4.css');
 			//$this->document->addScript(Uri::root() . 'media/system/js/searchtools.js');
@@ -174,7 +178,150 @@ $this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sport
 $this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/style.css');        
 $this->document->addStyleSheet(Uri::root() . 'administrator/components/com_sportsmanagement/assets/css/stylebox.css');
 	}	
-		
+
+
+/**
+* https://codepen.io/johnbocook/pen/vZoZpK
+ * https://cdnjs.com/libraries/select2
+ */
+/** neu für die options mit suche*/
+$this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js');
+$this->document->addScriptDeclaration(
+'
+$(document).ready(function() {
+    var $progControl = $(".progControlSelect2").select2({
+       // placeholder: "Neue Mannschaft",
+      //maximumSelectionLength: 2
+    });
+    $(".AGSPlan").on("click", function() {
+        $progControl.val(["aa", "ac", "ae"]).trigger("change");
+    });
+    $(".TradPlan").on("click", function() {
+        $progControl.val(["aa", "ab", "af"]).trigger("change");
+    });
+    $(".RegStudent").on("click", function() {
+        $progControl.val(["ag", "ah", "ai", "aj"]).trigger("change");
+    });
+    $(".Other").on("click", function() {
+        $progControl.val(["ak"]).trigger("change");
+    });
+    $(".clearSelect2").on("click", function() {
+        $progControl.val(null).trigger("change");
+    });
+
+   
+
+    alertify.defaults = {
+        glossary: {
+            title: "Nothing to see here...",
+            ok: "I AM a silly guy"
+        },
+        theme: {
+            input: "ajs-input",
+            ok: "ajs-ok",
+            cancel: "ajs-cancel"
+        }
+    };
+
+    //Disable select open on option remove
+    $("select").on("select2:unselect", function (evt) {
+        if (!evt.params.originalEvent) {
+            return;
+        }
+        evt.params.originalEvent.stopPropagation();
+    });
+
+
+});
+
+'
+);
+
+$this->document->addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css');
+$this->document->addStyleSheet('//cdn.jsdelivr.net/alertifyjs/1.10.0/css/alertify.min.css');
+$this->document->addStyleSheet('//cdn.jsdelivr.net/alertifyjs/1.10.0/css/themes/default.min.css');
+$this->document->addStyleSheet('//cdn.jsdelivr.net/alertifyjs/1.10.0/css/themes/semantic.min.css');
+$this->document->addStyleSheet('//cdn.jsdelivr.net/alertifyjs/1.10.0/css/themes/bootstrap.min.css');
+$this->document->addStyleDeclaration(
+			'
+.container {
+    //font-size: 20px;
+    //width: 1000px;
+}
+.title {
+    font-size: 16px;
+    background: black;
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+    color: white;
+    text-align: center;
+}
+.content {
+    padding-top: 20px;
+}
+.full {
+    text-align: center;
+}
+.bg {
+    padding: 15px;
+    background: #bfe6e4;
+}
+input[type="button"] {
+    display: block;
+    width: 200px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+.btn-success {
+    color: #fff;
+    background-color: #246b24;
+    border-color: #1e5f1e;
+}
+
+.btn.btn-default.btn-sm.Other {
+    border: 1px solid #292b2c;
+    border: 1px solid rgba(0, 0, 0, 0.17);
+    background: #464646;
+    color: white;
+}
+.btn.btn-default.btn-sm.Other:hover {
+    background: #333333;
+}
+input.clearSelect2, input.Submit {
+    margin-top: 15px;
+    width: 99px;
+    display: inline-block;
+}
+.clearSelect2 {
+    background: red;
+}
+.progControlSelect2 {
+    width: 350px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    border-radius: 0;
+}
+.purple {
+    color: #980798;
+}
+.select2-selection__choice__remove {
+    color: #5a5a5a !important;
+    position: relative;
+    top: -1px;
+    font-size: 13px;
+}
+.ajs-button {
+    cursor: pointer;
+}
+@media (min-width: 576px)
+_grid.scss:24
+.container {
+    width: 100%;
+    max-width: 100%;
+}
+'
+		);
 ?>        
    
         
@@ -314,7 +461,7 @@ if (preg_match("/ordering/i", $this->sortColumn)) {
 			case 'predictiontemplates':
 			case 'predictiongroups':
 			case 'predictionmembers':
-//            case 'statistics':
+            case 'extrafields':
             case 'clubnames':
 
 //            case 'smquotes':
@@ -333,7 +480,7 @@ if (version_compare(substr(JVERSION, 0, 3), '4.0', 'ge'))
 {
 $this->document->addScriptDeclaration(
 "
-$('.js-stools-btn-clear').addClass('disabled');                        
+$('.js-stools-btn-clear').addClass('disabled');
 $(document).on('click','.js-stools-btn-filter', function(){
 console.log('hallo filter options');
     //your code here
@@ -502,14 +649,6 @@ break;
 			$this->table_data_class = 'table table-striped';
 			$this->table_data_div   = '</div>';
 		}
-		else
-		{
-			// Wir lassen das layout so wie es ist, dann müssen
-			// nicht so viele dateien umbenannt werden
-			$this->setLayout($this->getLayout());
-			$this->table_data_class = 'adminlist';
-			$this->table_data_div   = '';
-		}
 
 		$this->init();
 		$this->addToolbar();
@@ -567,16 +706,7 @@ break;
 				//$this->sidebar = JHtmlSidebar::render();
 			}
 		}
-	/*	
-switch ($this->view)
-{
-case 'clubs';
-case 'playgrounds':
-//$this->filterForm    = $this->get('FilterForm');
-//$this->activeFilters = $this->get('ActiveFilters');	
-break;
-}
-*/		
+
 
 		parent::display($tpl);
 	}
@@ -711,14 +841,7 @@ break;
              break;
              }
 
-//			if (isset($this->federation))
-//			{
-//				JHtmlSidebar::addFilter(
-//					Text::_('COM_SPORTSMANAGEMENT_GLOBAL_SELECT_FEDERATION'),
-//					'filter_federation',
-//					HTMLHelper::_('select.options', $this->federation, 'value', 'text', $this->state->get('filter.federation'), true)
-//				);
-//			}
+
 
 			if (isset($this->unique_id))
 			{
@@ -737,26 +860,8 @@ break;
 					HTMLHelper::_('select.options', $this->userfields, 'id', 'name', $this->state->get('filter.userfields'), true)
 				);
 			}
-/*
-			if (isset($this->league))
-			{
-				JHtmlSidebar::addFilter(
-					Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_LEAGUES_FILTER'),
-					'filter_league',
-					HTMLHelper::_('select.options', $this->league, 'id', 'name', $this->state->get('filter.league'), true)
-				);
-			}
-			*/
-/*
-			if (isset($this->sports_type))
-			{
-				JHtmlSidebar::addFilter(
-					Text::_('COM_SPORTSMANAGEMENT_ADMIN_PROJECTS_SPORTSTYPE_FILTER'),
-					'filter_sports_type',
-					HTMLHelper::_('select.options', $this->sports_type, 'id', 'name', $this->state->get('filter.sports_type'), true)
-				);
-			}
-*/
+
+
 			if (isset($this->season))
 			{
 			 /*
@@ -839,13 +944,12 @@ document.getElementById("filter_season").classList.add("filter_season");
 				}
 			}
 
-			// Built the actions for new and existing records.
-			// Projectteam
+			/** Built the actions for new and existing records.*/
+			/** Projectteam */
 			$search_tmpl_array = array('projectteam' => null, 'treetonode' => null);
 
 			if ($isNew)
 			{
-				// For new records, check the create permission. if (version_compare(JVERSION, '4.0.0', 'ge'))
 				if ($canDo->get('core.create'))
 				{
 					if (version_compare(JVERSION, '4.0.0', 'ge'))

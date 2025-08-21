@@ -91,6 +91,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 	 */
 	function getProjectteams($project_id = 0, $division_id = 0)
 	{
+	    $result = array();
 		$this->jsmquery->clear();
 		$this->jsmquery->select('pt.id AS value');
 		$this->jsmquery->select('t.name AS text,t.notes');
@@ -103,6 +104,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 		{
 			$this->jsmquery->where('pt.division_id = ' . $division_id);
 		}
+        $this->jsmquery->order('t.name');
 
 		try
 		{
@@ -117,14 +119,14 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 			}
 			else
 			{
-				return false;
+				return $result;
 			}
 		}
 		catch (Exception $e)
 		{
 			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
         $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
-			return false;
+			return $result;
 		}
 
 	}
@@ -139,6 +141,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 	 */
 	function getDFBKey($number, $matchdays)
 	{
+	    $result = array();
 		$project_id = $this->jsmapp->getUserState("$this->jsmoption.pid", '0');
 
 		/** Gibt es zum land der liga schlüssel ? */
@@ -169,10 +172,12 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 		if ($matchdays == 'ALL')
 		{
 			$this->jsmquery->group('spieltag');
+            $this->jsmquery->order('spieltag');
 		}
 		elseif ($matchdays == 'FIRST')
 		{
 			$this->jsmquery->where('spieltag = 1');
+            $this->jsmquery->order('spieltag, spielnummer');
 		}
 
 		try
@@ -185,7 +190,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 		{
 			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
         $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
-			return false;
+			return $result;
 		}
 
 	}
@@ -199,6 +204,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 	 */
 	function getCountry($project_id = 0)
 	{
+        $country = array();
 		$this->jsmquery->clear();
 		$this->jsmquery->select('l.country');
 		$this->jsmquery->from('#__sportsmanagement_league as l');
@@ -215,7 +221,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 		{
 			$this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()), 'notice');
         $this->jsmapp->enqueueMessage(Text::sprintf('COM_SPORTSMANAGEMENT_FILE_ERROR_FUNCTION_FAILED', __FILE__, __LINE__), 'notice');
-			return false;
+			return $country;
 		}
 
 	}
@@ -362,7 +368,7 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 		{
 			$teile = explode(",", $row->paarung);
 
-			if ($chooseteam[$teile[0]]['projectteamid'] != 0 && $chooseteam[$teile[1]]['projectteamid'] != 0)
+			if ($chooseteam[(int)$teile[0]]['projectteamid'] != 0 && $chooseteam[(int)$teile[1]]['projectteamid'] != 0)
 			{
 				$temp                    = new stdClass;
 				$temp->spieltag          = $row->spieltag;
@@ -370,10 +376,10 @@ class sportsmanagementModeljlextDfbkeyimport extends JSMModelLegacy
 				$temp->spielnummer       = $row->spielnummer;
 				$temp->match_date        = $row->round_date_first;
 				$temp->division_id       = $division_id;
-				$temp->projectteam1_id   = $chooseteam[$teile[0]]['projectteamid'];
-				$temp->projectteam2_id   = $chooseteam[$teile[1]]['projectteamid'];
-				$temp->projectteam1_name = $chooseteam[$teile[0]]['teamname'];
-				$temp->projectteam2_name = $chooseteam[$teile[1]]['teamname'];
+				$temp->projectteam1_id   = $chooseteam[(int)$teile[0]]['projectteamid'];
+				$temp->projectteam2_id   = $chooseteam[(int)$teile[1]]['projectteamid'];
+				$temp->projectteam1_name = $chooseteam[(int)$teile[0]]['teamname'];
+				$temp->projectteam2_name = $chooseteam[(int)$teile[1]]['teamname'];
 
 				$result[] = $temp;
 				$result   = array_merge($result);

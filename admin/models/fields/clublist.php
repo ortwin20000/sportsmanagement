@@ -54,8 +54,19 @@ class JFormFieldClublist extends \JFormFieldList
       
       
       $sport_type = (string) $this->element->attributes()->target;
+      $club_id = Factory::getApplication()->input->get('club_id');
+      //Factory::getApplication()->enqueueMessage('club_id input<pre>'.print_r($club_id,true).'</pre>', 'error');
+      if ( !$club_id )
+      {
+      $post = Factory::getApplication()->input->post->getArray(array());
+      //Factory::getApplication()->enqueueMessage('post<pre>'.print_r($post,true).'</pre>', 'error');
+      $club_id = Factory::getApplication()->getUserState("com_sportsmanagement.club_id", '0'); 
+      //Factory::getApplication()->enqueueMessage('club_id post<pre>'.print_r($club_id,true).'</pre>', 'error');
+      }
+
+
       //echo 'sport_type<pre>'.print_r($sport_type,true).'</pre>';
-      
+
       
 		// Initialize variables.
 		$options = array();
@@ -66,7 +77,12 @@ class JFormFieldClublist extends \JFormFieldList
 		$query->select('c.id AS value, c.name AS text');
 		$query->from('#__sportsmanagement_club as c');
       $query->join('LEFT', '#__sportsmanagement_team AS t ON t.club_id = c.id');
-      
+
+      if ( $club_id )
+      {
+      $query->where("c.id = " . $club_id );
+      }
+
       if ( $sport_type )
       {
       $query->join('INNER', '#__sportsmanagement_sports_type AS st ON st.id = t.sports_type_id');  

@@ -781,6 +781,7 @@ In that case, $data wont be affected
 		$db        = sportsmanagementHelper::getDBConnection(true, $cfg_which_database);
 		$query     = $db->getQuery(true);
 		$starttime = microtime();
+        $res = array();
 
 		$query->select('pt.id AS ptid, pt.is_in_score, pt.start_points, pt.division_id');
 		$query->select('t.name, t.id as teamid, pt.neg_points_finally');
@@ -879,7 +880,7 @@ try{
 
       //echo __LINE__.' dump <pre>'.print_r($query->dump(),true).'</pre>'; 
       
-//echo __LINE__.' division <pre>'.print_r($division,true).'</pre>';      
+//echo __LINE__.' division <pre>'.print_r($division,true).'</pre>';
 //echo __LINE__.' res <pre>'.print_r($res,true).'</pre>';		
 		
 		
@@ -1397,7 +1398,7 @@ function array_multisort(&$a, array $column_names) {
 
 	/**
 	 * JSMRanking::getRankingAway()
-	 * 
+	 *
 	 * @param mixed $from
 	 * @param mixed $to
 	 * @param mixed $division
@@ -1509,7 +1510,7 @@ try{
 
 		return $res;
 	}
-	
+
 	function _cmpFinaltablerank($a, $b)
 	{
 		$res = $a->_finaltablerank <=> $b->_finaltablerank;
@@ -1528,12 +1529,14 @@ try{
 
 	function _cmpscorefor($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->sum_team1_result - $b->sum_team1_result);
 		return (int) $res;
 	}
 
 	function _cmpscoreagainst($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->sum_team2_result - $b->sum_team2_result);
 		return (int) $res;
 	}
@@ -1541,6 +1544,7 @@ try{
 
 	function _cmpGoalsfor($a, $b)
 	{
+	    $res = 0;
 	   //echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
       switch ( trim($this->_order) )
         {
@@ -1559,6 +1563,7 @@ try{
 
 	function _cmpGoalsagainst($a, $b)
 	{
+	    $res = 0;
 	   //echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
       switch ( trim($this->_order) )
         {
@@ -1586,6 +1591,7 @@ try{
 	 */
 	function _cmpPoints($a, $b)
 	{
+	    $res = 0;
 	  // echo __METHOD__.' '.__LINE__ .' values <pre>'.print_r($this->_order,true).'</pre>';
        switch ( $this->_order )
         {
@@ -1611,11 +1617,12 @@ try{
      */
     function _cmpShooterrings($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->shooterrings - $b->shooterrings);
 		return (int) $res;
 	}
-    
-    
+
+
 
 	/**
 	 * Point comparison
@@ -1627,6 +1634,7 @@ try{
 	 */
 	function _cmpPenaltypoints($a, $b)
 	{
+	    $res = 0;
 		// $res =- ($a->penalty_points - $b->penalty_points );
 		$res = -($b->penalty_points - $a->penalty_points);
 		return (int) $res;
@@ -1642,6 +1650,7 @@ try{
 	 */
 	function _cmpBonus($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->bonus_points - $b->bonus_points);
 		return $res;
 	}
@@ -1656,6 +1665,7 @@ try{
 	 */
 	function _cmpAgainst($a, $b)
 	{
+	    $res = 0;
 		$res = ($a->sum_team2_result - $b->sum_team2_result);
 		return $res;
 	}
@@ -1670,6 +1680,7 @@ try{
 	 */
 	function _cmpScoreAvg($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->scoreAvg() - $b->scoreAvg());
 		return $res;
 	}
@@ -1684,6 +1695,7 @@ try{
 	 */
 	function _cmpScorePct($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->scorePct() - $b->scorePct());
 		return $res;
 	}
@@ -1698,6 +1710,7 @@ try{
 	 */
 	function _cmpWinpct($a, $b)
 	{
+	    $res = 0;
 		$res = -($a->winPct() - $b->winPct());
 		if ($res != 0)
 		{
@@ -2092,6 +2105,11 @@ class JSMRankingTeamClass extends \stdClass
 	var $sum_team1_balls = 0;
 	var $sum_team2_balls = 0;
 	var $diff_team_balls = 0;
+
+    var $scorefor = 0;
+    var $scoreagainst = 0;
+    var $goalsfor = 0;
+    var $goalsagainst = 0;
     
 
 	/**

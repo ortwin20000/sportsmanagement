@@ -112,18 +112,19 @@ class sportsmanagementModelClubs extends JSMModelList
 		}
 
 $list = $this->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array');
-     
-		
-      $this->setState('filter.search', $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string'));
-		$this->setState('filter.state', $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string'));
-		$this->setState('filter.search_nation', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
-		$this->setState('filter.association', $this->getUserStateFromRequest($this->context . '.filter.association', 'filter_association', ''));
-		$this->setState('filter.season', $this->getUserStateFromRequest($this->context . '.filter.season', 'filter_season', ''));
-		$this->setState('filter.geo_daten', $this->getUserStateFromRequest($this->context . '.filter.geo_daten', 'filter_geo_daten', ''));
-		$this->setState('filter.standard_picture', $this->getUserStateFromRequest($this->context . '.filter.standard_picture', 'filter_standard_picture', ''));
-		$this->setState('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'list_limit', $this->jsmapp->get('list_limit'), 'int'));
-		$this->setState('list.start', $this->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0, 'int'));
-		$orderCol = $this->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', '', 'string');
+
+$this->setState('filter.search', $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string'));
+$this->setState('filter.state', $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string'));
+$this->setState('filter.search_nation', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
+$this->setState('filter.association', $this->getUserStateFromRequest($this->context . '.filter.association', 'filter_association', ''));
+$this->setState('filter.season', $this->getUserStateFromRequest($this->context . '.filter.season', 'filter_season', ''));
+$this->setState('filter.geo_daten', $this->getUserStateFromRequest($this->context . '.filter.geo_daten', 'filter_geo_daten', ''));
+$this->setState('filter.standard_picture', $this->getUserStateFromRequest($this->context . '.filter.standard_picture', 'filter_standard_picture', ''));
+$this->setState('filter.search_association', $this->getUserStateFromRequest($this->context . '.filter.search_association', 'filter_search_association', ''));
+$this->setState('filter.search_associations_leagues', $this->getUserStateFromRequest($this->context . '.filter.search_associations_leagues', 'filter_search_associations_leagues', ''));
+$this->setState('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'list_limit', $this->jsmapp->get('list_limit'), 'int'));
+$this->setState('list.start', $this->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0, 'int'));
+$orderCol = $this->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', '', 'string');
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
@@ -139,6 +140,7 @@ $list = $this->getUserStateFromRequest($this->context . '.list', 'list', array()
 		}
         
         $this->jsmapp->setUserState("$this->jsmoption.clubnation", $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', '') );
+        $this->jsmapp->setUserState("$this->jsmoption.search_association", $this->getUserStateFromRequest($this->context . '.filter.search_association', 'filter_search_association', '') );
 
 		$this->setState('list.direction', $listOrder);
 	}
@@ -174,19 +176,22 @@ $list = $this->getUserStateFromRequest($this->context . '.list', 'list', array()
 			a.new_club_id,
 			a.ordering,
 			a.checked_out,
-			a.checked_out_time');
+			a.checked_out_time,
+            a.modified,
+            a.modified_by');
 		$this->jsmquery->from('#__sportsmanagement_club as a');
-		$this->jsmquery->select('uc.name AS editor');
+		$this->jsmquery->select('uc.name AS editor, u1.username');
 		$this->jsmquery->join('LEFT', '#__users AS uc ON uc.id = a.checked_out');
+        $this->jsmquery->join('LEFT', '#__users AS u1 ON u1.id = a.modified_by');
 
 		/** keine geodaten gesetzt */
-		if ($this->getState('filter.geo_daten') == 1)
+		if ($this->getState('filter.geo_daten') == 0)
 		{
 			$this->jsmquery->where(' ( a.latitude IS NULL OR a.latitude = 0.00000000 )');
 		}
 
 		/** geo daten gesetzt */
-		if ($this->getState('filter.geo_daten') == 2)
+		if ($this->getState('filter.geo_daten') == 1)
 		{
 			$this->jsmquery->where(' a.latitude > 0.00000000 ');
 		}
@@ -195,7 +200,9 @@ $list = $this->getUserStateFromRequest($this->context . '.list', 'list', array()
 		{
 			$this->jsmquery->where(' ( LOWER(a.name) LIKE ' . $this->jsmdb->Quote('%' . $this->getState('filter.search') . '%') .
                                   ' OR a.id = ' . $this->jsmdb->Quote('' . $this->getState('filter.search') . '') .
-                                   ' OR LOWER(a.unique_id) LIKE ' . $this->jsmdb->Quote('%' . $this->getState('filter.search') . '%') . ')'  
+                                   ' OR LOWER(a.unique_id) LIKE ' . $this->jsmdb->Quote('%' . $this->getState('filter.search') . '%') .
+                                   ' OR LOWER(a.state) LIKE ' . $this->jsmdb->Quote('%' . $this->getState('filter.search') . '%') .
+                                   ')'
                                   
                                   );
 		}
@@ -227,6 +234,11 @@ $list = $this->getUserStateFromRequest($this->context . '.list', 'list', array()
 		//$this->jsmquery->where('a.logo_big LIKE ' . $this->jsmdb->Quote('%' . 'placeholder' . '%'));
         $this->jsmquery->where(' ( a.logo_big LIKE ' . $this->jsmdb->Quote('%' . 'placeholder' . '%') . ' OR a.logo_big LIKE ' . $this->jsmdb->Quote('') . ')');  
         }
+
+        if ($this->getState('filter.search_association'))
+		{
+			$this->jsmquery->where("a.associations = " . $this->getState('filter.search_association'));
+		}
 
 		$this->jsmquery->order(
 			$this->jsmdb->escape($this->getState('list.ordering', 'a.name')) . ' ' .

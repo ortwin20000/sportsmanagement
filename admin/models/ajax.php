@@ -406,6 +406,7 @@ class sportsmanagementModelAjax extends BaseDatabaseModel
 		$query->from('#__sportsmanagement_season');
 		$query->order('name DESC');
 		$db->setQuery($query);
+//        $app->enqueueMessage(Text::_('<pre>'.print_r($query->dump(),true).'</pre>'), 'Notice');
 
 		return self::addGlobalSelectElement($db->loadObjectList(), $required);
 
@@ -1156,7 +1157,7 @@ $app->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . 'person_a
 		}
 		else
 		{
-			$query->select('p.id AS value,p.name AS text');
+			$query->select('p.id AS value,CONCAT_WS(\' - \', p.name, l.country) AS text');
 		}
 
 		$query->from('#__sportsmanagement_project as p');
@@ -1199,6 +1200,7 @@ $app->enqueueMessage(Text::_(__METHOD__ . ' ' . ' ' . __LINE__ . ' ' . 'person_a
 		$query->order('p.name');
 
 		$db->setQuery($query);
+//        $app->enqueueMessage(Text::_('<pre>'.print_r($query->dump(),true).'</pre>'), 'Notice');
 
 		return self::addGlobalSelectElement($db->loadObjectList(), $required);
 	}
