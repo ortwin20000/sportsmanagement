@@ -728,7 +728,7 @@ In that case, $data wont be affected
  //echo '<pre>'.print_r($data->_matches,true).'</pre>';
 		if ( sizeof($data->_matches) == 0 )
 		{
-		self::$_use_finaltablerank = 1;	
+		self::$_use_finaltablerank = 0;	
 		}
         
         foreach( $data->_teams as $key => $value )
@@ -1757,7 +1757,9 @@ try{
 				$ptids[] = $t->_ptid;
 			}
 
-			$this->_h2h = $this->_collect($ptids);
+			$app = Factory::getApplication();
+			$jinput = $app->input;	
+			$this->_h2h = $this->_collect($ptids, $jinput->get('cfg_which_database', 0, ''));
 		}
 
 		return $this->_h2h;
