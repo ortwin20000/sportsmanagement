@@ -221,14 +221,14 @@ $edit_search_nation = array_key_exists('edit_search_nation', $post) ? $post['edi
 			$lists['teams'] = JHtmlSelect::genericlist(
 				$notusedteams,
 				'teamslist[]',
-				' style="width:250px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($notusedteams)) . '"',
+				' style="width:400px; height:300px;" class="inputbox" multiple="true" size="' . min(30, count($notusedteams)) . '"',
 				'value',
 				'text'
 			);
 		}
 		else
 		{
-			$lists['teams'] = '<select name="teamslist[]" id="teamslist" style="width:250px; height:300px;" class="inputbox" multiple="true" size="10"></select>';
+			$lists['teams'] = '<select name="teamslist[]" id="teamslist" style="width:400px; height:300px;" class="inputbox" multiple="true" size="10"></select>';
 		}
 
 		unset($res);
