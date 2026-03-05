@@ -134,10 +134,16 @@ class sportsmanagementModelProjects extends JSMModelList
 
 
 Factory::getApplication()->setUserState( "$this->jsmoption.projects_search_league", $this->getUserStateFromRequest($this->context . '.filter.search_league', 'filter_search_league', '') );
-		
+Factory::getApplication()->setUserState( "$this->jsmoption.projects_search_nation", $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', '') );
+Factory::getApplication()->setUserState( "$this->jsmoption.projects_search_associations_leagues", $this->getUserStateFromRequest($this->context . '.filter.search_associations_leagues', 'filter_search_associations_leagues', '') );
+
+
 		$orderCol = $this->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', '', 'string');
         
-        Factory::getApplication()->input->set('search_nation_projects', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
+Factory::getApplication()->input->set('projects_search_nation', $this->getUserStateFromRequest($this->context . '.filter.search_nation', 'filter_search_nation', ''));
+Factory::getApplication()->input->set('projects_search_associations_leagues', $this->getUserStateFromRequest($this->context . '.filter.search_associations_leagues', 'filter_search_associations_leagues', ''));
+Factory::getApplication()->input->set('projects_search_league', $this->getUserStateFromRequest($this->context . '.filter.search_league', 'filter_search_league', ''));
+
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
@@ -215,7 +221,7 @@ Factory::getApplication()->setUserState( "$this->jsmoption.projects_search_leagu
 		}
 */
 		$this->jsmquery->select('p.id,p.ordering,p.published,p.project_type,p.name,p.alias,p.checked_out,p.checked_out_time,p.sports_type_id,p.current_round,p.picture,p.agegroup_id,p.master_template,p.fast_projektteam ');
-		$this->jsmquery->select('p.league_id,p.use_leaguechampion,p.cr_project');
+		$this->jsmquery->select('p.league_id,p.use_leaguechampion,p.cr_project,p.project_live_update');
 		$this->jsmquery->select('p.modified,p.modified_by');
 		$this->jsmquery->select('u1.username');
 

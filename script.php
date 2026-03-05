@@ -91,9 +91,11 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Filesystem\File;
+
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Installer\Installer;
@@ -102,6 +104,39 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Updater\Update;
 use Joomla\CMS\Updater\Updater;
+//$version = new Version();
+//$this->joomlaversion = $version->getShortVersion();
+
+/**
+Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $this->joomlaversion, 'error'); // commonly to still display that error
+if (version_compare(substr($this->joomlaversion, 0, 3), '6.0', 'ge'))
+        {
+Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' größer version 6', 'error'); // commonly to still display that error
+      //  use Joomla\Filesystem\File;
+        }
+        elseif (version_compare(substr($this->joomlaversion, 0, 3), '4.0', 'ge'))
+        {
+Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' größer version 4', 'error'); // commonly to still display that error
+      //  use Joomla\Filesystem\File;
+        }
+*/
+
+/** welche joomla version ? */
+/**
+if (version_compare(JVERSION, '6.0.0', 'ge'))
+{
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+}
+elseif (version_compare(JVERSION, '3.0.0', 'ge'))
+{
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\Filesystem\File;
+}
+*/
+
 
 $maxImportTime = 960;
 
@@ -153,8 +188,12 @@ class com_sportsmanagementInstallerScript
 	 */
 	public function __construct( $adapter)
 	{
+$version = new Version();
+$this->joomlaversion = $version->getShortVersion();
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $this->joomlaversion, 'error'); // commonly to still display that error
+
 		// Https://api.joomla.org/cms-3/deprecated.html
-		if (version_compare(substr(JVERSION, 0, 5), '4.0.0', 'ge'))
+		if (version_compare(substr($this->joomlaversion, 0, 5), '4.0.0', 'ge'))
 		{
 				$this->startPane = 'startTabSet';
 				$this->endPane = 'endTabSet';
@@ -172,6 +211,7 @@ class com_sportsmanagementInstallerScript
 
 				// $this->release = $adapter->get( "manifest" )->version;
 		}
+
 
 	}
 
@@ -372,7 +412,7 @@ echo '<p> alte Version ' .  $this->oldRelease . '</p>';
 		$db->execute();
                        
                        
-                       
+
 						$query->clear();
 						$query->insert($db->quoteName('#__schemas'));
 						$query->columns(array($db->quoteName('extension_id'), $db->quoteName('version_id')));
@@ -494,7 +534,7 @@ echo '<p> alte Version ' .  $this->oldRelease . '</p>';
 
 <div class="jsm-extension">
 Like this extension? 
-<a href="https://extensions.joomla.org/extension/sports-management/" target="_blank">Leave a review on the JED</a>	
+<a href="https://extensions.joomla.org/extension/sports-management/" target="_blank">Leave a review on the JED</a>
 <i class="icon-star"></i>
 <i class="icon-star"></i>
 <i class="icon-star"></i>
@@ -514,7 +554,7 @@ Like this extension?
 			alt="JSM Sports Management" title="JSM Sports Management" width="auto"/>
         <img
 			src="../media/com_sportsmanagement/jl_images/Compat_icon_5_0_long.png"
-			alt="JSM Sports Management" title="JSM Sports Management" width="auto"/>    
+			alt="JSM Sports Management" title="JSM Sports Management" width="auto"/>
             
 			<?php
 			echo '<p>' . Text::_('COM_SPORTSMANAGEMENT_PREFLIGHT_' . $route . '_TEXT') . $this->release . '</p>';
@@ -547,6 +587,8 @@ Like this extension?
 	 */
 	function postflight($route,  $adapter)
 	{
+//$version = new Version();
+//$this->joomlaversion = $version->getShortVersion();
 		$mainframe = Factory::getApplication();
 		$db = Factory::getDbo();
         
@@ -569,7 +611,7 @@ Like this extension?
 	        $result = false;
 	    }
         }
-        
+
         
         $query->clear();
 		$query->select($db->quoteName('id'))
@@ -624,7 +666,7 @@ Like this extension?
         }
         
         
-        
+
 
 		// Sicherheitshalber dateien löschen, die ich falsch angelegt habe.
 		// Aber nur wenn sie vorhanden sind
@@ -712,6 +754,14 @@ Like this extension?
 			'/administrator/components/com_sportsmanagement/views/treetonode/tmpl/form_description.php',
 		);
 
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' ' . $this->joomlaversion, 'error'); // commonly to still display that error
+if (version_compare(substr($this->joomlaversion, 0, 3), '6.0', 'ge'))
+        {
+//Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . ' größer version 6', 'error'); // commonly to still display that error
+//        use Joomla\Filesystem\File;
+        }
+
+
 		foreach ($files as $file)
 		{
 			if (File::exists(JPATH_ROOT . $file) && !File::delete(JPATH_ROOT . $file))
@@ -720,7 +770,7 @@ Like this extension?
 			}
 		}
 
-		if (version_compare(JVERSION, '3.0.0', 'ge'))
+		if (version_compare($this->joomlaversion, '3.0.0', 'ge'))
 		{
 				echo '<p>' . Text::_('COM_SPORTSMANAGEMENT_POSTFLIGHT_' . $route . '_TEXT') . $this->release . '</p>';
 
@@ -744,7 +794,7 @@ Like this extension?
 $plugin_id = PluginHelper::getPlugin('system','jsm_registercomp')->id;
 $object = new stdClass();            
 $object->extension_id = $plugin_id;
-$object->enabled = 1;            
+$object->enabled = 0;
 $result = Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');      
 
 

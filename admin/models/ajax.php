@@ -246,8 +246,12 @@ class sportsmanagementModelAjax extends BaseDatabaseModel
 		$option = Factory::getApplication()->input->getCmd('option');
         $post = Factory::getApplication()->input->post->getArray();
         
-      $country = Factory::getApplication()->input->getCmd('search_nation_projects');
+      $country = Factory::getApplication()->input->getCmd('projects_search_nation');
+      $association = Factory::getApplication()->input->getCmd('projects_search_associations_leagues');
+
+
 //      Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_( $country   ), 'Error');
+//      Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_( $association   ), 'Error');
 //      Factory::getApplication()->enqueueMessage(__METHOD__ . ' ' . __LINE__ . Text::_( '<pre>'.print_r($app->input,true).'</pre>'   ), 'Error');
       
        if (!$dbase)
@@ -266,6 +270,11 @@ class sportsmanagementModelAjax extends BaseDatabaseModel
 		if ($country)
 		{
 			$query->where('country LIKE ' . $db->Quote('' . $country . ''));
+        if ($association) // associations
+		{
+        $query->where('associations = ' . $association );
+        }
+
 			$db->setQuery($query);
 
 			return self::addGlobalSelectElement($db->loadObjectList(), $required);

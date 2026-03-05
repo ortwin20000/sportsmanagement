@@ -37,7 +37,7 @@ if (! defined('JSM_PATH')) {
 jimport('joomla.plugin.plugin');
 jimport('joomla.html.parameter');
 
-
+JLoader::import('components.com_sportsmanagement.helpers.browser', JPATH_ADMINISTRATOR);
 
 
 
@@ -65,9 +65,10 @@ class PlgSystemjsm_registercomp extends CMSPlugin
     {
         parent::__construct($subject, $params);
         $app = Factory::getApplication();
+        //$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' params <br><pre>'.print_r($params ,true).'</pre>'   ),'');
  
- 
-
+$classpath = JPATH_ADMINISTRATOR . DIRECTORY_SEPARATOR . JSM_PATH . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'browser.php';
+JLoader::register('Browser', $classpath);
   
     }
 
@@ -157,6 +158,63 @@ $object->enabled = 0;
         
       }
     }
+
+    if ($app->isClient('site'))
+				{
+
+$browser = new Browser();
+//$app->enqueueMessage(JText::_(__METHOD__.' '.__LINE__.' getBrowser <br><pre>'.print_r($browser->getBrowser() ,true).'</pre>'   ),'');
+//$app->enqueueMessage(JText::_(__METHOD__.' '.__LINE__.' getVersion <br><pre>'.print_r($browser->getVersion() ,true).'</pre>'   ),'');
+
+
+
+      //$app->enqueueMessage(JText::_(__METHOD__.' '.__LINE__.' option <br><pre>'.print_r($option ,true).'</pre>'   ),'');
+      $_ref = $_SERVER['HTTP_USER_AGENT'];
+      //$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' _ref <br><pre>'.print_r($_ref ,true).'</pre>'   ),'');
+
+    /**
+    unter edge
+    Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
+
+    unter chrome
+    Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36
+
+    unter firefox
+    Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
+
+    unter opera
+    Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 OPR/120.0.0.0
+
+
+    */
+
+if ( str_contains($_SERVER['HTTP_USER_AGENT'], 'Firefox') ) {
+//$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' Firefox'.''   ),'');
+$startjsm = (int) $this->params->get('load_firefox', 0);
+}
+elseif ( str_contains($_SERVER['HTTP_USER_AGENT'], 'Edg') ) {
+//$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' Edge'.''   ),'');
+$startjsm = (int) $this->params->get('load_edge', 0);
+}
+elseif ( str_contains($_SERVER['HTTP_USER_AGENT'], 'OPR') ) {
+//$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' Opera'.''   ),'');
+$startjsm = (int) $this->params->get('load_opera', 0);
+}
+else{
+//$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' Google Chrome'.''   ),'');
+$startjsm = (int) $this->params->get('load_chrome', 0);
+}
+
+//$app->enqueueMessage(Text::_(__METHOD__.' '.__LINE__.' starten '.$startjsm.''   ),'');
+
+
+$keinstart = $startjsm ? 0 : Factory::getApplication()->redirect('https://www.google.com', 403);
+    }
+
+
+
+
+
     break;
 }
         

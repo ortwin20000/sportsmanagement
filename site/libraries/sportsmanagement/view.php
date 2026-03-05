@@ -313,9 +313,11 @@ class sportsmanagementView extends HtmlView
 		$this->project = sportsmanagementModelProject::getProject(sportsmanagementModelProject::$cfg_which_database);
 		break;
 		case 'resultsranking':
-		case 'resultsmatrix':
+		case 'rankingmatrix':
 		$this->project       = sportsmanagementModelProject::getProject(sportsmanagementModelProject::$cfg_which_database);
 		$this->overallconfig = sportsmanagementModelProject::getOverallConfig(sportsmanagementModelProject::$cfg_which_database);
+        $this->config        = sportsmanagementModelProject::getTemplateConfig($this->getName(), sportsmanagementModelProject::$cfg_which_database);
+        $this->config        = array_merge($this->overallconfig, $this->config);
 		break;
 		case 'curve':
 		case 'stats':
@@ -338,12 +340,14 @@ class sportsmanagementView extends HtmlView
 /** pdf download */
 if ( array_key_exists('show_button_download_pdf', $this->config) )
 {
-$this->document->addScript('https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js'); // path to js script
-$this->document->addScript('https://unpkg.com/jspdf-autotable@3.8.3/dist/jspdf.plugin.autotable.js'); // path to js script		
+/** 2.5.2 funktioniert */
+$this->document->addScript('https://unpkg.com/jspdf@3.0.3/dist/jspdf.umd.min.js'); // path to js script
+/** 3.8.3 funktioniert */
+$this->document->addScript('https://unpkg.com/jspdf-autotable@5.0.2/dist/jspdf.plugin.autotable.js'); // path to js script
 $this->document->addScript('https://html2canvas.hertzen.com/dist/html2canvas.min.js'); // path to js script
   
-  $dom = new DOMDocument;
-  
+$dom = new DOMDocument;
+
 $columnStyles = array();
   
 switch ( $this->view )  
@@ -354,7 +358,6 @@ switch ( $this->view )
     $columnStyles[] = "2: {cellWidth: 40}";
     $columnStyles[] = "3: {cellWidth: 40}";
     $columnStyles[] = "4: {cellWidth: 320}";
-    
     $columnStyles[] = "5: {cellWidth: 25}";
     $columnStyles[] = "6: {cellWidth: 25}";
     $columnStyles[] = "7: {cellWidth: 25}";
@@ -362,10 +365,7 @@ switch ( $this->view )
     $columnStyles[] = "9: {cellWidth: 40}";
     $columnStyles[] = "10: {cellWidth: 40}";
     $columnStyles[] = "11: {cellWidth: 40}";
-    
     $columnStyles[] = "12: {cellWidth: 'wrap'}";
-    
-    $this->columnwidth = implode(", ", $columnStyles);
     break;
     case 'results':
     $columnStyles[] = "0: {cellWidth: 10}";
@@ -373,11 +373,21 @@ switch ( $this->view )
     $columnStyles[] = "2: {cellWidth: 40}";
     $columnStyles[] = "3: {cellWidth: 40}";
     $columnStyles[] = "4: {cellWidth: 80}";
-    $this->columnwidth = implode(", ", $columnStyles);
     break;
+    case 'matrix':
+    $columnStyles[] = "0: {cellWidth: 40}";
+    $countteams = sportsmanagementModelProject::getTeams();
+    // $this->app->enqueueMessage('<pre>'.print_r(sizeof($countteams),true).'</pre>', 'notice');
+    for($a=1; $a <= sizeof($countteams);$a++)
+    {
+    $columnStyles[] = $a.": {cellWidth: 40}";
+    }
+
+    break;
+
 }
-  
-  
+$this->columnwidth = implode(", ", $columnStyles);
+// $this->app->enqueueMessage('<pre>'.print_r($this->columnwidth,true).'</pre>', 'notice');  
   
   
   

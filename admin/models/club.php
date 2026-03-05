@@ -147,6 +147,8 @@ return $result;
 		$app    = Factory::getApplication();
         $date = Factory::getDate();
 		$user = Factory::getUser();
+        $pks = array();
+        $post = array();
 		$option = Factory::getApplication()->input->getCmd('option');
 		$pks  = Factory::getApplication()->input->getVar('cid', null, 'post', 'array');
 		$post = Factory::getApplication()->input->post->getArray(array());
@@ -168,7 +170,7 @@ return $result;
 
 			$tblClub->unique_id   = $post['unique_id' . $pks[$x]];
 			$tblClub->new_club_id = $post['new_club_id' . $pks[$x]];
-			$tblClub->name = $post['club_name' . $pks[$x]];
+			$tblClub->name = trim($post['club_name' . $pks[$x]]);
 			$tblClub->alias = OutputFilter::stringURLSafe($tblClub->name);
 
             $tblClub->modified    = $date->toSql();
