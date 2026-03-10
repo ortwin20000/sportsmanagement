@@ -93,7 +93,7 @@ $time = date('H:i', strtotime($time));
         <!-- Button HTML (to Trigger Modal) -->
 		<?php
 		echo sportsmanagementHelperHtml::getBootstrapModalImage(
-			'edit' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/edit.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_MATCH_DETAILS_BACKEND'), '20', $url,
+			'edit' . $thismatch->id, 'components/com_sportsmanagement/assets/images/edit.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_MATCH_DETAILS_BACKEND'), '20', $url,
 			$this->modalwidth,
 			$this->modalheight,
 			$this->overallconfig['use_jquery_modal']
@@ -119,7 +119,7 @@ $time = date('H:i', strtotime($time));
 		<?php
 		$url = sportsmanagementHelperRoute::getEditLineupRoute(sportsmanagementModelResults::$projectid, $thismatch->id, 'editlineup', $team1->projectteamid, $datum, null, sportsmanagementModelResults::$cfg_which_database, sportsmanagementModelProject::$seasonid, sportsmanagementModelProject::$roundslug, 0, 'form');
 		echo sportsmanagementHelperHtml::getBootstrapModalImage(
-			'home_lineup' . $team1->projectteamid, 'administrator/components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_HOME'), '20', $url,
+			'home_lineup' . $team1->projectteamid, 'components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_HOME'), '20', $url,
 			$this->modalwidth,
 			$this->modalheight,
 			$this->overallconfig['use_jquery_modal']
@@ -165,7 +165,7 @@ $time = date('H:i', strtotime($time));
 		<?php
 		$url = sportsmanagementHelperRoute::getEditLineupRoute(sportsmanagementModelResults::$projectid, $thismatch->id, 'editlineup', $team2->projectteamid, $datum, null, sportsmanagementModelResults::$cfg_which_database, sportsmanagementModelProject::$seasonid, sportsmanagementModelProject::$roundslug, 0, 'form');
 		echo sportsmanagementHelperHtml::getBootstrapModalImage(
-			'away_lineup' . $team2->projectteamid, 'administrator/components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_AWAY'), '20', $url,
+			'away_lineup' . $team2->projectteamid, 'components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_AWAY'), '20', $url,
 			$this->modalwidth,
 			$this->modalheight,
 			$this->overallconfig['use_jquery_modal']
@@ -297,7 +297,7 @@ $time = date('H:i', strtotime($time));
                 <!-- Button HTML (to Trigger Modal) -->
 				<?php
 				echo sportsmanagementHelperHtml::getBootstrapModalImage(
-					'edit_events' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/events.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EVENTS_BACKEND'), '20', $url,
+					'edit_events' . $thismatch->id, 'components/com_sportsmanagement/assets/images/events.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EVENTS_BACKEND'), '20', $url,
 					$this->modalwidth,
 					$this->modalheight,
 					$this->overallconfig['use_jquery_modal']
@@ -318,7 +318,7 @@ $time = date('H:i', strtotime($time));
                 <!-- Button HTML (to Trigger Modal) -->
 				<?php
 				echo sportsmanagementHelperHtml::getBootstrapModalImage(
-					'edit_statistics' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/calc16.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_STATISTICS_BACKEND'), '20', $url,
+					'edit_statistics' . $thismatch->id, 'components/com_sportsmanagement/assets/images/calc16.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_STATISTICS_BACKEND'), '20', $url,
 					$this->modalwidth,
 					$this->modalheight,
 					$this->overallconfig['use_jquery_modal']

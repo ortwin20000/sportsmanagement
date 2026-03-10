@@ -159,7 +159,7 @@ else
       $link = "index.php?option=com_sportsmanagement&tmpl=component&view=editprojectteam&ptid=" . $season->ptid . "&tid=" . $this->teamid . "&p=" . $season->projectid;
 					$ausgabe = sportsmanagementHelperHtml::getBootstrapModalImage(
 						'teamedit' . $season->ptid,
-						'administrator/components/com_sportsmanagement/assets/images/teams.png',
+						'components/com_sportsmanagement/assets/images/teams.png',
 						Text::_('COM_SPORTSMANAGEMENT_ADMIN_TEAMINFO_EDIT_DETAILS'),
 						'20',
 						$link,

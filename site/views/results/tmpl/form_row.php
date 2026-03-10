@@ -117,12 +117,12 @@ $time = date('H:i', strtotime($time));
           switch ( $saveshortall )
           {
             case 0:
-              echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/edit.png', '', array('title' => 'Keine Berechtigung'  ) );
+              echo HTMLHelper::_('image', 'components/com_sportsmanagement/assets/images/edit.png', '', array('title' => 'Keine Berechtigung'  ) );
               break;
             case 1:
           echo sportsmanagementHelperHtml::getBootstrapModalImage(
 			'edit' . $thismatch->id,
-			'administrator/components/com_sportsmanagement/assets/images/edit.png',
+			'components/com_sportsmanagement/assets/images/edit.png',
 			Text::_('COM_SPORTSMANAGEMENT_EDIT_MATCH_DETAILS_BACKEND'),
 			'20',
 			$url,
@@ -265,12 +265,12 @@ $time = date('H:i', strtotime($time));
           switch ( $saveshortall )
           {
             case 0:
-              echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/players_add.png', '', array('title' => 'Keine Berechtigung'  ) );
+              echo HTMLHelper::_('image', 'components/com_sportsmanagement/assets/images/players_add.png', '', array('title' => 'Keine Berechtigung'  ) );
               break;
             case 1:
         echo sportsmanagementHelperHtml::getBootstrapModalImage(
 			'home_lineup' . $team1->projectteamid,
-			'administrator/components/com_sportsmanagement/assets/images/players_add.png',
+			'components/com_sportsmanagement/assets/images/players_add.png',
 			Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_HOME'),
 			'20',
 			$url,
@@ -339,12 +339,12 @@ $time = date('H:i', strtotime($time));
           switch ( $saveshortall )
           {
             case 0:
-              echo HTMLHelper::_('image', 'administrator/components/com_sportsmanagement/assets/images/players_add.png', '', array('title' => 'Keine Berechtigung'  ) );
+              echo HTMLHelper::_('image', 'components/com_sportsmanagement/assets/images/players_add.png', '', array('title' => 'Keine Berechtigung'  ) );
               break;
             case 1:
         echo sportsmanagementHelperHtml::getBootstrapModalImage(
 			'away_lineup' . $team2->projectteamid,
-			'administrator/components/com_sportsmanagement/assets/images/players_add.png',
+			'components/com_sportsmanagement/assets/images/players_add.png',
 			Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_AWAY'),
 			'20',
 			$url,
@@ -489,7 +489,7 @@ $time = date('H:i', strtotime($time));
 				<?php
 				echo sportsmanagementHelperHtml::getBootstrapModalImage(
 					'edit_events' . $thismatch->id,
-					'administrator/components/com_sportsmanagement/assets/images/events.png',
+					'components/com_sportsmanagement/assets/images/events.png',
 					Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EVENTS_BACKEND'),
 					'20',
 					$url,
@@ -515,7 +515,7 @@ $time = date('H:i', strtotime($time));
 				<?php
 				echo sportsmanagementHelperHtml::getBootstrapModalImage(
 					'edit_statistics' . $thismatch->id,
-					'administrator/components/com_sportsmanagement/assets/images/calc16.png',
+					'components/com_sportsmanagement/assets/images/calc16.png',
 					Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_STATISTICS_BACKEND'),
 					'20',
 					$url,
@@ -541,7 +541,7 @@ $time = date('H:i', strtotime($time));
 				<?php
 				echo sportsmanagementHelperHtml::getBootstrapModalImage(
 					'editreferees' . $thismatch->id,
-					'administrator/components/com_sportsmanagement/assets/images/players_add.png',
+					'components/com_sportsmanagement/assets/images/players_add.png',
 					Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_REFEREE_BACKEND'),
 					'20',
 					$url,

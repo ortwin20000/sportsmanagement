@@ -70,7 +70,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/edit.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_MATCH_DETAILS_BACKEND'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit' . $thismatch->id, 'components/com_sportsmanagement/assets/images/edit.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_MATCH_DETAILS_BACKEND'), '20', $url);
 			?>
         </div>
         <!-- Edit round -->
@@ -136,7 +136,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('home_lineup' . $team1->projectteamid, 'administrator/components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_HOME'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('home_lineup' . $team1->projectteamid, 'components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_HOME'), '20', $url);
 			?>
 
 
@@ -172,7 +172,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('away_lineup' . $team2->projectteamid, 'administrator/components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_AWAY'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('away_lineup' . $team2->projectteamid, 'components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EDIT_LINEUP_AWAY'), '20', $url);
 			?>
         </div>
 
@@ -189,7 +189,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit_events' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/events.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EVENTS_BACKEND'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit_events' . $thismatch->id, 'components/com_sportsmanagement/assets/images/events.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_EVENTS_BACKEND'), '20', $url);
 			?>
             <!-- Edit match statistics -->
 			<?php
@@ -197,7 +197,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit_statistics' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/calc16.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_STATISTICS_BACKEND'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('edit_statistics' . $thismatch->id, 'components/com_sportsmanagement/assets/images/calc16.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_STATISTICS_BACKEND'), '20', $url);
 			?>
             <!-- Edit referee -->
 			<?php
@@ -205,7 +205,7 @@ foreach ($teams AS $team)
 			?>
             <!-- Button HTML (to Trigger Modal) -->
 			<?php
-			echo sportsmanagementHelperHtml::getBootstrapModalImage('editreferees' . $thismatch->id, 'administrator/components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_REFEREE_BACKEND'), '20', $url);
+			echo sportsmanagementHelperHtml::getBootstrapModalImage('editreferees' . $thismatch->id, 'components/com_sportsmanagement/assets/images/players_add.png', Text::_('COM_SPORTSMANAGEMENT_EDIT_RESULTS_REFEREE_BACKEND'), '20', $url);
 			?>
 
 

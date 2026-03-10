@@ -1160,13 +1160,13 @@ class sportsmanagementViewResults extends sportsmanagementView
 		$this->document->addHeadLink(Route::_($feed . '&type=rss'), 'alternate', 'rel', $rss);
 		$view = $this->jinput->getVar("view");
 
-		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'administrator/components/' . $this->option . '/assets/css/jquery.modal.css' . '" type="text/css" />' . "\n";
+		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'components/' . $this->option . '/assets/css/jquery.modal.css' . '" type="text/css" />' . "\n";
 		$this->document->addCustomTag($stylelink);
 
-		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'administrator/components/' . $this->option . '/assets/css/bootstrap-switch.css' . '" type="text/css" />' . "\n";
+		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'components/' . $this->option . '/assets/css/bootstrap-switch.css' . '" type="text/css" />' . "\n";
 		$this->document->addCustomTag($stylelink);
 
-		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'administrator/components/' . $this->option . '/assets/css/datepicker.css' . '" type="text/css" />' . "\n";
+		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'components/' . $this->option . '/assets/css/datepicker.css' . '" type="text/css" />' . "\n";
 		$this->document->addCustomTag($stylelink);
 
 		$stylelink = '<link rel="stylesheet" href="' . Uri::root() . 'components/' . $this->option . '/assets/css/' . $view . '.css' . '" type="text/css" />' . "\n";
